@@ -1,20 +1,30 @@
 #include "IOHandler.h"
+#include "Instructions.h"
 #include <iostream>
+#include <string>
 
 void IOHandler::loadProgram(const char* filename, CPU& cpu) {
     std::ifstream file(filename);
 
     if (!file) {
-        std::cerr << "Error: Could not open " << filename << std::endl;
+        std::cerr << "Error: Cant Open the File ... " << filename << std::endl;
         return;
     }
 
     uint16_t addr = 0x0000;
-    uint8_t opcode;
+    std::string strInst;
 
-    while (file >> std::hex >> opcode) {
-        cpu.memory.write(addr++, opcode);
-        std::cout << "Loaded: " << std::hex << (int)opcode << " at " << addr - 1 << std::endl;
+    while (getline(file, strInst)) {
+        if (instructionSet.find(strInst) == instructionSet.end()) {
+            std::cerr << "Error: { " << strInst << " } | Invalid Instruction ..." << std::endl;
+            exit(1);
+        }
+
+        Instruction Inst = instructionSet[strInst];
+        uint8_t oc = Inst.opcode;
+
+        cpu.memory.write(addr++, oc);
+        std::cout << "Loaded: " << std::hex << (int)oc << " at " << addr - 1 << std::endl;
     }
 
     file.close();

@@ -129,18 +129,23 @@
   <ItemGroup>
     <ClCompile Include="ALU.cpp" />
     <ClCompile Include="CPU.cpp" />
+    <ClCompile Include="Instructions.cpp" />
     <ClCompile Include="IOHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ALU.h" />
     <ClInclude Include="CPU.h" />
+    <ClInclude Include="Instructions.h" />
     <ClInclude Include="IOHandler.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="Registers.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Guid.txt" />
     <Text Include="program.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

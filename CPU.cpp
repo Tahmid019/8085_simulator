@@ -1,14 +1,23 @@
 #include "CPU.h"
+#include "utils.h"
 #include <iostream>
 
 void CPU::execute(uint8_t opcode) {
     std::cout << "Executing Opcode: " << std::hex << (int)opcode << std::endl;
 
     switch (opcode) {
-    case 0x78:
+    case 0x3E: {
+        uint8_t value = memory.read(reg.PC++);
+        reg.A = value;
+        debug(0x3E, (int)reg.A);
+        break;
+    }
+
+    case 0x78: {
         reg.A = reg.B;
         std::cout << "MOV A, B executed. A = " << (int)reg.A << std::endl;
         break;
+    }
 
     case 0x3A: {
         uint16_t addr = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);

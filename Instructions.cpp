@@ -1,4 +1,5 @@
 #include "Instructions.h"
+#include "utils.h"
 #include <iostream>
 
 std::unordered_map<std::string, Instruction> instructionSet = {
@@ -75,5 +76,10 @@ std::unordered_map<std::string, Instruction> instructionSet = {
     {"MOV E, D", Instruction("MOV E, D", 0x5A, 1)},
     {"MOV E, E", Instruction("MOV E, E", 0x5B, 1)},
     {"MOV E, H", Instruction("MOV E, H", 0x5C, 1)},
-    {"MOV E, L", Instruction("MOV E, L", 0x5D, 1)}
+    {"MOV E, L", Instruction("MOV E, L", 0x5D, 1)},
+    {"MVI A",    Instruction("MVI A", 0x3E, 1)}
+};
+
+std::unordered_map<std::string, std::function<void()>> instructionHandlers = {
+    {"MVI A", [] { debug("MVI A", 0); }}
 };

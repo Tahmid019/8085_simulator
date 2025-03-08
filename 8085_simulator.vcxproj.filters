@@ -30,6 +30,12 @@
     <ClCompile Include="ALU.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="Instructions.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPU.h">
@@ -47,10 +53,17 @@
     <ClInclude Include="IOHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Instructions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="program.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Guid.txt" />
   </ItemGroup>
 </Project>
