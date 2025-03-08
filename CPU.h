@@ -7,5 +7,5 @@ class CPU {
 public:
 	Registers reg;
 	Memory memory;
-	void execute(uint8_t opcode);
+	int execute(uint8_t opcode);
 };

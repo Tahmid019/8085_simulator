@@ -2,14 +2,14 @@
 #include "utils.h"
 #include <iostream>
 
-void CPU::execute(uint8_t opcode) {
+int CPU::execute(uint8_t opcode) {
     std::cout << "Executing Opcode: " << std::hex << (int)opcode << std::endl;
 
     switch (opcode) {
     case 0x3E: {
         uint8_t value = memory.read(reg.PC++);
         reg.A = value;
-        debug(0x3E, (int)reg.A);
+        debug("3E", (int)reg.A);
         break;
     }
 
@@ -41,11 +41,13 @@ void CPU::execute(uint8_t opcode) {
     }
 
     case 0x76:
-        std::cout << "HLT executed." << std::endl;
-        return;
+        debug("HLT", opcode);
+        return -1;
 
     default:
         std::cout << "Unknown Opcode: " << std::hex << (int)opcode << std::endl;
     }
+
+    return 0;
 }
 
