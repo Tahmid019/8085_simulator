@@ -1,2 +1,5 @@
 MVI A
+255
+MOV B, A
+OUT B
 HLT

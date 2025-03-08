@@ -63,6 +63,8 @@ std::unordered_map<std::string, Instruction> instructionSet = {
     {"DCR H", Instruction("DCR H", 0x25, 1)},
     {"DCR L", Instruction("DCR L", 0x2D, 1)},
     {"DCR M", Instruction("DCR M", 0x35, 1)},
+    {"HLT",      Instruction("HLT"     , 0x76, 1)},
+    {"MOV B, A", Instruction("MOV B, A", 0x47, 1)},
     {"MOV D, B", Instruction("MOV D, B", 0x50, 1)},
     {"MOV D, C", Instruction("MOV D, C", 0x51, 1)},
     {"MOV D, D", Instruction("MOV D, D", 0x52, 1)},
@@ -77,8 +79,8 @@ std::unordered_map<std::string, Instruction> instructionSet = {
     {"MOV E, E", Instruction("MOV E, E", 0x5B, 1)},
     {"MOV E, H", Instruction("MOV E, H", 0x5C, 1)},
     {"MOV E, L", Instruction("MOV E, L", 0x5D, 1)},
-    {"MVI A",    Instruction("MVI A"   , 0x3E, 1)},
-    {"HLT",      Instruction("HLT"     , 0x76, 1)},
+    {"MVI A",    Instruction("MVI A"   , 0x3E, 2)},
+    {"OUT B",    Instruction("OUT B"   , 0xD3, 1)},
 };
 
 std::unordered_map<std::string, std::function<void()>> instructionHandlers = {

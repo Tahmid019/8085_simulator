@@ -7,15 +7,73 @@ int CPU::execute(uint8_t opcode) {
 
     switch (opcode) {
     case 0x3E: {
-        uint8_t value = memory.read(reg.PC++);
+        uint8_t value = memory.read(++reg.PC);
         reg.A = value;
+        reg.PC++;
         debug("3E", (int)reg.A);
+        break;
+    }
+
+    /*
+     === MOV Instruction Cases ===
+    */
+
+    case 0x7F: {
+        reg.A = reg.A;
+        message("MOV A, A executed ", opcode);
         break;
     }
 
     case 0x78: {
         reg.A = reg.B;
-        std::cout << "MOV A, B executed. A = " << (int)reg.A << std::endl;
+        message("MOV A, B executed ", opcode);
+        break;
+    }
+
+    case 0x79: {
+        reg.A = reg.C;
+        message("MOV A, C executed ", opcode);
+        break;
+    }
+
+    case 0x7A: {
+        reg.A = reg.D;
+        message("MOV A, D executed ", opcode);
+        break;
+    }
+
+    case 0x7B: {
+        reg.A = reg.E;
+        message("MOV A, E executed ", opcode);
+        break;
+    }
+
+    case 0x7C: {
+        reg.A = reg.H;
+        message("MOV A, H executed ", opcode);
+        break;
+    }
+
+    case 0x7D: {
+        reg.A = reg.L;
+        message("MOV A, L executed ", opcode);
+        break;
+    }
+
+    // MOV A, M
+
+    case 0x47: {
+        reg.B = reg.A;
+        message("MOV B, A executed ", opcode);
+        break;
+    }
+
+    /*
+     === INPUT - OUTPUT ===
+    */
+
+    case 0xD3: { // OUT B
+        message("Register B: ", (int)reg.B);
         break;
     }
 

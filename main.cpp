@@ -12,6 +12,6 @@ int main() {
         int check = cpu.execute(cpu.memory.read(i++));
         if (check == -1) break;
     }
-    std::cout << "Register A: " << std::hex << (int)cpu.reg.A << std::endl;
+
     return 0;
 }
