@@ -1,12 +1,13 @@
 #pragma once
 #include <iostream>
+#include <string>
 
-template<typename T, typename V>
-void debug(T mn, V reg) {
-    std::cerr << mn << " executed. [" << std::hex << (int)reg << "]" << std::endl;
-}
+void debug(std::string mn, uint8_t reg);
 
-template<typename T, typename V>
-void message(T msg, V mem) {
-    std::cerr << msg << " [ " << mem << " ]" << std::endl;
-}
+void message(std::string msg, uint8_t mem);
+
+bool parity(uint8_t val);
+
+bool auxillaryCarry(uint8_t regValue_1, uint8_t regValue_2);
+
+bool carry(uint8_t value);

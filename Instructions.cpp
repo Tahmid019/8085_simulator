@@ -80,6 +80,12 @@ std::unordered_map<std::string, Instruction> instructionSet = {
     {"MOV E, H", Instruction("MOV E, H", 0x5C, 1)},
     {"MOV E, L", Instruction("MOV E, L", 0x5D, 1)},
     {"MVI A",    Instruction("MVI A"   , 0x3E, 2)},
+    {"MVI B",    Instruction("MVI B"   , 0x06, 2)},
+    {"MVI C",    Instruction("MVI C"   , 0x0E, 2)},
+    {"MVI D",    Instruction("MVI D"   , 0x16, 2)},
+    {"MVI E",    Instruction("MVI E"   , 0x1E, 2)},
+    {"MVI H",    Instruction("MVI H"   , 0x26, 2)},
+    {"MVI L",    Instruction("MVI L"   , 0x2E, 2)},
     {"OUT B",    Instruction("OUT B"   , 0xD3, 1)},
 };
 

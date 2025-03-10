@@ -6,18 +6,67 @@ int CPU::execute(uint8_t opcode) {
     std::cout << "Executing Opcode: " << std::hex << (int)opcode << std::endl;
 
     switch (opcode) {
+
+    // === MVI Instruction Cases ===
+
     case 0x3E: {
         uint8_t value = memory.read(++reg.PC);
         reg.A = value;
         reg.PC++;
-        debug("3E", (int)reg.A);
+        debug("3E", reg.A);
         break;
     }
 
-    /*
-     === MOV Instruction Cases ===
-    */
+    case 0x06: {
+        uint8_t value = memory.read(++reg.PC);
+        reg.B = value;
+        reg.PC++;
+        debug("06", (int)reg.B);
+        break;
+    }
 
+    case 0x0E: {
+        uint8_t value = memory.read(++reg.PC);
+        reg.C = value;
+        reg.PC++;
+        debug("0E", (int)reg.C);
+        break;
+    }
+
+    case 0x16: {
+        uint8_t value = memory.read(++reg.PC);
+        reg.D = value;
+        reg.PC++;
+        debug("16", (int)reg.D);
+        break;
+    }
+
+    case 0x1E: {
+        uint8_t value = memory.read(++reg.PC);
+        reg.E = value;
+        reg.PC++;
+        debug("1E", (int)reg.E);
+        break;
+    }
+
+    case 0x26: {
+        uint8_t value = memory.read(++reg.PC);
+        reg.H = value;
+        reg.PC++;
+        debug("26", (int)reg.H);
+        break;
+    }
+
+    case 0x2E: {
+        uint8_t value = memory.read(++reg.PC);
+        reg.L = value;
+        reg.PC++;
+        debug("2E", (int)reg.L);
+        break;
+    }
+
+    // === MOV Instruction Cases ===
+    
     case 0x7F: {
         reg.A = reg.A;
         message("MOV A, A executed ", opcode);
