@@ -1,11 +1,34 @@
 #include "utils.h"
 
-void debug(std::string mn, uint8_t reg) {
-    std::cerr << mn << " executed. [" << std::hex << (int)reg << "]" << std::endl;
-}
+void message(std::string msg="", uint8_t in_load=0x00, uint8_t out_load=0x00) {
+    std::string prefix;
+    MessageType type = MessageType::INFO;
+    switch (type) {
+    case MessageType::INFO: {
+        prefix = "[INFO] ";
+        std::cout << prefix << msg << std::endl;
+        break;
+    }
+    case MessageType::WARNING: {
+        prefix = "[WARNING] ";
+        std::cout << prefix << msg << std::endl;
+        break;
+    }
+    case MessageType::ERROR:   prefix = "[ERROR] ";   break;
+    case MessageType::MEMORY: {
+        prefix = "[MEMORY - Load] ";
+        std::cerr << prefix << msg << " Memory-value: [ " << static_cast<int>(in_load) << " ]";
+        break;
+    }
+    case MessageType::REGISTER: {
+        prefix = "[REGISTER - Load] ";
+        std::cerr << prefix << msg << " Register-value: [ " << static_cast<int>(in_load) << " ]";
+        break;
+    }
+    }   
 
-void message(std::string msg, uint8_t mem) {
-    std::cerr << msg << " [ " << mem << " ]" << std::endl;
+    if (out_load != 0x00) std::cout << " <-- [ " << static_cast<int>(out_load) << " ]";
+    std::cout << std::endl;
 }
 
 bool parity(uint8_t val) {

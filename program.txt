@@ -1,5 +1,3 @@
-MVI B
-23
-MOV A, B
-OUT A
+MOV B,
+24
 HLT

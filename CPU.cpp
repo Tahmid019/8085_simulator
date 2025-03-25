@@ -13,7 +13,7 @@ int CPU::execute(uint8_t opcode) {
         uint8_t value = memory.read(++reg.PC);
         reg.A = value;
         reg.PC++;
-        debug("3E", reg.A);
+        message("MVI A", reg.A);
         break;
     }
 
@@ -21,7 +21,7 @@ int CPU::execute(uint8_t opcode) {
         uint8_t value = memory.read(++reg.PC);
         reg.B = value;
         reg.PC++;
-        debug("06", (int)reg.B);
+        //debug("06", (int)reg.B);
         break;
     }
 
@@ -29,7 +29,7 @@ int CPU::execute(uint8_t opcode) {
         uint8_t value = memory.read(++reg.PC);
         reg.C = value;
         reg.PC++;
-        debug("0E", (int)reg.C);
+        //debug("0E", (int)reg.C);
         break;
     }
 
@@ -37,7 +37,7 @@ int CPU::execute(uint8_t opcode) {
         uint8_t value = memory.read(++reg.PC);
         reg.D = value;
         reg.PC++;
-        debug("16", (int)reg.D);
+        //debug("16", (int)reg.D);
         break;
     }
 
@@ -45,7 +45,7 @@ int CPU::execute(uint8_t opcode) {
         uint8_t value = memory.read(++reg.PC);
         reg.E = value;
         reg.PC++;
-        debug("1E", (int)reg.E);
+        //debug("1E", (int)reg.E);
         break;
     }
 
@@ -53,7 +53,7 @@ int CPU::execute(uint8_t opcode) {
         uint8_t value = memory.read(++reg.PC);
         reg.H = value;
         reg.PC++;
-        debug("26", (int)reg.H);
+        //debug("26", (int)reg.H);
         break;
     }
 
@@ -61,7 +61,7 @@ int CPU::execute(uint8_t opcode) {
         uint8_t value = memory.read(++reg.PC);
         reg.L = value;
         reg.PC++;
-        debug("2E", (int)reg.L);
+        //debug("2E", (int)reg.L);
         break;
     }
 
@@ -109,6 +109,12 @@ int CPU::execute(uint8_t opcode) {
         break;
     }
 
+    case 0x7E: {
+        reg.A = memory.read(reg.H*pow(2,8)+reg.L);
+        message("MOV A, M executed ", opcode);
+        break;
+    }
+
     // MOV A, M
 
     case 0x47: {
@@ -122,9 +128,16 @@ int CPU::execute(uint8_t opcode) {
     */
 
     case 0xD3: { // OUT B
+        //ALU::add(reg.A)
         message("Register B: ", (int)reg.B);
         break;
     }
+
+    // === ALU Instruction ===
+
+   /* case 0xCE: {
+
+    }*/
 
     case 0x3A: {
         uint16_t addr = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
@@ -148,12 +161,14 @@ int CPU::execute(uint8_t opcode) {
     }
 
     case 0x76:
-        debug("HLT", opcode);
+        //debug("HLT", opcode);
         return -1;
 
     default:
         std::cout << "Unknown Opcode: " << std::hex << (int)opcode << std::endl;
     }
+
+
 
     return 0;
 }
