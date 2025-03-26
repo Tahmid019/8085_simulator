@@ -20,13 +20,12 @@ void IOHandler::loadProgram(const char* filename, CPU& cpu) {
         if (ws>0) {
             std::cerr << ws << std::endl;
             cpu.memory.write(addr++, stoi(strInst));
-            message("Loaded at: ", addr - 1);
+            debug("Loaded at: ", addr - 1, 0, MessageType::MEMORY);
             ws--;
             continue;
         }
         if (instructionSet.find(strInst) == instructionSet.end()) {
-            //std::cerr << ws << std::endl;
-            std::cerr << "Error: { " << strInst << " } | Invalid Instruction ..." << std::endl;
+            std::cerr << "Error: {" << strInst << "} | Invalid Instruction ..." << std::endl;
             exit(1);
         }
 
@@ -45,11 +44,11 @@ void IOHandler::loadProgram(const char* filename, CPU& cpu) {
             case 2: {
                 cpu.memory.write(addr++, oc);
                 ws--;
-                message("Loaded at: ", addr-1);
+                debug("Loaded at: ", addr - 1, 0, MessageType::MEMORY);
                 break;
             }
             default: {
-                debug("Invalid IO case", 0);
+                debug("Invalid IO case", 0, 0, MessageType::INFO);
                 exit(1);
             }
         }

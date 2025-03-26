@@ -1,34 +1,64 @@
 #include "utils.h"
 
-void message(std::string msg="", uint8_t in_load=0x00, uint8_t out_load=0x00) {
+void message(std::string msg="[--] ", uint8_t in_load = 0, uint8_t out_load = 0, MessageType type = MessageType::INFO) {
     std::string prefix;
-    MessageType type = MessageType::INFO;
     switch (type) {
-    case MessageType::INFO: {
-        prefix = "[INFO] ";
-        std::cout << prefix << msg << std::endl;
-        break;
-    }
-    case MessageType::WARNING: {
-        prefix = "[WARNING] ";
-        std::cout << prefix << msg << std::endl;
-        break;
-    }
-    case MessageType::ERROR:   prefix = "[ERROR] ";   break;
-    case MessageType::MEMORY: {
-        prefix = "[MEMORY - Load] ";
-        std::cerr << prefix << msg << " Memory-value: [ " << static_cast<int>(in_load) << " ]";
-        break;
-    }
-    case MessageType::REGISTER: {
-        prefix = "[REGISTER - Load] ";
-        std::cerr << prefix << msg << " Register-value: [ " << static_cast<int>(in_load) << " ]";
-        break;
-    }
+        case MessageType::INFO: {
+            prefix = "[INFO] ";
+            std::cout << prefix << msg << std::endl;
+            break;
+        }
+        case MessageType::WARNING: {
+            prefix = "[WARNING] ";
+            std::cout << prefix << msg << std::endl;
+            break;
+        }
+        case MessageType::ERROR:   prefix = "[ERROR] "; break;
+        case MessageType::MEMORY: {
+            prefix = "[MEMORY - Load] ";
+            std::cerr << prefix << msg << " Memory-value: [ " << static_cast<int>(in_load) << " ]";
+            break;
+        }
+        case MessageType::REGISTER: {
+            prefix = "[REGISTER - Load] ";
+            std::cerr << prefix << msg << " Register-value: [ " << static_cast<int>(in_load) << " ]";
+            break;
+        }
     }   
 
     if (out_load != 0x00) std::cout << " <-- [ " << static_cast<int>(out_load) << " ]";
     std::cout << std::endl;
+}
+
+void debug(std::string msg = "[--] ", uint16_t in_addr = 0, uint8_t in_data = 0, MessageType type = MessageType::INFO) {
+    std::string prefix;
+    switch (type) {
+        case MessageType::INFO: {
+            prefix = "[INFO] ";
+            std::cout << prefix << msg << std::endl;
+            break;
+        }
+        case MessageType::MEMORY: {
+            prefix = "[MEMORY] ";
+            std::cout << prefix << msg;
+            if (in_addr != 0) std::cout << " Address: { " << in_addr << " } ";
+            if (in_data != 0) std::cout << " Data : { " << in_data << " } ";
+            std::cout << std::endl;
+            break;
+        }
+        case MessageType::REGISTER: {
+            prefix = "[REGISTER] ";
+            std::cout << prefix << msg;
+            if (in_addr != 0) std::cout << " Address: { " << in_addr << " } ";
+            if (in_data != 0) std::cout << " Data : { " << in_data << " } ";
+            std::cout << std::endl;
+            break;
+        }
+        default: {
+            std::cout << "[UNKNOWN CASE]" << std::endl;
+            break;
+        }
+    }
 }
 
 bool parity(uint8_t val) {

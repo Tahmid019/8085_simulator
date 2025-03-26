@@ -152,11 +152,11 @@ std::unordered_map<std::string, Instruction> instructionSet = {
     {"MVI M",    Instruction("MVI M"   , 0x36, 2)},
 
     {"IN", Instruction("IN", 0xDB, 2)},
-    {"OUT B",    Instruction("OUT B"   , 0xD3, 1)},
+    {"OUT",    Instruction("OUT"   , 0xD3, 2)},
 
     {"HLT",      Instruction("HLT"     , 0x76, 1)},
 };
 
 std::unordered_map<std::string, std::function<void()>> instructionHandlers = {
-    {"MVI A", [] { debug("MVI A", 0); }}
+    //{"MVI A", [] { /*debug*/("MVI A", 0); }}
 };

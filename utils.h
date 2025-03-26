@@ -2,15 +2,17 @@
 #include <iostream>
 #include <string>
 
-typedef enum class MessageType {
+enum class MessageType {
     INFO,
     WARNING,
     ERROR,
     MEMORY,
     REGISTER
-} MessageType;
+};
 
-void message(std::string msg, uint8_t in_load);
+void message(std::string msg, uint8_t in_load, uint8_t out_load, MessageType type);
+
+void debug(std::string msg, uint16_t in_addr, uint8_t in_data, MessageType type);
 
 bool parity(uint8_t val);
 
