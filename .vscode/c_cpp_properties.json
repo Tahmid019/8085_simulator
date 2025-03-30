@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${default}"
+            ],
+            "defines": [
+                "_DEBUG",  // Debug mode flag
+                "UNICODE",  // Use Unicode encoding
+                "_UNICODE"  // Enable Unicode support
+            ],
+            "windowsSdkVersion": "10.0.22621.0",  // Windows SDK version
+            "compilerPath": "cl.exe",  // Path to the compiler
+            "cStandard": "c17",  // Set C standard
+            "cppStandard": "c++17",  // Set C++ standard
+            "intelliSenseMode": "windows-msvc-x64"  // IntelliSense mode for Microsoft Visual C++
+        }
+    ],
+    "version": 4
+}
