@@ -1,11 +1,7 @@
-MVI B
-24
-MOV A, B
+MVI A
+10
+ACI
+1
 OUT
-20
-MVI C
-36
-MOV A, C
-OUT
-20
+255
 HLT

@@ -13,20 +13,23 @@ void message(std::string msg="[--] ", uint8_t in_load = 0, uint8_t out_load = 0,
             std::cout << prefix << msg << std::endl;
             break;
         }
-        case MessageType::ERROR:   prefix = "[ERROR] "; break;
+        case MessageType::ERROR: {
+            prefix = "[ERROR] ";
+            std::cout << prefix << msg << std::endl;
+        }
         case MessageType::MEMORY: {
             prefix = "[MEMORY - Load] ";
-            std::cerr << prefix << msg << " Memory-value: [ " << static_cast<int>(in_load) << " ]";
+            std::cerr << prefix << msg << " Memory-value: [ " << std::hex << static_cast<int>(in_load) << " ]";
             break;
         }
         case MessageType::REGISTER: {
             prefix = "[REGISTER - Load] ";
-            std::cerr << prefix << msg << " Register-value: [ " << static_cast<int>(in_load) << " ]";
+            std::cerr << prefix << msg << " Register-value: [ " << std::hex << static_cast<int>(in_load) << " ]";
             break;
         }
     }   
 
-    if (out_load != 0x00) std::cout << " <-- [ " << static_cast<int>(out_load) << " ]";
+    if (out_load != 0x00) std::cout << " <-- [ " << std::hex << static_cast<int>(out_load) << " ]";
     std::cout << std::endl;
 }
 
@@ -41,16 +44,16 @@ void debug(std::string msg = "[--] ", uint16_t in_addr = 0, uint8_t in_data = 0,
         case MessageType::MEMORY: {
             prefix = "[MEMORY] ";
             std::cout << prefix << msg;
-            if (in_addr != 0) std::cout << " Address: { " << in_addr << " } ";
-            if (in_data != 0) std::cout << " Data : { " << in_data << " } ";
+            if (in_addr != 0) std::cout << " Address: { " << std::hex << static_cast<int>(in_addr) << " } ";
+            if (in_data != 0) std::cout << " Data : { " << std::hex << static_cast<int>(in_data) << " } ";
             std::cout << std::endl;
             break;
         }
         case MessageType::REGISTER: {
             prefix = "[REGISTER] ";
             std::cout << prefix << msg;
-            if (in_addr != 0) std::cout << " Address: { " << in_addr << " } ";
-            if (in_data != 0) std::cout << " Data : { " << in_data << " } ";
+            if (in_addr != 0) std::cout << " Address: { " << std::hex << static_cast<int>(in_addr) << " } ";
+            if (in_data != 0) std::cout << " Data : { " << std::hex << static_cast<int>(in_data) << " } ";
             std::cout << std::endl;
             break;
         }

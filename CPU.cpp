@@ -3,9 +3,68 @@
 #include <iostream>
 
 int CPU::execute(uint8_t opcode) {
-    std::cout << "Executing Opcode: " << std::hex << (int)opcode << std::endl;
+    std::cout << "Executing Opcode: " << std::hex << static_cast<int>(opcode) << std::endl;
 
     switch (opcode) {
+
+    // === ADC ===
+
+    case 0xCE: { 
+        uint8_t value = memory.read(++reg.PC); 
+        reg.A = ALU::adc(reg, value); 
+        std::cout << "ACI executed. A = " <<   std::hex << static_cast<int>(reg.A) << std::endl;
+        break;
+    }
+
+    case 0x8F: { 
+        reg.A = ALU::adc(reg, reg.A);
+        std::cout << "ADC A executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
+        break;
+    }
+
+    case 0x88: { 
+        reg.A = ALU::adc(reg, reg.B); 
+        std::cout << "ADC B executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
+        break;
+    }
+
+    case 0x89: { 
+        reg.A = ALU::adc(reg, reg.C); 
+        std::cout << "ADC C executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
+        break;
+    }
+
+    case 0x8A: { 
+        reg.A = ALU::adc(reg, reg.D);
+        std::cout << "ADC D executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
+        break;
+    }
+
+    case 0x8B: { 
+        reg.A = ALU::adc(reg, reg.E); 
+        std::cout << "ADC E executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
+        break;
+    }
+
+    case 0x8C: { 
+        reg.A = ALU::adc(reg, reg.H); 
+        std::cout << "ADC H executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
+        break;
+    }
+
+    case 0x8D: { 
+        reg.A = ALU::adc(reg, reg.L); 
+        std::cout << "ADC L executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
+        break;
+    }
+
+    case 0x8E: { 
+        uint16_t address = (reg.H << 8) | reg.L;
+        uint8_t value = memory.read(address);   
+        reg.A = ALU::adc(reg, value);           
+        std::cout << "ADC M executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
+        break;
+    }
 
     // === MVI Instruction Cases ===
 
@@ -412,21 +471,21 @@ int CPU::execute(uint8_t opcode) {
     case 0x3A: {
         uint16_t addr = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
         reg.A = memory.read(addr);
-        std::cout << "LDA executed. A = " << (int)reg.A << " from [" << addr << "]" << std::endl;
+        std::cout << "LDA executed. A = " << std::hex << static_cast<int>(reg.A) << " from [" << addr << "]" << std::endl;
         break;
     }
 
     case 0xC6: {
         uint8_t value = memory.read(reg.PC++);
         reg.A += value;
-        std::cout << "ADI executed. A = " << (int)reg.A << std::endl;
+        std::cout << "ADI executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
         break;
     }
 
     case 0x32: {
         uint16_t addr = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
         memory.write(addr, reg.A);
-        std::cout << "STA executed. A at [" << addr << "]" << std::endl;
+        std::cout << "STA executed. A at [" << std::hex << static_cast<int>(addr) << "]" << std::endl;
         break;
     }
 
@@ -435,7 +494,7 @@ int CPU::execute(uint8_t opcode) {
         return -1;
 
     default:
-        std::cout << "Unknown Opcode: " << std::hex << (int)opcode << std::endl;
+        std::cout << "Unknown Opcode: " << std::hex << static_cast<int>(opcode) << std::endl;
     }
 
 

@@ -18,7 +18,6 @@ void IOHandler::loadProgram(const char* filename, CPU& cpu) {
 
     while (getline(file, strInst)) {
         if (ws>0) {
-            std::cerr << ws << std::endl;
             cpu.memory.write(addr++, stoi(strInst));
             debug("Loaded at: ", addr - 1, 0, MessageType::MEMORY);
             ws--;
@@ -37,7 +36,7 @@ void IOHandler::loadProgram(const char* filename, CPU& cpu) {
             case 1: {
                 cpu.memory.write(addr++, oc);
                 ws--;
-                std::cout << "Loaded: " << std::hex << (int)oc << " at " << addr - 1 << std::endl;
+                debug("Loaded at: ", addr-1, oc, MessageType::MEMORY);
                 break;
             }
         
