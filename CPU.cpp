@@ -12,48 +12,56 @@ int CPU::execute(uint8_t opcode) {
     case 0xCE: { 
         uint8_t value = memory.read(++reg.PC); 
         reg.A = ALU::adc(reg, value); 
+        reg.PC++;
         std::cout << "ACI executed. A = " <<   std::hex << static_cast<int>(reg.A) << std::endl;
         break;
     }
 
     case 0x8F: { 
         reg.A = ALU::adc(reg, reg.A);
+        reg.PC++;
         std::cout << "ADC A executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
         break;
     }
 
     case 0x88: { 
         reg.A = ALU::adc(reg, reg.B); 
+        reg.PC++;
         std::cout << "ADC B executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
         break;
     }
 
     case 0x89: { 
         reg.A = ALU::adc(reg, reg.C); 
+        reg.PC++;
         std::cout << "ADC C executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
         break;
     }
 
     case 0x8A: { 
         reg.A = ALU::adc(reg, reg.D);
+        reg.PC++;
         std::cout << "ADC D executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
         break;
     }
 
     case 0x8B: { 
-        reg.A = ALU::adc(reg, reg.E); 
+        reg.A = ALU::adc(reg, reg.E);
+        reg.PC++;
         std::cout << "ADC E executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
         break;
     }
 
     case 0x8C: { 
-        reg.A = ALU::adc(reg, reg.H); 
+        reg.A = ALU::adc(reg, reg.H);
+        reg.PC++;
         std::cout << "ADC H executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
         break;
     }
 
     case 0x8D: { 
-        reg.A = ALU::adc(reg, reg.L); 
+        reg.A = ALU::adc(reg, reg.L);
+        reg.PC++;
         std::cout << "ADC L executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
         break;
     }
@@ -61,8 +69,71 @@ int CPU::execute(uint8_t opcode) {
     case 0x8E: { 
         uint16_t address = (reg.H << 8) | reg.L;
         uint8_t value = memory.read(address);   
-        reg.A = ALU::adc(reg, value);           
+        reg.A = ALU::adc(reg, value); 
+        reg.PC++;
         std::cout << "ADC M executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
+        break;
+    }
+
+    // === ADD ===
+
+    case 0x87: {
+        reg.A = ALU::add(reg, reg.A);
+        reg.PC++;
+        message("ADD A executed.", reg.A, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0x80: {
+        reg.A = ALU::add(reg, reg.B);
+        reg.PC++;
+        message("ADD B executed.", reg.B, reg.A, MessageType::REGISTER);
+        break;
+    }
+    case 0x81: {
+        reg.A = ALU::add(reg, reg.C);
+        reg.PC++;
+        message("ADD C executed.", reg.C, reg.A, MessageType::REGISTER);
+        break;
+    }
+    case 0x82: {
+        reg.A = ALU::add(reg, reg.D);
+        reg.PC++;
+        message("ADD D executed.", reg.D, reg.A, MessageType::REGISTER);
+        break;
+    }
+    case 0x83: {
+        reg.A = ALU::add(reg, reg.E);
+        reg.PC++;
+        message("ADD E executed.", reg.E, reg.A, MessageType::REGISTER);
+        break;
+    }
+    case 0x84: {
+        reg.A = ALU::add(reg, reg.H);
+        reg.PC++;
+        message("ADD H executed.", reg.H, reg.A, MessageType::REGISTER);
+        break;
+    }
+    case 0x85: {
+        reg.A = ALU::add(reg, reg.L);
+        reg.PC++;
+        message("ADD L executed.", reg.L, reg.A, MessageType::REGISTER);
+        break;
+    }
+    case 0x86: {
+        uint16_t address = (reg.H << 8) | reg.L;
+        uint8_t value = memory.read(address);
+        reg.A = ALU::add(reg, value);
+        reg.PC++;
+        debug("ADD M executed.", address, value, MessageType::MEMORY);
+        message("ADD M executed.", value, reg.A, MessageType::REGISTER);
+        break;
+    }
+
+    case 0xC6: {
+        uint8_t value = memory.read(++reg.PC);
+        reg.A = ALU::add(reg, value);
+        reg.PC++;
+        std::cout << "ADI executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
         break;
     }
 
@@ -457,6 +528,7 @@ int CPU::execute(uint8_t opcode) {
 
     case 0xD3: { 
         uint8_t port_address = memory.read(++reg.PC);
+        reg.PC++;
         // implement IO memory
         message("OUT ", port_address, reg.A, MessageType::REGISTER);
         break;
@@ -472,13 +544,6 @@ int CPU::execute(uint8_t opcode) {
         uint16_t addr = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
         reg.A = memory.read(addr);
         std::cout << "LDA executed. A = " << std::hex << static_cast<int>(reg.A) << " from [" << addr << "]" << std::endl;
-        break;
-    }
-
-    case 0xC6: {
-        uint8_t value = memory.read(reg.PC++);
-        reg.A += value;
-        std::cout << "ADI executed. A = " << std::hex << static_cast<int>(reg.A) << std::endl;
         break;
     }
 

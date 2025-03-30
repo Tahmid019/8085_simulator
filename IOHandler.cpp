@@ -23,6 +23,7 @@ void IOHandler::loadProgram(const char* filename, CPU& cpu) {
             ws--;
             continue;
         }
+        if (strInst == "") continue;
         if (instructionSet.find(strInst) == instructionSet.end()) {
             std::cerr << "Error: {" << strInst << "} | Invalid Instruction ..." << std::endl;
             exit(1);
