@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClInclude Include="ALU.h" />
     <ClInclude Include="CPU.h" />
+    <ClInclude Include="Head_1.h" />
     <ClInclude Include="Instructions.h" />
     <ClInclude Include="IOHandler.h" />
     <ClInclude Include="Memory.h" />

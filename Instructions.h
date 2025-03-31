@@ -1,8 +1,5 @@
 #pragma once
-
-#include <iostream>
-#include <unordered_map>
-#include <functional>
+#include "Head_1.h"
 
 class Instruction {
 public:
@@ -16,5 +13,5 @@ public:
 	//static void Execute(std::string mnemonic);
 };
 
-extern std::unordered_map<std::string, Instruction> instructionSet;
-extern std::unordered_map<std::string, std::function<void()>> instructionHandlers;
+extern std::map<std::string, Instruction> instructionSet;
+extern std::map<std::string, std::function<void()>> instructionHandlers;

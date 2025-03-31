@@ -1,9 +1,8 @@
-#include "Head_1.h"
 #include "Instructions.h"
 #include "utils.h"
+#include <iostream>
 
-
-std::map<std::string, Instruction> instructionSet = {
+std::unordered_map<std::string, Instruction> instructionSet = {
     {"ACI", Instruction("ACI", 0xCE, 2)},
     
     {"ADC A", Instruction("ADC A", 0x8F, 1)},
@@ -265,6 +264,6 @@ std::map<std::string, Instruction> instructionSet = {
     {"HLT",      Instruction("HLT"     , 0x76, 1)},
 };
 
-std::map<std::string, std::function<void()>> instructionHandlers = {
+std::unordered_map<std::string, std::function<void()>> instructionHandlers = {
     //{"MVI A", [] { /*debug*/("MVI A", 0); }}
 };

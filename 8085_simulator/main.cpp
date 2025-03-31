@@ -1,6 +1,6 @@
-#include "Head_1.h"
 #include "CPU.h"
 #include "IOHandler.h"
+#include <iostream>
 
 int main() {
     CPU cpu;

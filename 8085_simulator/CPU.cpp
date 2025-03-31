@@ -1,6 +1,6 @@
-#include "Head_1.h"
 #include "CPU.h"
 #include "utils.h"
+#include <iostream>
 
 int CPU::execute(uint8_t opcode) {
     std::cout << "Executing Opcode: " << std::hex << static_cast<int>(opcode) << std::endl;

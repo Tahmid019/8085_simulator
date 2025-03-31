@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\Instructions">
+      <UniqueIdentifier>{3684cafe-7c6c-42df-97e4-ed93993969e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Implementation_Headers">
+      <UniqueIdentifier>{84de1f94-ae80-4e3c-991c-a0dfe9cd8c49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Memory.cpp">
@@ -38,19 +44,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CPU.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ALU.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Registers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IOHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Instructions.h">
@@ -58,6 +55,18 @@
     </ClInclude>
     <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Head_1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IOHandler.h">
+      <Filter>Header Files\Implementation_Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CPU.h">
+      <Filter>Header Files\Implementation_Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ALU.h">
+      <Filter>Header Files\Implementation_Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

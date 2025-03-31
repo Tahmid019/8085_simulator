@@ -1,5 +1,5 @@
 #pragma once
-#include <cstdint>
+#include "Head_1.h"
 
 struct Registers{
 	uint8_t A, B, C, D, E, H, L;

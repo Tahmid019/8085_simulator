@@ -1,5 +1,5 @@
-#include "Head_1.h"
 #include "Memory.h"
+#include <iostream>
 
 void Memory::write(uint16_t address, uint8_t data) {
     mem[address] = data;

@@ -1,7 +1,8 @@
-#include "Head_1.h"
 #include "IOHandler.h"
 #include "Instructions.h"
 #include "utils.h"
+#include <iostream>
+#include <string>
 
 void IOHandler::loadProgram(const char* filename, CPU& cpu) {
     std::ifstream file(filename);
