@@ -4,5 +4,5 @@
 
 class IOHandler {
 public:
-	static void loadProgram(const char* filename, CPU& cpu);
+	void loadProgram(string filename, CPU& cpu);
 };

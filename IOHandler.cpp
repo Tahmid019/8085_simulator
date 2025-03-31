@@ -3,7 +3,7 @@
 #include "Instructions.h"
 #include "utils.h"
 
-void IOHandler::loadProgram(const char* filename, CPU& cpu) {
+void IOHandler::loadProgram(string filename, CPU& cpu) {
     std::ifstream file(filename);
 
     if (!file) {
