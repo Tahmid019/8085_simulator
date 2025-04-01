@@ -173,6 +173,7 @@ std::map<std::string, Instruction> instructionSet = {
     {"MVI M",    Instruction("MVI M"   , 0x36, 2)},
 
     {"NOP",    Instruction("NOP"   , 0x00, 1) },
+
     {"ORA A",    Instruction("ORA A"   , 0xB7, 1) },
     {"ORA B",    Instruction("ORA B"   , 0xB0, 1) },
     {"ORA C",    Instruction("ORA C"   , 0xB1, 1) },
@@ -181,17 +182,21 @@ std::map<std::string, Instruction> instructionSet = {
     {"ORA H",    Instruction("ORA H"   , 0xB4, 1) },
     {"ORA L",    Instruction("ORA L"   , 0xB5, 1) },
     {"ORA M",    Instruction("ORA M"   , 0xB6, 1) },
+
     {"ORI",    Instruction("ORI"   , 0xF6, 2) },
     
     {"PCHL",    Instruction("PCHL"   , 0xE9, 1) },
+    
     {"POP B",    Instruction("POP B"   , 0xC1, 1) },
     {"POP D",    Instruction("POP D"   , 0xD1, 1) },
     {"POP H",    Instruction("POP H"   , 0xE1, 1) },
     {"POP PSW",    Instruction("POP PSW"   , 0xF1, 1) },
+    
     {"PUSH B",    Instruction("PUSH B"   , 0xC5, 1) },
     {"PUSH D",    Instruction("PUSH D"   , 0xD5, 1) },
     {"PUSH H",    Instruction("PUSH H"   , 0xE5, 1) },
     {"PUSH PSW",    Instruction("PUSH PSW"   , 0xF5, 1) },
+    
     {"RAL",    Instruction("RAL"   , 0x17, 1) },
     {"RAR",    Instruction("RAR"   , 0x1F, 1) },
     {"RC",    Instruction("RC"   , 0xD8, 1) },

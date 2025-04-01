@@ -17,7 +17,7 @@ public:
         cpu.reg.H = 0x00;
         cpu.reg.L = 0x00;
         cpu.reg.PC = 0x0000;
-        cpu.reg.SP = 0x0000;
+        cpu.reg.SP = 0xffff;
         cpu.reg.Flags = 0x00;
     }
     void load_program(string filename, bool debug = false) {
@@ -31,6 +31,9 @@ public:
             if (check == -1) break;
             cout << endl;
         }
+    }
+    ~sim_8085() {
+        cerr << "sim_8085 instance deconstructed" << endl;
     }
 };
 

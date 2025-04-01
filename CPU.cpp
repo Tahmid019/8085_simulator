@@ -7,7 +7,7 @@ int CPU::execute(uint8_t opcode) {
 
     switch (opcode) {
 
-    // === ADC ===
+    // === ACI ===
 
     case 0xCE: { 
         uint8_t value = memory.read(++reg.PC); 
@@ -16,6 +16,8 @@ int CPU::execute(uint8_t opcode) {
         std::cout << "ACI executed. A = " <<   std::hex << static_cast<int>(reg.A) << std::endl;
         break;
     }
+
+    // === ADC ===
 
     case 0x8F: { 
         reg.A = ALU::adc(reg, reg.A);
@@ -129,6 +131,8 @@ int CPU::execute(uint8_t opcode) {
         break;
     }
 
+    // === ADI ===
+
     case 0xC6: {
         uint8_t value = memory.read(++reg.PC);
         reg.A = ALU::add(reg, value);
@@ -137,7 +141,124 @@ int CPU::execute(uint8_t opcode) {
         break;
     }
 
-    // === MVI Instruction Cases ===
+    // === ANA ===
+
+    case 0xA7: {
+        reg.A = ALU::ana(reg, reg.A);
+        reg.PC++;
+        message("ANA A executed.", reg.A, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0xA0: {
+        reg.A = ALU::ana(reg, reg.B);
+        reg.PC++;
+        message("ANA B executed.  => [B] - [A] : ", reg.B, reg.A, MessageType::REGISTER);
+        break;
+    }
+    case 0xA1: {
+        reg.A = ALU::ana(reg, reg.C);
+        reg.PC++;
+        message("ANA C executed.  => [C] - [A] : ", reg.C, reg.A, MessageType::REGISTER);
+        break;
+    }
+    case 0xA2: {
+        reg.A = ALU::ana(reg, reg.D);
+        reg.PC++;
+        message("ANA D executed.  => [D] - [A] : ", reg.D, reg.A, MessageType::REGISTER);
+        break;
+    }
+    case 0xA3: {
+        reg.A = ALU::ana(reg, reg.E);
+        reg.PC++;
+        message("ANA E executed.  => [E] - [A] : ", reg.E, reg.A, MessageType::REGISTER);
+        break;
+    }
+    case 0xA4: {
+        reg.A = ALU::ana(reg, reg.H);
+        reg.PC++;
+        message("ANA H executed.  => [H] - [A] : ", reg.H, reg.A, MessageType::REGISTER);
+        break;
+    }
+    case 0xA5: {
+        reg.A = ALU::ana(reg, reg.L);
+        reg.PC++;
+        message("ANA L executed.  => [L] - [A] : ", reg.L, reg.A, MessageType::REGISTER);
+        break;
+    }
+    case 0xA6: {
+        uint16_t address = (reg.H << 8) | reg.L;
+        uint8_t value = memory.read(address);
+        debug("ANA M executed.", address, value, MessageType::MEMORY);
+        reg.A = ALU::ana(reg, value);
+        reg.PC++;
+        message("ANA M executed.  => [M] - [A] : ", value, reg.A, MessageType::REGISTER);
+        break;
+    }
+
+    // === ANI ===
+
+    case 0xE6: {
+        uint8_t value = memory.read(++reg.PC);
+        reg.PC++;
+        reg.A = ALU::ana(reg, value);
+        message("ANI executed.  => [VAL] - [A] : ", value, reg.A, MessageType::REGISTER);
+        break;
+    }
+
+    // === CALL etc ... ===
+
+    case 0xCD: {
+        uint16_t address = memory.read(++reg.PC) | (memory.read(++reg.PC) << 8); // little Endian
+        memory.write(reg.SP--, reg.PC & 0xFF); // lower  
+        memory.write(reg.SP--, (reg.PC >> 8) & 0xFF); // higher 
+        reg.PC = address;
+        debug("CALL executed. --> ", address, 0, MessageType::MEMORY);
+        break;
+    }
+    case 0xDC: { // CALL if carry 1
+        if ((reg.Flags & 0x01) == 0x01) { 
+            uint16_t address = memory.read(++reg.PC) | (memory.read(++reg.PC) << 8);
+            memory.write(reg.SP--, reg.PC & 0xFF);
+            memory.write(reg.SP--, (reg.PC >> 8) & 0xFF);
+            reg.PC = address;
+            debug("CC executed. --> ", address, 0, MessageType::MEMORY);
+        }
+        else {
+            reg.PC += 2; 
+            message("CC skipped as Carry flag is not set.",0,0,MessageType::INFO);
+        }
+        break;
+    }
+    case 0xFC: {
+        if ((reg.Flags & 0x80) == 0x80) { // CALL if Sign 1
+            uint16_t address = memory.read(++reg.PC) | (memory.read(++reg.PC) << 8);
+            memory.write(reg.SP--, reg.PC & 0xFF);
+            memory.write(reg.SP--, (reg.PC >> 8) & 0xFF);
+            reg.PC = address;
+            debug("CC executed. --> ", address, 0, MessageType::MEMORY);
+        }
+        else {
+            reg.PC += 2;
+            message("CC skipped as Sign flag is not set.", 0, 0, MessageType::INFO);
+        }
+        break;
+    }
+    case 0x2F: {
+        reg.A = ~reg.A; 
+        message("CMA executed.  => [A] : ", reg.A, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0x3F: { // CMC
+        reg.Flags ^= 0x01; 
+        message("CMC executed.", 0, 0, MessageType::REGISTER);
+        break;
+    }
+
+    // === CMP ===
+
+
+
+    // === MVI ===
 
     case 0x3E: {
         uint8_t value = memory.read(++reg.PC);
@@ -190,7 +311,7 @@ int CPU::execute(uint8_t opcode) {
     }
     case 0x36: {
         uint8_t value = memory.read(++reg.PC);
-        uint16_t M_addr = (reg.H) * (pow(2, 4)) + reg.L;
+        uint16_t M_addr = (reg.H << 8) | reg.L;
         memory.write(M_addr, value);
         message("MVI M", memory.read(M_addr), 0x00, MessageType::REGISTER);
         break;

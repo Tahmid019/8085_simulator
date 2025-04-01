@@ -1,29 +1,5 @@
-MVI A
-10
-OUT
-255
-
-MVI B
-1
-OUT
-255
-
-ADC B
-
-
-ACI
-10
-OUT
-255
-
-ADD B
-OUT
-255
-
-MVI C
-20
-ADD C
-OUT
-255
-
+CALL
+0
+4
+MOV A, A
 HLT
