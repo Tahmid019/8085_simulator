@@ -209,6 +209,7 @@ int CPU::execute(uint8_t opcode) {
 
     case 0xCD: {
         uint16_t address = memory.read(++reg.PC) | (memory.read(++reg.PC) << 8); // little Endian
+        reg.PC++;
         memory.write(reg.SP--, reg.PC & 0xFF); // lower  
         memory.write(reg.SP--, (reg.PC >> 8) & 0xFF); // higher 
         reg.PC = address;
@@ -218,13 +219,14 @@ int CPU::execute(uint8_t opcode) {
     case 0xDC: { // CALL if carry 1
         if ((reg.Flags & 0x01) == 0x01) { 
             uint16_t address = memory.read(++reg.PC) | (memory.read(++reg.PC) << 8);
+            reg.PC++;
             memory.write(reg.SP--, reg.PC & 0xFF);
             memory.write(reg.SP--, (reg.PC >> 8) & 0xFF);
             reg.PC = address;
             debug("CC executed. --> ", address, 0, MessageType::MEMORY);
         }
         else {
-            reg.PC += 2; 
+            reg.PC += 3; 
             message("CC skipped as Carry flag is not set.",0,0,MessageType::INFO);
         }
         break;
@@ -232,31 +234,193 @@ int CPU::execute(uint8_t opcode) {
     case 0xFC: {
         if ((reg.Flags & 0x80) == 0x80) { // CALL if Sign 1
             uint16_t address = memory.read(++reg.PC) | (memory.read(++reg.PC) << 8);
+            reg.PC++;
             memory.write(reg.SP--, reg.PC & 0xFF);
             memory.write(reg.SP--, (reg.PC >> 8) & 0xFF);
             reg.PC = address;
-            debug("CC executed. --> ", address, 0, MessageType::MEMORY);
+            debug("CM executed. --> ", address, 0, MessageType::MEMORY);
         }
         else {
-            reg.PC += 2;
-            message("CC skipped as Sign flag is not set.", 0, 0, MessageType::INFO);
+            reg.PC += 3;
+            message("CM skipped as Sign flag is not set.", 0, 0, MessageType::INFO);
         }
         break;
     }
     case 0x2F: {
         reg.A = ~reg.A; 
+        reg.PC++;
         message("CMA executed.  => [A] : ", reg.A, 0, MessageType::REGISTER);
         break;
     }
-    case 0x3F: { // CMC
-        reg.Flags ^= 0x01; 
+    case 0x3F: {
+        reg.Flags ^= 0x01;
+        reg.PC++;
         message("CMC executed.", 0, 0, MessageType::REGISTER);
         break;
     }
 
     // === CMP ===
 
+    case 0xBF: {
+        ALU::cmp(reg, reg.A);
+        reg.PC++;
+        message("CMP A executed.", reg.A, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0xB8: {
+        ALU::cmp(reg, reg.B);
+        reg.PC++;
+        message("CMP B executed.", reg.B, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0xB9: {
+        ALU::cmp(reg, reg.C);
+        reg.PC++;
+        message("CMP C executed.", reg.C, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0xBA: {
+        ALU::cmp(reg, reg.D);
+        reg.PC++;
+        message("CMP D executed.", reg.D, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0xBB: {
+        ALU::cmp(reg, reg.E);
+        reg.PC++;
+        message("CMP E executed.", reg.E, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0xBC: {
+        ALU::cmp(reg, reg.H);
+        reg.PC++;
+        message("CMP H executed.", reg.H, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0xBD: {
+        ALU::cmp(reg, reg.L);
+        reg.PC++;
+        message("CMP L executed.", reg.L, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0xBE: {
+        uint16_t address = (reg.H << 8) | reg.L;
+        uint8_t value = memory.read(address);
+        debug("CMP M executed.", address, value, MessageType::MEMORY);
+        ALU::cmp(reg, value);
+        reg.PC++;
+        message("CMP M executed.", value, 0, MessageType::REGISTER);
+        break;
+    }
 
+    // === CALL if Flag ===
+
+    case 0xD4: { 
+        if ((reg.Flags | 0xfe) == 0xfe) {
+            reg.PC++;
+            uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+            memory.write(--reg.SP, reg.PC & 0xFF);
+            memory.write(--reg.SP, (reg.PC >> 8) & 0xFF);
+            reg.PC = address;
+            debug("CNC executed.", address, 0, MessageType::MEMORY);
+        }
+        else {
+            reg.PC += 3;
+            message("CNC skipped as Carry flag is set.",0,0,MessageType::INFO);
+        }
+        break;
+    }
+    case 0xC4: { // CNZ
+        if ((reg.Flags | 0xdf) == 0xdf) {
+            reg.PC++;
+            uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+            memory.write(--reg.SP, reg.PC & 0xFF);
+            memory.write(--reg.SP, (reg.PC >> 8) & 0xFF);
+            reg.PC = address;
+            debug("CNZ executed.", address, 0, MessageType::MEMORY);
+        }
+        else {
+            reg.PC += 3;
+            message("CNZ skipped as Zero flag is set.",0, 0, MessageType::INFO);
+        }
+        break;
+    }
+    case 0xF4: { // Call if Pos
+        if ((reg.Flags | 0x7f) == 0x7f) {
+            reg.PC++;
+            uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+            memory.write(--reg.SP, reg.PC & 0xFF);
+            memory.write(--reg.SP, (reg.PC >> 8) & 0xFF);
+            reg.PC = address;
+            debug("CP executed.", address, 0, MessageType::MEMORY);
+        }
+        else {
+            reg.PC += 3;
+            message("CP skipped as Sign flag is set.");
+        }
+        break;
+    }
+    case 0xEC: { 
+        if ((reg.Flags | 0xf7) == 0xff) {
+            reg.PC++;
+            uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+            memory.write(--reg.SP, reg.PC & 0xFF);
+            memory.write(--reg.SP, (reg.PC >> 8) & 0xFF);
+            reg.PC = address;
+            debug("CPE executed.", address, 0, MessageType::MEMORY);
+        }
+        else {
+            reg.PC += 3;
+            message("CPE skipped as Parity flag is not set.",0,0,MessageType::INFO);
+        }
+        break;
+    }
+    case 0xFE: { 
+        reg.PC++;
+        uint8_t value = memory.read(reg.PC++);
+        ALU::cmp(reg, value);
+        message("CPI executed.", value,0,MessageType::MEMORY);
+        break;
+    }
+    case 0xE4: {
+        if ((reg.Flags | 0xf7) == 0xf7) {
+            reg.PC++;
+            uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+            memory.write(--reg.SP, reg.PC & 0xFF);
+            memory.write(--reg.SP, (reg.PC >> 8) & 0xFF);
+            reg.PC = address;
+            debug("CPO executed.", address, 0, MessageType::MEMORY);
+        }
+        else {
+            reg.PC += 2;
+            message("CPO skipped as Parity flag is set.",0,0,MessageType::INFO);
+        }
+        break;
+    }
+    case 0xCC: { 
+        if ((reg.Flags | 0xdf) == 0xff) {
+            reg.PC++;
+            uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+            memory.write(--reg.SP, reg.PC & 0xFF);
+            memory.write(--reg.SP, (reg.PC >> 8) & 0xFF);
+            reg.PC = address;
+            debug("CZ executed.", address, 0, MessageType::MEMORY);
+        }
+        else {
+            reg.PC += 3;
+            message("CZ skipped as Zero flag is not set.",0,0,MessageType::INFO);
+        }
+        break;
+    }
+
+    // === DAA ===
+
+    case 0x27: {
+        reg.PC++;
+        reg.A = ALU::daa(reg);
+        message("DAA executed.", reg.A,0,MessageType::REGISTER);
+        break;
+    }
 
     // === MVI ===
 
