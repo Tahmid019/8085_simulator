@@ -356,7 +356,7 @@ int CPU::execute(uint8_t opcode) {
         }
         else {
             reg.PC += 3;
-            message("CP skipped as Sign flag is set.");
+            message("CP skipped as Sign flag is set.",0,0, MessageType::INFO);
         }
         break;
     }
@@ -485,6 +485,7 @@ int CPU::execute(uint8_t opcode) {
     
     case 0x7F: {  
         reg.A = reg.A;
+        reg.PC++;
         message("MOV A, A", reg.A, reg.A, MessageType::REGISTER);
         break;
     }

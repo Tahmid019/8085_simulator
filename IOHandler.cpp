@@ -17,7 +17,7 @@ void IOHandler::loadProgram(string filename, CPU& cpu) {
 
     while (getline(file, strInst)) {
         if (ws>0) {
-            cpu.memory.write(addr++, stoi(strInst));
+            cpu.memory.write(addr++, stoi(strInst)); // STRING TO HEXT IMPLEMENTATION
             debug("Loaded at: ", addr - 1, 0, MessageType::MEMORY);
             ws--;
             continue;

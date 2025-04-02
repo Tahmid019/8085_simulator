@@ -1,5 +1,8 @@
-CALL
-0
-4
-MOV A, A
+MVI A
+26H
+
+OUT
+255
+
 HLT
+

@@ -26,8 +26,9 @@ public:
     }
     void execute_program(uint16_t init_addr) {
         message("Executing Program from Main Memory ...", 0, 0, MessageType::INFO);
+        cpu.reg.PC = init_addr;
         while (true) {
-            int check = cpu.execute(cpu.memory.read(init_addr++));
+            int check = cpu.execute(cpu.memory.read(cpu.reg.PC));
             if (check == -1) break;
             cout << endl;
         }
