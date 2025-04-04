@@ -422,6 +422,35 @@ int CPU::execute(uint8_t opcode) {
         break;
     }
 
+    // === DAD === 32-bit - avoid overflow
+
+    case 0x09: { // DAD B
+        ALU::dad(reg, reg.BC);
+        reg.PC++;
+        message("DAD B executed.", reg.B, reg.H, MessageType::REGISTER);
+        break;
+    }
+    case 0x19: { // DAD D
+        ALU::dad(reg, reg.DE);
+        reg.PC++;
+        message("DAD D executed.", reg.D, reg.H, MessageType::REGISTER);
+        break;
+    }
+    case 0x29: { // DAD H
+        ALU::dad(reg, reg.HL);
+        reg.PC++;
+        message("DAD H executed.", reg.H, reg.H, MessageType::REGISTER);
+        break;
+    }
+    case 0x39: { // DAD SP
+        uint32_t result = reg.HL.get() + reg.SP; 
+        reg.HL.set(static_cast<uint16_t>(result));
+		reg.Flags |= (result > 0xFFFF) ? 0x01 : 0x00;
+        reg.PC++;
+        message("DAD SP executed.", static_cast<uint8_t>(reg.SP & 0xFF), reg.H, MessageType::REGISTER);
+        break;
+    }
+
     // === MVI ===
 
     case 0x3E: {

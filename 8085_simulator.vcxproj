@@ -149,6 +149,9 @@
     <Text Include="Guid.txt" />
     <Text Include="program.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="data.csv" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

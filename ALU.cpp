@@ -12,21 +12,26 @@ uint8_t ALU::add(Registers& reg, uint8_t value) {
 	uint8_t temp = reg.A;
 	reg.A += value;
 
-	if ((reg.A & 0x80) == 0x80) {
+	if ((reg.A & 0x80) == 0x80) { // Sgn
 		reg.Flags |= 0x80;
 	}
 
-	if (reg.A == 0x00) {
+	if (reg.A == 0x00) { // Z
 		reg.Flags |= 0x20;
 	}
 
-	if (parity(reg.A)) {
+	if (parity(reg.A)) { // P
 		reg.Flags |= 0x08;
 	}
 
-	if (auxillaryCarry(temp, value)) {
+	if (auxillaryCarry(temp, value)) { // AC
 		reg.Flags |= 0x02;
 	}
+
+	if (carry(reg.A)) { // Carry
+		reg.Flags |= 0x01;
+	}
+
 
 	return reg.A;
 }
@@ -35,23 +40,23 @@ uint8_t ALU::adc(Registers& reg, uint8_t value) {
 	uint8_t temp = reg.A;
 	reg.A += value;
 	
-	if ( (reg.A & 0x80) == 0x80 ) {
+	if ((reg.A & 0x80) == 0x80) { // Sgn
 		reg.Flags |= 0x80;
 	}
 
-	if ( reg.A == 0x00000000 ) {
+	if (reg.A == 0x00000000) { // Z
 		reg.Flags |= 0x20;
 	}
 
-	if (parity(reg.A)) {
+	if (parity(reg.A)) { // P
 		reg.Flags |= 0x08;
 	}
 
-	if (auxillaryCarry(temp, value)) {
+	if (auxillaryCarry(temp, value)) { // AC
 		reg.Flags |= 0x02;
 	}
 
-	if (carry(reg.A)) {
+	if (carry(reg.A)) { // Carry
 		reg.Flags |= 0x01;
 	}
 
@@ -62,23 +67,23 @@ uint8_t ALU::ana(Registers& reg, uint8_t value) {
 	uint8_t temp = reg.A;
 	reg.A &= value;
 
-	if ((reg.A & 0x80) == 0x80) {
+	if ((reg.A & 0x80) == 0x80) { // Sgn
 		reg.Flags |= 0x80;
 	}
 
-	if (reg.A == 0x00) {
+	if (reg.A == 0x00) { // Z
 		reg.Flags |= 0x20;
 	}
 
-	if (parity(reg.A)) {
+	if (parity(reg.A)) { // P
 		reg.Flags |= 0x08;
 	}
 
-	if (auxillaryCarry(temp, value)) {
+	if (auxillaryCarry(temp, value)) { // AC
 		reg.Flags |= 0x02;
 	}
 
-	if (carry(reg.A)) {
+	if (carry(reg.A)) { // Carry
 		reg.Flags |= 0x01;
 	}
 	return reg.A;
@@ -87,23 +92,23 @@ uint8_t ALU::ana(Registers& reg, uint8_t value) {
 uint8_t ALU::cmp(Registers& reg, uint8_t value) {
 	uint8_t temp = reg.A - value;
 
-	if ((reg.A & 0x80) == 0x80) {
+	if ((reg.A & 0x80) == 0x80) { // Sgn
 		reg.Flags |= 0x80;
 	}
 
-	if (temp == 0x00) {
+	if (temp == 0x00) { // Z
 		reg.Flags |= 0x20;
 	}
 
-	if (parity(temp)) {
+	if (parity(temp)) { // P
 		reg.Flags |= 0x08;
 	}
 
-	if (auxillaryCarry(reg.A, value)) {
+	if (auxillaryCarry(reg.A, value)) { // AC
 		reg.Flags |= 0x02;
 	}
 
-	if (carry(temp)) {
+	if (carry(temp)) { // Carry
 		reg.Flags |= 0x01;
 	}
 	return temp;
@@ -121,10 +126,26 @@ uint8_t ALU::daa(Registers& reg) {
 		reg.A += 0x60;
 		(reg.A > 0xFF) ? (reg.Flags |= 0x01) : (reg.Flags &= 0xfe);
 	}
-	//reg.Flags = (reg.A == 0x00) ? (); // Z
-	//reg.flags.S = (reg.A & 0x80) != 0;
-	//reg.flags.P = __builtin_parity(reg.A);
+	if (reg.A == 0x00) { // Z
+		reg.Flags |= 0x20;
+	}
+	if (reg.A & 0x80) { // Sgn
+		reg.Flags |= 0x80;
+	}
+	if (parity(reg.A)) { // P
+		reg.Flags |= 0x08;
+	}
+	
 	return reg.A;
+}
+
+uint16_t ALU::dad(Registers& reg, RegisterPair& regx) {
+	uint32_t result = (reg.HL.get() + regx.get());
+	if (result > 0xFFFF) { // carry
+		reg.Flags |= 0x01;
+	}
+	reg.HL.set(result);
+	return reg.HL.get();
 }
 
 
