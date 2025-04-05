@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClInclude Include="ALU.h" />
     <ClInclude Include="CPU.h" />
+    <ClInclude Include="Head_1.h" />
     <ClInclude Include="Instructions.h" />
     <ClInclude Include="IOHandler.h" />
     <ClInclude Include="Memory.h" />
@@ -147,6 +148,9 @@
   <ItemGroup>
     <Text Include="Guid.txt" />
     <Text Include="program.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

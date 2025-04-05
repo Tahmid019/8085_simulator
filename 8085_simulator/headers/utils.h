@@ -1,7 +1,5 @@
 #pragma once
-#include <iostream>
-#include <string>
-#include <iomanip>
+#include "Head_1.h"
 
 enum class MessageType {
     INFO,

@@ -1,6 +1,5 @@
 #pragma once
-#include <map>
-#include <cstdint>
+#include "Head_1.h"
 
 class Memory {
 public:

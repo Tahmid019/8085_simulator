@@ -1,9 +1,10 @@
-#include "Head_1.h"
 #include "IOHandler.h"
 #include "Instructions.h"
 #include "utils.h"
+#include <iostream>
+#include <string>
 
-void IOHandler::loadProgram(string filename, CPU& cpu) {
+void IOHandler::loadProgram(const char* filename, CPU& cpu) {
     std::ifstream file(filename);
 
     if (!file) {
@@ -17,7 +18,7 @@ void IOHandler::loadProgram(string filename, CPU& cpu) {
 
     while (getline(file, strInst)) {
         if (ws>0) {
-            cpu.memory.write(addr++, stoi(strInst)); // STRING TO HEXT IMPLEMENTATION
+            cpu.memory.write(addr++, stoi(strInst));
             debug("Loaded at: ", addr - 1, 0, MessageType::MEMORY);
             ws--;
             continue;
