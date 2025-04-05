@@ -50,7 +50,7 @@ std::map<std::string, Instruction> instructionSet = {
     {"CMP E", Instruction("CMP E", 0xBB, 1)},
     {"CMP H", Instruction("CMP H", 0xBC, 1)},
     {"CMP L", Instruction("CMP L", 0xBD, 1)},
-    {"CMP M", Instruction("CMP M", 0xBD, 1)},
+    {"CMP M", Instruction("CMP M", 0xBE, 1)},
     
     {"CNC", Instruction("CNC", 0xD4, 3)},
     {"CNZ", Instruction("CNZ", 0xC4, 3)},

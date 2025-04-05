@@ -451,6 +451,349 @@ int CPU::execute(uint8_t opcode) {
         break;
     }
 
+    // === DCR ===
+
+    case 0x3D: { // DCR A
+        reg.A--;
+        reg.PC++;
+        message("DCR A executed.", reg.A,0, MessageType::REGISTER);
+        break;
+    }
+    case 0x05: { // DCR B
+        reg.B--;
+        reg.PC++;
+        message("DCR B executed.", reg.B,0, MessageType::REGISTER);
+        break;
+    }
+    case 0x0D: { // DCR C
+        reg.C--;
+        reg.PC++;
+        message("DCR C executed.", reg.C,0, MessageType::REGISTER);
+        break;
+    }
+    case 0x15: { // DCR D
+        reg.D--;
+        reg.PC++;
+        message("DCR D executed.", reg.D,0, MessageType::REGISTER);
+        break;
+    }
+    case 0x1D: { // DCR E
+        reg.E--;
+        reg.PC++;
+        message("DCR E executed.", reg.E,0, MessageType::REGISTER);
+        break;
+    }
+    case 0x25: { // DCR H
+        reg.H--;
+        reg.PC++;
+        message("DCR H executed.", reg.H,0, MessageType::REGISTER);
+        break;
+    }
+    case 0x2D: { // DCR L
+        reg.L--;
+        reg.PC++;
+        message("DCR L executed.", reg.L,0, MessageType::REGISTER);
+        break;
+    }
+    case 0x35: { // DCR M
+        uint16_t address = reg.HL.get();
+        uint8_t value = memory.read(address) - 1;
+        memory.write(address, value);
+        reg.PC++;
+        debug("DCR M executed.", address, value, MessageType::MEMORY);
+        message("DCR M executed.", value,0, MessageType::REGISTER);
+        break;
+    }
+    
+    // === DCX ===
+
+    case 0x0B: { // DCX B
+        reg.BC.set(reg.BC.get() - 1);
+        reg.PC++;
+        message("DCX B executed.", reg.B, reg.C, MessageType::REGISTER);
+        break;
+    }
+    case 0x1B: { // DCX D
+        reg.DE.set(reg.DE.get() - 1);
+        reg.PC++;
+        message("DCX D executed.", reg.D, reg.E, MessageType::REGISTER);
+        break;
+    }
+    case 0x22B: { // DCX H
+        reg.HL.set(reg.HL.get() - 1);
+        reg.PC++;
+        message("DCX H executed.", reg.H, reg.L, MessageType::REGISTER);
+        break;
+    }
+    case 0x3B: { // DCX SP
+        reg.SP--;
+        reg.PC++;
+        message("DCX SP executed.", static_cast<uint8_t>(reg.SP & 0xFF),0, MessageType::REGISTER);
+        break;
+    }
+
+    // === Interrupt ===
+
+    case 0xF3: { // DI
+        reg.interruptEnabled = false;
+        reg.PC++;
+        message("DI executed. Interrupts disabled.",0,0, MessageType::INFO);
+        break;
+    }
+    case 0xFB: { // EI
+        reg.interruptEnabled = true;
+        reg.PC++;
+        message("EI executed. Interrupts enabled.",0,0, MessageType::INFO);
+        break;
+    }
+
+    // === INR ===
+
+    case 0x3C: { // INR A
+        reg.A++;
+        reg.PC++;
+        message("INR A executed.", reg.A, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0x04: { // INR B
+        reg.B++;
+        reg.PC++;
+        message("INR B executed.", reg.B, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0x0C: { // INR C
+        reg.C++;
+        reg.PC++;
+        message("INR C executed.", reg.C, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0x14: { // INR D
+        reg.D++;
+        reg.PC++;
+        message("INR D executed.", reg.D, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0x1C: { // INR E
+        reg.E++;
+        reg.PC++;
+        message("INR E executed.", reg.E, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0x24: { // INR H
+        reg.H++;
+        reg.PC++;
+        message("INR H executed.", reg.H, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0x2C: { // INR L
+        reg.L++;
+        reg.PC++;
+        message("INR L executed.", reg.L, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0x34: { // INR M
+        uint16_t address = reg.HL.get();
+        uint8_t value = memory.read(address) + 1;
+        memory.write(address, value);
+        reg.PC++;
+        debug("INR M executed.", address, value, MessageType::MEMORY);
+        message("INR M executed.", value, 0, MessageType::REGISTER);
+        break;
+    }
+
+    // === INX ===
+
+    case 0x03: { // INX B
+        reg.BC.set(reg.BC.get() + 1);
+        reg.PC++;
+        message("INX B executed.", reg.BC.get() & 0xFF, reg.BC.get() >> 8, MessageType::REGISTER);
+        break;
+    }
+    case 0x13: { // INX D
+        reg.DE.set(reg.DE.get() + 1);
+        reg.PC++;
+        message("INX D executed.", reg.DE.get() & 0xFF, reg.DE.get() >> 8, MessageType::REGISTER);
+        break;
+    }
+    case 0x23: { // INX H
+        reg.HL.set(reg.HL.get() + 1);
+        reg.PC++;
+        message("INX H executed.", reg.HL.get() & 0xFF, reg.HL.get() >> 8, MessageType::REGISTER);
+        break;
+    }
+    case 0x33: { // INX SP
+        reg.SP++;
+        reg.PC++;
+        message("INX SP executed.", static_cast<uint8_t>(reg.SP & 0xFF), static_cast<uint8_t>(reg.SP >> 8), MessageType::REGISTER);
+        break;
+    }
+
+	// === JMP ===
+
+    case 0xDA: { // JC
+        uint16_t address = memory.read(++reg.PC) | (memory.read(++reg.PC) << 8);
+        if ((reg.Flags & 0x01) == 0x01) {
+            reg.PC = address;
+            debug("JC executed. Jump taken.", address, 0, MessageType::MEMORY);
+        }
+        else {
+            message("JC executed. Jump not taken.",0,0, MessageType::INFO);
+        }
+        break;
+    }
+    case 0xFA: { // JM
+        reg.PC++;
+        uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+        if ((reg.Flags & 0x80) == 0x80) {
+            reg.PC = address;
+            debug("JM executed. Jump taken.", address, 0, MessageType::MEMORY);
+        }
+        else {
+            message("JM executed. Jump not taken.",0,0, MessageType::INFO);
+        }
+        break;
+    }
+    case 0xC3: { // JMP
+		reg.PC++;
+        reg.PC = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+        debug("JMP executed. Unconditional jump.", reg.PC, 0, MessageType::MEMORY);
+        break;
+    }
+    case 0xD2: { // JNC
+        reg.PC++;
+        uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+        if ((reg.Flags & 0x01) == 0x00) {
+            reg.PC = address;
+            debug("JNC executed. Jump taken.", address, 0, MessageType::MEMORY);
+        }
+        else {
+            message("JNC executed. Jump not taken.",0,0, MessageType::INFO);
+        }
+        break;
+    }
+    case 0xC2: { // JNZ
+        reg.PC++;
+        uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+        if ((reg.Flags & 0x20) == 0x00) {
+            reg.PC = address;
+            debug("JNZ executed. Jump taken.", address, 0, MessageType::MEMORY);
+        }
+        else {
+            message("JNZ executed. Jump not taken.",0,0, MessageType::INFO);
+        }
+        break;
+    }
+    case 0xF2: { // JP
+        reg.PC++;
+        uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+        if ((reg.Flags & 0x80) == 0x00) {
+            reg.PC = address;
+            debug("JP executed. Jump taken.", address, 0, MessageType::MEMORY);
+        }
+        else {
+            message("JP executed. Jump not taken.",0,0, MessageType::INFO);
+        }
+        break;
+    }
+    case 0xEA: { // JPE
+        reg.PC++;
+        uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+        if ((reg.Flags & 0x08) == 0x08) {
+            reg.PC = address;
+            debug("JPE executed. Jump taken.", address, 0, MessageType::MEMORY);
+        }
+        else {
+            message("JPE executed. Jump not taken.",0,0, MessageType::INFO);
+        }
+        break;
+    }
+    case 0xE2: { // JPO
+        reg.PC++;
+        uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+        if ((reg.Flags & 0x08) == 0x00) {
+            reg.PC = address;
+            debug("JPO executed. Jump taken.", address, 0, MessageType::MEMORY);
+        }
+        else {
+            message("JPO executed. Jump not taken.",0,0, MessageType::INFO);
+        }
+        break;
+    }
+    case 0xCA: { // JZ
+        reg.PC++;
+        uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+        if ((reg.Flags & 0x20) == 0x20) {
+            reg.PC = address;
+            debug("JZ executed. Jump taken.", address, 0, MessageType::MEMORY);
+        }
+        else {
+            message("JZ executed. Jump not taken.",0,0, MessageType::INFO);
+        }
+        break;
+    }
+
+    // === LD Type ===
+
+    case 0x3A: { // LDA
+        reg.PC++;
+        uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+        reg.A = memory.read(address);
+        message("LDA executed. Loaded value into accumulator.", reg.A, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0x0A: { // LDAX B
+        reg.PC++;
+        uint16_t address = reg.BC.get();
+        reg.A = memory.read(address);
+        message("LDAX B executed. Loaded value into accumulator.", reg.A, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0x1A: { // LDAX D
+        reg.PC++;
+        uint16_t address = reg.DE.get();
+        reg.A = memory.read(address);
+        message("LDAX D executed. Loaded value into accumulator.", reg.A, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0x2A: { // LHLD
+        reg.PC++;
+        uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+        reg.L = memory.read(address);
+        reg.H = memory.read(address + 1);
+        message("LHLD executed. Loaded values into H and L registers.", reg.H, reg.L, MessageType::REGISTER);
+        break;
+    }
+
+    // === LXI ===
+
+    case 0x01: { // LXI B
+        reg.PC++;
+        reg.C = memory.read(reg.PC++);
+        reg.B = memory.read(reg.PC++);
+        message("LXI B executed. Loaded values into B and C registers.", reg.B, reg.C, MessageType::REGISTER);
+        break;
+    }
+    case 0x11: { // LXI D
+        reg.PC++;
+        reg.E = memory.read(reg.PC++);
+        reg.D = memory.read(reg.PC++);
+        message("LXI D executed. Loaded values into D and E registers.", reg.D, reg.E, MessageType::REGISTER);
+        break;
+    }
+    case 0x21: { // LXI H
+        reg.PC++;
+        reg.L = memory.read(reg.PC++);
+        reg.H = memory.read(reg.PC++);
+        message("LXI H executed. Loaded values into H and L registers.", reg.H, reg.L, MessageType::REGISTER);
+        break;
+    }
+    case 0x31: { // LXI SP
+        reg.PC++;
+        reg.SP = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+        message("LXI SP executed. Loaded value into Stack Pointer.", static_cast<uint8_t>(reg.SP & 0xFF), static_cast<uint8_t>(reg.SP >> 8), MessageType::REGISTER);
+        break;
+    }
+
     // === MVI ===
 
     case 0x3E: {
@@ -837,6 +1180,117 @@ int CPU::execute(uint8_t opcode) {
         break;
     }
 
+    // === NOP ===
+
+    case 0x00: { // NOP
+        reg.PC++;
+        message("NOP executed. No operation performed.",0,0, MessageType::INFO);
+        break;
+    }
+
+    // === ORA ===
+
+    case 0xB7: { // ORA A
+        ALU::ora(reg, reg.A);
+        reg.PC++;
+        message("ORA A executed. A |=  itself.", reg.A, 0, MessageType::REGISTER);
+        break;
+    }
+    case 0xB0: { // ORA B
+        ALU::ora(reg, reg.B);
+        reg.PC++;
+        message("ORA B executed. A |=  register B.", reg.A, reg.B, MessageType::REGISTER);
+        break;
+    }
+    case 0xB1: { // ORA C
+        ALU::ora(reg, reg.C);
+        reg.PC++;
+        message("ORA C executed. A |=  register C.", reg.A, reg.C, MessageType::REGISTER);
+        break;
+    }
+    case 0xB2: { // ORA D
+        ALU::ora(reg, reg.D);
+        reg.PC++;
+        message("ORA D executed. A |=  register D.", reg.A, reg.D, MessageType::REGISTER);
+        break;
+    }
+    case 0xB3: { // ORA E
+        ALU::ora(reg, reg.E);
+        reg.PC++;
+        message("ORA E executed. A |=  register E.", reg.A, reg.E, MessageType::REGISTER);
+        break;
+    }
+    case 0xB4: { // ORA H
+        ALU::ora(reg, reg.H);
+        reg.PC++;
+        message("ORA H executed. A |=  register H.", reg.A, reg.H, MessageType::REGISTER);
+        break;
+    }
+    case 0xB5: { // ORA L
+        ALU::ora(reg, reg.L);
+        reg.PC++;
+        message("ORA L executed. A |=  register L.", reg.A, reg.L, MessageType::REGISTER);
+        break;
+    }
+    case 0xB6: { // ORA M
+        uint16_t address = reg.HL.get();
+        uint8_t value = memory.read(address);
+        ALU::ora(reg, value);
+        reg.PC++;
+        debug("ORA M executed. A |=  memory value.", address, value, MessageType::MEMORY);
+        message("ORA M executed.", reg.A, 0, MessageType::REGISTER);
+        break;
+    }
+
+    // === ORI ===
+
+    case 0xF6: { // ORI
+        uint8_t val = memory.read(reg.PC++);
+        ALU::ora(reg, val);
+        reg.PC++;
+        message("ORI executed. A |= val.", reg.A, val, MessageType::REGISTER);
+        break;
+    }
+
+    // === PCHL ===
+
+    case 0xE9: { // PCHL
+        reg.PC = reg.HL.get();
+        message("PCHL executed. Program Counter set to HL register pair.", reg.PC & 0xFF, reg.PC >> 8, MessageType::REGISTER);
+        break;
+    }
+
+    // === POP ===
+
+    case 0xC1: { // POP B
+        reg.C = reg.SP.pop(memory);
+        reg.B = reg.SP.pop(memory);
+        reg.PC++;
+        message("POP B executed. Values popped into B and C registers.", reg.B, reg.C, MessageType::REGISTER);
+        break;
+    }
+    case 0xD1: { // POP D
+        reg.E = reg.SP.pop(memory);
+        reg.D = reg.SP.pop(memory);
+        reg.PC++;
+        message("POP D executed. Values popped into D and E registers.", reg.D, reg.E, MessageType::REGISTER);
+        break;
+    }
+    case 0xE1: { // POP H
+        reg.L = reg.SP.pop(memory);
+        reg.H = reg.SP.pop(memory);
+        reg.PC++;
+        message("POP H executed. Values popped into H and L registers.", reg.H, reg.L, MessageType::REGISTER);
+        break;
+    }
+    case 0xF1: { // POP PSW (Processor Status Word)
+        reg.Flags = reg.SP.pop(memory);
+        reg.A = reg.SP.pop(memory);
+        reg.PC++;
+        message("POP PSW executed. Flags and Accumulator updated.", reg.A, reg.Flags, MessageType::REGISTER);
+        break;
+    }
+
     /*
      === INPUT - OUTPUT ===
     */
@@ -854,13 +1308,6 @@ int CPU::execute(uint8_t opcode) {
    /* case 0xCE: {
 
     }*/
-
-    case 0x3A: {
-        uint16_t addr = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
-        reg.A = memory.read(addr);
-        std::cout << "LDA executed. A = " << std::hex << static_cast<int>(reg.A) << " from [" << addr << "]" << std::endl;
-        break;
-    }
 
     case 0x32: {
         uint16_t addr = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
