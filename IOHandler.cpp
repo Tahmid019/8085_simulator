@@ -46,6 +46,14 @@ void IOHandler::loadProgram(string filename, CPU& cpu) {
                 debug("Loaded at: ", addr - 1, 0, MessageType::MEMORY);
                 break;
             }
+            
+            case 3: {
+                cpu.memory.write(addr++, oc);
+                ws--;
+                debug("Loaded at: ", addr - 1, 0, MessageType::MEMORY);
+                break;
+            }
+
             default: {
                 debug("Invalid IO case", 0, 0, MessageType::INFO);
                 exit(1);

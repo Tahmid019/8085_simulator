@@ -1,8 +1,19 @@
 MVI A
-26H
+1
+
+MVI B
+21
+
+ADC B
 
 OUT
 255
+
+JNC
+2
+0
+
+
 
 HLT
 
