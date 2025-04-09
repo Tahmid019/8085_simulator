@@ -1291,6 +1291,107 @@ int CPU::execute(uint8_t opcode) {
         break;
     }
 
+    // === Rotate & Return ===
+
+    case 0x17: { // RAL
+        uint8_t carry = reg.Flags & 0x01;
+        reg.Flags = (reg.Flags & 0xFE) | ((reg.A & 0x80) != 0);
+        reg.A = (reg.A << 1) | carry;
+        reg.PC++;
+        break;
+    }
+    case 0x1F: { // RAR
+        uint8_t carry = reg.Flags & 0x01;
+        reg.Flags = (reg.Flags & 0xFE) | (reg.A & 0x01);
+        reg.A = (reg.A >> 1) | (carry << 7);
+        reg.PC++;
+        break;
+    }
+    case 0x07: { // RLC
+        reg.Flags = (reg.Flags & 0xFE) | ((reg.A & 0x80) != 0);
+        reg.A = (reg.A << 1) | (reg.A >> 7);
+        reg.PC++;
+        break;
+    }
+    case 0x0F: { // RRC
+        reg.Flags = (reg.Flags & 0xFE) | (reg.A & 0x01);
+        reg.A = (reg.A >> 1) | (reg.A << 7);
+        reg.PC++;
+        break;
+    }
+    case 0xC9: { // RET
+        reg.PC = reg.SP.pop(memory) | (reg.SP.pop(memory) << 8);
+        break;
+    }
+    case 0xD8: { // RC
+        if (reg.Flags & 0x01) {
+            reg.PC = reg.SP.pop(memory) | (reg.SP.pop(memory) << 8);
+        }
+        else {
+            reg.PC++;
+        }
+        break;
+    }
+    case 0xC0: { // RNZ
+        if (!(reg.Flags & 0x40)) {
+            reg.PC = reg.SP.pop(memory) | (reg.SP.pop(memory) << 8);
+        }
+        else {
+            reg.PC++;
+        }
+        break;
+    }
+    case 0xD0: { // RNC
+        if (!(reg.Flags & 0x01)) {
+            reg.PC = reg.SP.pop(memory) | (reg.SP.pop(memory) << 8);
+        }
+        else {
+            reg.PC++;
+        }
+        break;
+    }
+    case 0xF0: { // RP
+        if (!(reg.Flags & 0x80)) {
+            reg.PC = reg.SP.pop(memory) | (reg.SP.pop(memory) << 8);
+        }
+        else {
+            reg.PC++;
+        }
+        break;
+    }
+    case 0xF8: { // RM
+        if (reg.Flags & 0x80) {
+            reg.PC = reg.SP.pop(memory) | (reg.SP.pop(memory) << 8);
+        }
+        else {
+            reg.PC++;
+        }
+        break;
+    }
+    case 0xE8: { // RPE
+        if (reg.Flags & 0x04) {
+            reg.PC = reg.SP.pop(memory) | (reg.SP.pop(memory) << 8);
+        }
+        else {
+            reg.PC++;
+        }
+        break;
+    }
+    case 0xE0: { // RPO
+        if (!(reg.Flags & 0x04)) {
+            reg.PC = reg.SP.pop(memory) | (reg.SP.pop(memory) << 8);
+        }
+        else {
+            reg.PC++;
+        }
+        break;
+    }
+    case 0x20: { // RIM
+        reg.A = interruptControl.readMask();
+        reg.PC++;
+        break;
+    }
+
     /*
      === INPUT - OUTPUT ===
     */
