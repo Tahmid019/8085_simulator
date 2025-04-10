@@ -1350,7 +1350,7 @@ int CPU::execute(uint8_t opcode) {
         }
         break;
     }
-    case 0xF0: { // RP
+    case 0xF0: { // RP - if Positive
         if (!(reg.Flags & 0x80)) {
             reg.PC = reg.SP.pop(memory) | (reg.SP.pop(memory) << 8);
         }
@@ -1359,7 +1359,7 @@ int CPU::execute(uint8_t opcode) {
         }
         break;
     }
-    case 0xF8: { // RM
+    case 0xF8: { // RM - if Minus
         if (reg.Flags & 0x80) {
             reg.PC = reg.SP.pop(memory) | (reg.SP.pop(memory) << 8);
         }
@@ -1389,6 +1389,66 @@ int CPU::execute(uint8_t opcode) {
     case 0x20: { // RIM
         reg.A = interruptControl.readMask();
         reg.PC++;
+        break;
+    }
+
+    // === RST ===
+
+    case 0xC7: { // RST 0
+        reg.SP.push(memory, (reg.PC >> 8) & 0xFF);
+        reg.SP.push(memory, reg.PC & 0xFF);
+        reg.PC = 0x00;
+        break;
+    }
+    case 0xCF: { // RST 1
+        reg.SP.push(memory, (reg.PC >> 8) & 0xFF);
+        reg.SP.push(memory, reg.PC & 0xFF);
+        reg.PC = 0x08;
+        break;
+    }
+    case 0xD7: { // RST 2
+        reg.SP.push(memory, (reg.PC >> 8) & 0xFF);
+        reg.SP.push(memory, reg.PC & 0xFF);
+        reg.PC = 0x10;
+        break;
+    }
+    case 0xDF: { // RST 3
+        reg.SP.push(memory, (reg.PC >> 8) & 0xFF);
+        reg.SP.push(memory, reg.PC & 0xFF);
+        reg.PC = 0x18;
+        break;
+    }
+    case 0xE7: { // RST 4
+        reg.SP.push(memory, (reg.PC >> 8) & 0xFF);
+        reg.SP.push(memory, reg.PC & 0xFF);
+        reg.PC = 0x20;
+        break;
+    }
+    case 0xEF: { // RST 5
+        reg.SP.push(memory, (reg.PC >> 8) & 0xFF);
+        reg.SP.push(memory, reg.PC & 0xFF);
+        reg.PC = 0x28;
+        break;
+    }
+    case 0xF7: { // RST 6
+        reg.SP.push(memory, (reg.PC >> 8) & 0xFF);
+        reg.SP.push(memory, reg.PC & 0xFF);
+        reg.PC = 0x30;
+        break;
+    }
+    case 0xFF: { // RST 7
+        reg.SP.push(memory, (reg.PC >> 8) & 0xFF);
+        reg.SP.push(memory, reg.PC & 0xFF);
+        reg.PC = 0x38;
+        break;
+    }
+    case 0xC8: { // RZ
+        if (reg.Flags & 0x40) {
+            reg.PC = reg.SP.pop(memory) | (reg.SP.pop(memory) << 8);
+        }
+        else {
+            reg.PC++;
+        }
         break;
     }
 

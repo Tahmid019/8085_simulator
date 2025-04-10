@@ -43,6 +43,12 @@ public:
         return value;                         
     }
 
+	uint8_t push(Memory& memory, uint8_t value) {
+		spValue--;
+		memory.write(spValue, value);
+		return value;
+	}
+
     StackPointer& operator=(uint16_t value) {
         spValue = value; 
         return *this;    
