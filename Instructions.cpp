@@ -261,12 +261,14 @@ std::map<std::string, Instruction> instructionSet = {
     {"XRA L",    Instruction("XRA L"   , 0xAD, 1) },
     {"XRA M",    Instruction("XRA M"   , 0xAE, 1) },
     {"XRI",    Instruction("XRI"   , 0xEE, 2) },
+
     {"XTHL",    Instruction("XTHL"   , 0xE3, 1) },
 
     {"IN", Instruction("IN", 0xDB, 2)},
     {"OUT",    Instruction("OUT"   , 0xD3, 2)},
 
     {"HLT",      Instruction("HLT"     , 0x76, 1)},
+
 };
 
 std::map<std::string, std::function<void()>> instructionHandlers = {

@@ -11,4 +11,5 @@ public:
 	static uint8_t ora(Registers& reg, uint8_t value); // OR
 	static uint8_t sub(Registers& reg, uint8_t value);
 	static uint8_t sbi(Registers& reg, uint8_t value);
+	static uint8_t xra(Registers& reg, uint8_t value); 
 };

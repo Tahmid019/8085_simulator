@@ -45,6 +45,9 @@
     <ClCompile Include="InterruptControl.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="IO.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory.h">
@@ -72,6 +75,9 @@
       <Filter>Header Files\Implementation_Headers</Filter>
     </ClInclude>
     <ClInclude Include="InterruptControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

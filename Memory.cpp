@@ -9,3 +9,7 @@ uint8_t Memory::read(uint16_t address) {
     std::cout << "Reading Memory[" << std::hex << address << "]: " << static_cast<int>(mem[address]) << std::endl;
     return mem[address];
 }
+void Memory::clear() {
+	mem.clear();
+	std::cout << "Memory Cleared" << std::endl;
+}

@@ -183,6 +183,21 @@ uint8_t ALU::sbi(Registers& reg, uint8_t value) {
 	return result & 0xFF;
 }
 
+uint8_t ALU::xra(Registers& reg, uint8_t value) {
+	reg.A ^= value;
 
+	if ((reg.A & 0x80) == 0x80) { // Sgn
+		reg.Flags |= 0x80;
+	}
+	if (reg.A == 0x00) { // Z
+		reg.Flags |= 0x20;
+	}
+	if (parity(reg.A)) { // P
+		reg.Flags |= 0x08;
+	}
+	reg.Flags &= 0xFD; // AC
+	reg.Flags &= 0xFE; // C
+	return reg.A;
+}
 
 

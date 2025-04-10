@@ -1545,26 +1545,113 @@ int CPU::execute(uint8_t opcode) {
         break;
     }
 
-    /*
-     === INPUT - OUTPUT ===
-    */
+    // === SUI ===
 
-    case 0xD3: { 
-        uint8_t port_address = memory.read(++reg.PC);
+    case 0xD6: { // SUI 
         reg.PC++;
-        // implement IO memory
-        message("OUT ", port_address, reg.A, MessageType::REGISTER);
+        uint8_t value = memory.read(reg.PC++);
+        reg.A = ALU::sub(reg, value);
         break;
     }
 
-    // === ALU Instruction ===
+    // === XCHG ===
 
-   /* case 0xCE: {
+    case 0xEB: { // XCHG (HL <-> DE)
+        uint16_t temp = reg.HL.get();
+        reg.HL.set(reg.DE.get());
+        reg.DE.set(temp);
+        reg.PC++;
+        break;
+    }
 
-    }*/
+    // === XRA ===
+
+    case 0xAF: { // XRA A
+        reg.A = ALU::xra(reg, reg.A);
+        reg.PC++;
+        break;
+    }
+    case 0xA8: { // XRA B
+        reg.A = ALU::xra(reg, reg.B);
+        reg.PC++;
+        break;
+    }
+    case 0xA9: { // XRA C
+        reg.A = ALU::xra(reg, reg.C);
+        reg.PC++;
+        break;
+    }
+    case 0xAA: { // XRA D
+        reg.A = ALU::xra(reg, reg.D);
+        reg.PC++;
+        break;
+    }
+    case 0xAB: { // XRA E
+        reg.A = ALU::xra(reg, reg.E);
+        reg.PC++;
+        break;
+    }
+    case 0xAC: { // XRA H
+        reg.A = ALU::xra(reg, reg.H);
+        reg.PC++;
+        break;
+    }
+    case 0xAD: { // XRA L
+        reg.A = ALU::xra(reg, reg.L);
+        reg.PC++;
+        break;
+    }
+    case 0xAE: { // XRA M 
+        reg.A = ALU::xra(reg, memory.read(reg.HL.get()));
+        reg.PC++;
+        break;
+    }
+    case 0xEE: { // XRI 
+        reg.PC++;
+        reg.A = ALU::xra(reg, memory.read(reg.PC++));
+        break;
+    }
+
+    // === XTHL ===
+
+    case 0xE3: { // XTHL (Exchange Top of Stack with HL)
+        uint8_t tempL = memory.read(reg.SP.get());
+        uint8_t tempH = memory.read(reg.SP.get() + 1);
+        memory.write(reg.SP.get(), reg.L);
+        memory.write(reg.SP.get() + 1, reg.H);
+        reg.L = tempL;
+        reg.H = tempH;
+        reg.PC++;
+        break;
+    }
+
+    // === IN / OUT ===
+
+    case 0xDB: { // IN 
+        reg.PC++;
+        uint8_t portAddress = memory.read(reg.PC++);
+        reg.A = io.read(portAddress); 
+        break;
+    }
+    //case 0xD3: { // OUT 
+    //    reg.PC++;
+    //    uint8_t portAddress = memory.read(reg.PC++);
+    //    io.write(portAddress, reg.A); 
+    //    break;
+    //}
+
+    case 0xD3: { // OUT 
+        reg.PC++;
+        uint8_t value = memory.read(reg.PC++);
+        //uint8_t portAddress = memory.read(reg.PC++);
+        //io.write(portAddress, reg.A);
+        message("OUT : ", value, reg.A, MessageType::REGISTER);
+        break;
+    }
 
     case 0x76:
-        //debug("HLT", opcode);
+        debug("HLT", opcode, 0, MessageType::INFO);
+        reg.PC++;
         return -1;
 
     default:

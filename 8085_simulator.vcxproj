@@ -131,6 +131,7 @@
     <ClCompile Include="CPU.cpp" />
     <ClCompile Include="Instructions.cpp" />
     <ClCompile Include="InterruptControl.cpp" />
+    <ClCompile Include="IO.cpp" />
     <ClCompile Include="IOHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Memory.cpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="Head_1.h" />
     <ClInclude Include="Instructions.h" />
     <ClInclude Include="InterruptControl.h" />
+    <ClInclude Include="IO.h" />
     <ClInclude Include="IOHandler.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="Registers.h" />
