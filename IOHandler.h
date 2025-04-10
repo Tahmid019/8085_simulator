@@ -4,5 +4,5 @@
 
 class IOHandler {
 public:
-	void loadProgram(string filename, CPU& cpu);
+	void loadProgram(CPU& cpu, string filename, uint16_t& init_addr);
 };

@@ -3,7 +3,7 @@
 
 class Memory {
 public:
-	Memory() = default;
+	Memory();
 	~Memory() = default;
 
 	std::map<uint16_t, uint8_t> mem;

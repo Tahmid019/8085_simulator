@@ -46,7 +46,7 @@ void debug(std::string msg = "[--] ", uint16_t in_addr = 0, uint8_t in_data = 0,
             prefix = "[MEMORY] ";
             std::cout << prefix << msg;
             if (in_addr != 0) std::cout << " Address: { " << std::hex << static_cast<int>(in_addr) << " } ";
-            if (in_data != 0) std::cout << " Data : { " << std::hex << static_cast<int>(in_data) << " } ";
+            if (in_data != 0) std::cout << " Data : [ " << std::hex << static_cast<int>(in_data) << " ] ";
             std::cout << std::endl;
             break;
         }
@@ -54,7 +54,7 @@ void debug(std::string msg = "[--] ", uint16_t in_addr = 0, uint8_t in_data = 0,
             prefix = "[REGISTER] ";
             std::cout << prefix << msg;
             if (in_addr != 0) std::cout << " Address: { " << std::hex << static_cast<int>(in_addr) << " } ";
-            if (in_data != 0) std::cout << " Data : { " << std::hex << static_cast<int>(in_data) << " } ";
+            if (in_data != 0) std::cout << " Data : [ " << std::hex << static_cast<int>(in_data) << " ] ";
             std::cout << std::endl;
             break;
         }

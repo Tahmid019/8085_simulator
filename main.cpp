@@ -17,13 +17,16 @@ public:
         cpu.reg.E = 0x00;
         cpu.reg.H = 0x00;
         cpu.reg.L = 0x00;
+        cpu.reg.BC.set(0x0000);
+        cpu.reg.DE.set(0x0000);
+        cpu.reg.HL.set(0x0000);
         cpu.reg.PC = 0x0000;
         cpu.reg.SP = 0xffff;
         cpu.reg.Flags = 0x00;
     }
-    void load_program(string filename, bool debug = false) {
+    void load_program(string filename,uint16_t init_addr, bool debug = false) {
         message("Loading Program in Main Memory ...", 0, 0, MessageType::INFO);
-        io_handler.loadProgram(filename, cpu);
+        io_handler.loadProgram(cpu, filename, init_addr);
     }
     void execute_program(uint16_t init_addr) {
         message("Executing Program from Main Memory ...", 0, 0, MessageType::INFO);
@@ -41,9 +44,11 @@ public:
 
 int main() {
 
+    uint16_t start_addr = 8172;
+
     sim_8085 instance;
-    instance.load_program("program.txt", false);
-    instance.execute_program(7932); //1FEC
+    instance.load_program("program.txt", start_addr, false);
+    instance.execute_program(start_addr); 
 
     return 0;
 }

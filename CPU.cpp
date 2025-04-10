@@ -1465,9 +1465,8 @@ int CPU::execute(uint8_t opcode) {
 
     case 0x22: { // SHLD
         reg.PC++;
-        uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
-        memory.write(address, reg.L);
-        memory.write(address + 1, reg.H);
+        reg.HL.set(memory.read(reg.PC++) | (memory.read(reg.PC++) << 8));
+        debug("SHLD executed: address = [H-L] == ", reg.HL.get(),0, MessageType::REGISTER);
         break;
     }
     case 0x30: { // SIM 

@@ -23,14 +23,14 @@ LXI H
 64
 32
 MVI D
-O
+0
 MOV C, M
 DCR C
 INX H
 MOV A, M
 INX H
 CMP M
-JC 
+JC
 24
 32
 JZ
@@ -57,7 +57,7 @@ HLT
 
 MVI D
 6
-MVI M
+SHLD
 64
 32
 MOV A, M

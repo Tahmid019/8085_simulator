@@ -3,7 +3,7 @@
 #include "Instructions.h"
 #include "utils.h"
 
-void IOHandler::loadProgram(string filename, CPU& cpu) {
+void IOHandler::loadProgram(CPU& cpu, string filename, uint16_t& init_addr) {
     std::ifstream file(filename);
 
     if (!file) {
@@ -11,7 +11,7 @@ void IOHandler::loadProgram(string filename, CPU& cpu) {
         return;
     }
 
-    uint16_t addr = 0x0000;
+    uint16_t addr = init_addr;
     std::string strInst;
     int ws = 0;
 

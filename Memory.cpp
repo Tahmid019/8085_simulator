@@ -1,9 +1,15 @@
 #include "Head_1.h"
 #include "Memory.h"
 
+Memory::Memory() {
+    for (uint16_t i = 0; i < UINT16_MAX; i++) {
+        mem[i] = static_cast<uint16_t>(-1);
+    }
+}
+
 void Memory::write(uint16_t address, uint8_t data) {
     mem[address] = data;
-    std::cout << "Memory[" << std::hex << address << "] = " << static_cast<int>(data) << std::endl;
+    std::cout << "Memory{" << std::hex << address << "} = " << static_cast<int>(data) << std::endl;
 }
 uint8_t Memory::read(uint16_t address) {
     std::cout << "Reading Memory[" << std::hex << address << "]: " << static_cast<int>(mem[address]) << std::endl;
