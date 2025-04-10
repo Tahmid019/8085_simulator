@@ -50,7 +50,7 @@ public:
 	}
 
     StackPointer& operator=(uint16_t value) {
-        spValue = value; 
+        spValue = value;
         return *this;    
     }
 

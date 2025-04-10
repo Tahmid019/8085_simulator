@@ -238,7 +238,6 @@ std::map<std::string, Instruction> instructionSet = {
     {"STA",    Instruction("STA"   , 0x32, 3) },
     {"STAX B",    Instruction("STAX B"   , 0x02, 1) },
     {"STAX D",    Instruction("STAX D"   , 0x12, 1) },
-    
     {"STC",    Instruction("STC"   , 0x37, 1) },
     
     {"SUB A",    Instruction("SUB A"   , 0x97, 1) },

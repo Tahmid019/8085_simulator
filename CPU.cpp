@@ -1452,6 +1452,99 @@ int CPU::execute(uint8_t opcode) {
         break;
     }
 
+    // === SBI ===
+
+    case 0xDE: { // SBI
+        uint8_t value = memory.read(++reg.PC);
+        reg.A = ALU::sbi(reg, value);
+        reg.PC++;
+        break;
+    }
+
+    // === Misc... ===
+
+    case 0x22: { // SHLD
+        reg.PC++;
+        uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+        memory.write(address, reg.L);
+        memory.write(address + 1, reg.H);
+        break;
+    }
+    case 0x30: { // SIM 
+        interruptControl.setMask(reg.A);
+        reg.PC++;
+        break;
+    }
+    case 0xF9: { // SPHL 
+        reg.SP = static_cast<uint16_t>(reg.HL.get());
+        reg.PC++;
+        break;
+    }
+    case 0x32: { // STA 
+        uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
+        memory.write(address, reg.A);
+        reg.PC++;
+        break;
+    }
+    case 0x02: { // STAX B
+        memory.write(reg.BC.get(), reg.A);
+        reg.PC++;
+        break;
+    }
+    case 0x12: { // STAX D
+        memory.write(reg.DE.get(), reg.A);
+        reg.PC++;
+        break;
+    }
+    case 0x37: { // STC
+        reg.Flags |= 0x01;
+        reg.PC++;
+        break;
+    }
+
+    // === SUB ===
+
+    case 0x97: { // SUB A
+        reg.A = ALU::sub(reg, reg.A);
+        reg.PC++;
+        break;
+    }
+    case 0x90: { // SUB B
+        reg.A = ALU::sub(reg, reg.B);
+        reg.PC++;
+        break;
+    }
+    case 0x91: { // SUB C
+        reg.A = ALU::sub(reg, reg.C);
+        reg.PC++;
+        break;
+    }
+    case 0x92: { // SUB D
+        reg.A = ALU::sub(reg, reg.A);
+        reg.PC++;
+        break;
+    }
+    case 0x93: { // SUB E
+        reg.A = ALU::sub(reg, reg.A);
+        reg.PC++;
+        break;
+    }
+    case 0x94: { // SUB H
+        reg.A = ALU::sub(reg, reg.A);
+        reg.PC++;
+        break;
+    }
+    case 0x95: { // SUB L
+        reg.A = ALU::sub(reg, reg.A);
+        reg.PC++;
+        break;
+    }
+    case 0x96: { // SUB M
+        reg.A = ALU::sub(reg, memory.read(reg.HL.get()));
+        reg.PC++;
+        break;
+    }
+
     /*
      === INPUT - OUTPUT ===
     */
@@ -1469,13 +1562,6 @@ int CPU::execute(uint8_t opcode) {
    /* case 0xCE: {
 
     }*/
-
-    case 0x32: {
-        uint16_t addr = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
-        memory.write(addr, reg.A);
-        std::cout << "STA executed. A at [" << std::hex << static_cast<int>(addr) << "]" << std::endl;
-        break;
-    }
 
     case 0x76:
         //debug("HLT", opcode);

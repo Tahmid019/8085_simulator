@@ -165,4 +165,24 @@ uint8_t ALU::ora(Registers& reg, uint8_t value) {
 	return reg.A;
 }
 
+uint8_t ALU::sub(Registers& reg, uint8_t value) {
+	uint16_t result = reg.A - value;
+
+	reg.Flags = (reg.Flags & 0xFE) | ((result & 0x100) != 0); // C
+	reg.Flags = (reg.Flags & 0xDF) | (((result & 0xFF) == 0) << 5); // Z
+	reg.Flags = (reg.Flags & 0x7F) | ((result & 0x80)); // Sgn
+	reg.Flags = (reg.Flags & 0xF7) | (parity(result & 0xFF) << 3); // P
+
+	return result & 0xFF;
+}
+
+uint8_t ALU::sbi(Registers& reg, uint8_t value) {
+	uint8_t borrow = reg.Flags & 0x01;
+	uint16_t result = ALU::sub(reg, value) - borrow;
+
+	return result & 0xFF;
+}
+
+
+
 
