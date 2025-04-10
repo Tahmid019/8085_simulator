@@ -43,7 +43,7 @@ int main() {
 
     sim_8085 instance;
     instance.load_program("program.txt", false);
-    instance.execute_program(0);
+    instance.execute_program(7932); //1FEC
 
     return 0;
 }
