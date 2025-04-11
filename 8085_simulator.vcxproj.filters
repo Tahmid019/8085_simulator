@@ -19,6 +19,9 @@
     <Filter Include="Header Files\Implementation_Headers">
       <UniqueIdentifier>{84de1f94-ae80-4e3c-991c-a0dfe9cd8c49}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{ed3a2f15-8e23-469f-a162-76034622d000}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Memory.cpp">
@@ -86,10 +89,14 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="Guid.txt" />
+    <Text Include="q1.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data.csv">
       <Filter>Source Files</Filter>
+    </None>
+    <None Include="add.txt">
+      <Filter>Tests</Filter>
     </None>
   </ItemGroup>
 </Project>

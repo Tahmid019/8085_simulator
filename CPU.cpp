@@ -88,46 +88,46 @@ int CPU::execute(uint8_t opcode) {
     case 0x80: {
         reg.A = ALU::add(reg, reg.B);
         reg.PC++;
-        message("ADD B executed.", reg.B, reg.A, MessageType::REGISTER);
+        message("ADD B executed.", reg.A, reg.B,  MessageType::REGISTER);
         break;
     }
     case 0x81: {
         reg.A = ALU::add(reg, reg.C);
         reg.PC++;
-        message("ADD C executed.", reg.C, reg.A, MessageType::REGISTER);
+        message("ADD C executed.", reg.A, reg.C, MessageType::REGISTER);
         break;
     }
     case 0x82: {
         reg.A = ALU::add(reg, reg.D);
         reg.PC++;
-        message("ADD D executed.", reg.D, reg.A, MessageType::REGISTER);
+        message("ADD D executed.", reg.A, reg.D, MessageType::REGISTER);
         break;
     }
     case 0x83: {
         reg.A = ALU::add(reg, reg.E);
         reg.PC++;
-        message("ADD E executed.", reg.E, reg.A, MessageType::REGISTER);
+        message("ADD E executed.", reg.A, reg.E, MessageType::REGISTER);
         break;
     }
     case 0x84: {
         reg.A = ALU::add(reg, reg.H);
         reg.PC++;
-        message("ADD H executed.", reg.H, reg.A, MessageType::REGISTER);
+        message("ADD H executed.", reg.A, reg.H, MessageType::REGISTER);
         break;
     }
     case 0x85: {
         reg.A = ALU::add(reg, reg.L);
         reg.PC++;
-        message("ADD L executed.", reg.L, reg.A, MessageType::REGISTER);
+        message("ADD L executed.", reg.A, reg.L, MessageType::REGISTER);
         break;
     }
     case 0x86: {
-        uint16_t address = (reg.H << 8) | reg.L;
+        uint16_t address = reg.HL.get();
         uint8_t value = memory.read(address);
         reg.A = ALU::add(reg, value);
         reg.PC++;
         debug("ADD M executed.", address, value, MessageType::MEMORY);
-        message("ADD M executed.", value, reg.A, MessageType::REGISTER);
+        message("ADD M executed.", reg.A, value, MessageType::REGISTER);
         break;
     }
 
@@ -637,6 +637,7 @@ int CPU::execute(uint8_t opcode) {
 
     case 0xDA: { // JC
         uint16_t address = memory.read(++reg.PC) | (memory.read(++reg.PC) << 8);
+        reg.PC++;
         if ((reg.Flags & 0x01) == 0x01) {
             reg.PC = address;
             debug("JC executed. Jump taken.", address, 0, MessageType::MEMORY);
@@ -1513,9 +1514,10 @@ int CPU::execute(uint8_t opcode) {
         break;
     }
     case 0xFF: { // RST 7
-        reg.SP.push(memory, (reg.PC >> 8) & 0xFF);
+        /*reg.SP.push(memory, (reg.PC >> 8) & 0xFF);
         reg.SP.push(memory, reg.PC & 0xFF);
-        reg.PC = 0x38;
+        reg.PC = 0x38;*/
+        reg.PC++;
         break;
     }
     case 0xC8: { // RZ
@@ -1548,32 +1550,38 @@ int CPU::execute(uint8_t opcode) {
     case 0x30: { // SIM 
         interruptControl.setMask(reg.A);
         reg.PC++;
+		message("SIM executed. In <- [A] : ", reg.A, 0, MessageType::REGISTER);
         break;
     }
     case 0xF9: { // SPHL 
         reg.SP = static_cast<uint16_t>(reg.HL.get());
         reg.PC++;
+		message("SPHL executed. HL <- SP: ", reg.SP & 0xFF, reg.SP >> 8, MessageType::REGISTER);
         break;
     }
     case 0x32: { // STA 
+        reg.PC++;
         uint16_t address = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
         memory.write(address, reg.A);
-        reg.PC++;
+		debug("STA executed. [ADDR] : ", address, reg.A, MessageType::MEMORY);
         break;
     }
     case 0x02: { // STAX B
         memory.write(reg.BC.get(), reg.A);
         reg.PC++;
+		debug("STAX B executed. [BC] : ", reg.BC.get(), reg.A, MessageType::MEMORY);
         break;
     }
     case 0x12: { // STAX D
         memory.write(reg.DE.get(), reg.A);
         reg.PC++;
+		debug("STAX D executed. [DE] : ", reg.DE.get(), reg.A, MessageType::MEMORY);
         break;
     }
     case 0x37: { // STC
         reg.Flags |= 0x01;
         reg.PC++;
+		message("STC executed. Carry flag set.", 0, 0, MessageType::REGISTER);
         break;
     }
 

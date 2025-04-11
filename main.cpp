@@ -44,10 +44,11 @@ public:
 
 int main() {
 
-    uint16_t start_addr = 8172;
+    uint16_t start_addr = 0x1ff8;
+    string filename = "add.txt";
 
     sim_8085 instance;
-    instance.load_program("program.txt", start_addr, false);
+    instance.load_program(filename, start_addr, false);
     instance.execute_program(start_addr); 
 
     return 0;

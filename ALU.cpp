@@ -9,7 +9,7 @@
 */
 
 uint8_t ALU::add(Registers& reg, uint8_t value) {
-	uint8_t temp = reg.A;
+	uint16_t temp = reg.A + value;
 	reg.A += value;
 
 	if ((reg.A & 0x80) == 0x80) { // Sgn
@@ -28,7 +28,7 @@ uint8_t ALU::add(Registers& reg, uint8_t value) {
 		reg.Flags |= 0x02;
 	}
 
-	if (carry(reg.A)) { // Carry
+	if (temp > 0xFF) { // Carry
 		reg.Flags |= 0x01;
 	}
 
@@ -108,7 +108,7 @@ uint8_t ALU::cmp(Registers& reg, uint8_t value) {
 		reg.Flags |= 0x02;
 	}
 
-	if (carry(temp)) { // Carry
+	if (reg.A < value) { // Carry
 		reg.Flags |= 0x01;
 	}
 	return temp;

@@ -152,8 +152,10 @@
   <ItemGroup>
     <Text Include="Guid.txt" />
     <Text Include="program.txt" />
+    <Text Include="q1.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="add.txt" />
     <None Include="data.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

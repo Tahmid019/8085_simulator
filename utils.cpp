@@ -87,5 +87,5 @@ bool auxillaryCarry(uint8_t regValue_1, uint8_t regValue_2) {
 }
 
 bool carry(uint8_t value) {
-    return (((int)value / 255) != 0);
+    return ((static_cast<int>(value) / 255) != 0);
 }
