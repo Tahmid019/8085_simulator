@@ -8,6 +8,8 @@
 
 */
 
+class Register;
+
 struct RegisterPair {
 	uint8_t low, high;
 	
@@ -18,7 +20,7 @@ struct RegisterPair {
 	void set(uint16_t value) {
 		low = value & 0x00FF;
 		high = (value >> 8) & 0x00FF;
-	}
+    }
 };
 
 

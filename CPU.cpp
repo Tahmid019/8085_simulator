@@ -606,25 +606,30 @@ int CPU::execute(uint8_t opcode) {
     case 0x03: { // INX B
         reg.BC.set(reg.BC.get() + 1);
         reg.PC++;
-        message("INX B executed.", reg.BC.get() & 0xFF, reg.BC.get() >> 8, MessageType::REGISTER);
+        //message("INX B executed.", reg.BC.get() & 0xFF, reg.BC.get() >> 8, MessageType::REGISTER);
+        debug("INX B: ", reg.BC.get(), 0, MessageType::MEMORY);
         break;
     }
     case 0x13: { // INX D
         reg.DE.set(reg.DE.get() + 1);
         reg.PC++;
-        message("INX D executed.", reg.DE.get() & 0xFF, reg.DE.get() >> 8, MessageType::REGISTER);
+        //message("INX D executed.", reg.DE.get() & 0xFF, reg.DE.get() >> 8, MessageType::REGISTER);
+        debug("INX D: ", reg.DE.get(), 0, MessageType::MEMORY);
         break;
     }
     case 0x23: { // INX H
         reg.HL.set(reg.HL.get() + 1);
         reg.PC++;
-        message("INX H executed.", reg.HL.get() & 0xFF, reg.HL.get() >> 8, MessageType::REGISTER);
+        //message("INX H executed.", reg.HL.get() & 0xFF, reg.HL.get() >> 8, MessageType::REGISTER);
+        debug("INX H: ", reg.HL.get(), 0, MessageType::MEMORY);
         break;
     }
     case 0x33: { // INX SP
         reg.SP++;
         reg.PC++;
-        message("INX SP executed.", static_cast<uint8_t>(reg.SP & 0xFF), static_cast<uint8_t>(reg.SP >> 8), MessageType::REGISTER);
+        //message("INX SP executed.", static_cast<uint8_t>(reg.SP & 0xFF), static_cast<uint8_t>(reg.SP >> 8), MessageType::REGISTER);
+        debug("INX SP: ", static_cast<uint16_t>(reg.SP.get()), 0, MessageType::MEMORY);
+        debug("INX PC: ", static_cast<uint16_t>(reg.PC), 0, MessageType::MEMORY);
         break;
     }
 
@@ -770,21 +775,27 @@ int CPU::execute(uint8_t opcode) {
         reg.PC++;
         reg.C = memory.read(reg.PC++);
         reg.B = memory.read(reg.PC++);
-        message("LXI B executed. Loaded values into B and C registers.", reg.B, reg.C, MessageType::REGISTER);
+        reg.BC.set(reg.B << 8 | reg.C);
+        //message("LXI B executed. Loaded values into B and C registers.", reg.B, reg.C, MessageType::REGISTER);
+        debug("LXI B: ", reg.BC.get(), memory.read(reg.BC.get()), MessageType::MEMORY);
         break;
     }
     case 0x11: { // LXI D
         reg.PC++;
         reg.E = memory.read(reg.PC++);
         reg.D = memory.read(reg.PC++);
-        message("LXI D executed. Loaded values into D and E registers.", reg.D, reg.E, MessageType::REGISTER);
+        reg.DE.set(reg.D << 8 | reg.E);
+        //message("LXI D executed. Loaded values into D and E registers.", reg.D, reg.E, MessageType::REGISTER);
+        debug("LXI D: ", reg.DE.get(), memory.read(reg.DE.get()), MessageType::MEMORY);
         break;
     }
     case 0x21: { // LXI H
         reg.PC++;
         reg.L = memory.read(reg.PC++);
         reg.H = memory.read(reg.PC++);
-        message("LXI H executed. Loaded values into H and L registers.", reg.H, reg.L, MessageType::REGISTER);
+        reg.HL.set(reg.H << 8 | reg.L);
+        //message("LXI H executed. Loaded values into H and L registers.", reg.H, reg.L, MessageType::REGISTER);
+        debug("LXI H: ", reg.HL.get(), memory.read(reg.HL.get()), MessageType::MEMORY);
         break;
     }
     case 0x31: { // LXI SP
@@ -847,9 +858,12 @@ int CPU::execute(uint8_t opcode) {
     }
     case 0x36: {
         uint8_t value = memory.read(++reg.PC);
-        uint16_t M_addr = (reg.H << 8) | reg.L;
+        uint16_t M_addr = reg.HL.get();
+        cout << M_addr << endl;
         memory.write(M_addr, value);
-        message("MVI M", memory.read(M_addr), 0x00, MessageType::REGISTER);
+        reg.PC++;
+        //message("MVI M", memory.read(M_addr), 0x00, MessageType::REGISTER);
+        debug("MVI M: ", M_addr, memory.read(M_addr), MessageType::MEMORY);
         break;
     }
 
@@ -863,77 +877,92 @@ int CPU::execute(uint8_t opcode) {
     }
     case 0x78: {  
         reg.A = reg.B;
+        reg.PC++;
         message("MOV A, B", reg.A, reg.B, MessageType::REGISTER);
         break;
     }
     case 0x79: {  
         reg.A = reg.C;
+        reg.PC++;
         message("MOV A, C", reg.A, reg.C, MessageType::REGISTER);
         break;
     }
     case 0x7A: {  
         reg.A = reg.D;
+        reg.PC++;
         message("MOV A, D", reg.A, reg.D, MessageType::REGISTER);
         break;
     }
     case 0x7B: {  
         reg.A = reg.E;
+        reg.PC++;
         message("MOV A, E", reg.A, reg.E, MessageType::REGISTER);
         break;
     }
     case 0x7C: {  
         reg.A = reg.H;
+        reg.PC++;
         message("MOV A, H", reg.A, reg.H, MessageType::REGISTER);
         break;
     }
     case 0x7D: {  
         reg.A = reg.L;
+        reg.PC++;
         message("MOV A, L", reg.A, reg.L, MessageType::REGISTER);
         break;
     }
     case 0x7E: {  
-        uint8_t value = memory.read(reg.H * 16 + reg.L);
+        uint8_t value = memory.read(reg.HL.get());
+        reg.PC++;
         reg.A = value;
         message("MOV A, M", reg.A, value, MessageType::REGISTER);
         break;
     }
     case 0x47: {  
         reg.B = reg.A;
+        reg.PC++;
         message("MOV B, A", reg.B, reg.A, MessageType::REGISTER);
         break;
     }
     case 0x40: {  
         reg.B = reg.B;
+        reg.PC++;
         message("MOV B, B", reg.B, reg.B, MessageType::REGISTER);
         break;
     }
     case 0x41: {  
         reg.B = reg.C;
+        reg.PC++;
         message("MOV B, C", reg.B, reg.C, MessageType::REGISTER);
         break;
     }
     case 0x42: {  
         reg.B = reg.D;
+        reg.PC++;
         message("MOV B, D", reg.B, reg.D, MessageType::REGISTER);
         break;
     }
     case 0x43: {  
         reg.B = reg.E;
+        reg.PC++;
         message("MOV B, E", reg.B, reg.E, MessageType::REGISTER);
         break;
     }
     case 0x44: {  
         reg.B = reg.H;
+        reg.PC++;
         message("MOV B, H", reg.B, reg.H, MessageType::REGISTER);
         break;
     }
     case 0x45: {  
         reg.B = reg.L;
+        reg.PC++;
         message("MOV B, L", reg.B, reg.L, MessageType::REGISTER);
         break;
     }
     case 0x46: {  
-        uint8_t value = memory.read(reg.H * 16 + reg.L);
+        uint8_t value = memory.read(reg.HL.get());
+        reg.PC++;
         reg.B = value;
         message("MOV B, M", reg.B, value, MessageType::REGISTER);
         break;
@@ -941,241 +970,288 @@ int CPU::execute(uint8_t opcode) {
 
     case 0x4F: {  
         reg.C = reg.A;
+        reg.PC++;
         message("MOV C, A", reg.C, reg.A, MessageType::REGISTER);
         break;
     }
     case 0x48: {  
         reg.C = reg.B;
+        reg.PC++;
         message("MOV C, B", reg.C, reg.B, MessageType::REGISTER);
         break;
     }
     case 0x49: {  
         reg.C = reg.C;
+        reg.PC++;
         message("MOV C, C", reg.C, reg.C, MessageType::REGISTER);
         break;
     }
     case 0x4A: {  
         reg.C = reg.D;
+        reg.PC++;
         message("MOV C, D", reg.C, reg.D, MessageType::REGISTER);
         break;
     }
     case 0x4B: {  
         reg.C = reg.E;
+        reg.PC++;
         message("MOV C, E", reg.C, reg.E, MessageType::REGISTER);
         break;
     }
     case 0x4C: {  
         reg.C = reg.H;
+        reg.PC++;
         message("MOV C, H", reg.C, reg.H, MessageType::REGISTER);
         break;
     }
     case 0x4D: {  
         reg.C = reg.L;
+        reg.PC++;
         message("MOV C, L", reg.C, reg.L, MessageType::REGISTER);
         break;
     }
     case 0x4E: {  
-        uint8_t value = memory.read(reg.H * 16 + reg.L);
+        uint8_t value = memory.read(reg.HL.get());
+        reg.PC++;
         reg.C = value;
         message("MOV C, M", reg.C, value, MessageType::REGISTER);
         break;
     }
     case 0x57: {
         reg.D = reg.A;
+        reg.PC++;
         message("MOV D, A", reg.D, reg.A, MessageType::REGISTER);
         break;
     }
     case 0x50: {
         reg.D = reg.B;
+        reg.PC++;
         message("MOV D, B", reg.D, reg.B, MessageType::REGISTER);
         break;
     }
     case 0x51: {
         reg.D = reg.C;
+        reg.PC++;
         message("MOV D, C", reg.D, reg.C, MessageType::REGISTER);
         break;
     }
     case 0x52: {
         reg.D = reg.D;
+        reg.PC++;
         message("MOV D, D", reg.D, reg.D, MessageType::REGISTER);
         break;
     }
     case 0x53: {
         reg.D = reg.E;
+        reg.PC++;
         message("MOV D, E", reg.D, reg.E, MessageType::REGISTER);
         break;
     }
     case 0x54: {
         reg.D = reg.H;
+        reg.PC++;
         message("MOV D, H", reg.D, reg.H, MessageType::REGISTER);
         break;
     }
     case 0x55: {
         reg.D = reg.L;
+        reg.PC++;
         message("MOV D, L", reg.D, reg.L, MessageType::REGISTER);
         break;
     }
     case 0x56: {
-        uint8_t value = memory.read(reg.H * 16 + reg.L);
+        uint8_t value = memory.read(reg.HL.get());
         reg.D = value;
+        reg.PC++;
         message("MOV D, M", reg.D, value, MessageType::REGISTER);
         break;
     }
     case 0x5F: {
         reg.E = reg.A;
+        reg.PC++;
         message("MOV E, A", reg.E, reg.A, MessageType::REGISTER);
         break;
     }
     case 0x58: {
         reg.E = reg.B;
+        reg.PC++;
         message("MOV E, B", reg.E, reg.B, MessageType::REGISTER);
         break;
     }
     case 0x59: {
         reg.E = reg.C;
+        reg.PC++;
         message("MOV E, C", reg.E, reg.C, MessageType::REGISTER);
         break;
     }
     case 0x5A: {
         reg.E = reg.D;
+        reg.PC++;
         message("MOV E, D", reg.E, reg.D, MessageType::REGISTER);
         break;
     }
     case 0x5B: {
         reg.E = reg.E;
+        reg.PC++;
         message("MOV E, E", reg.E, reg.E, MessageType::REGISTER);
         break;
     }
     case 0x5C: {
         reg.E = reg.H;
+        reg.PC++;
         message("MOV E, H", reg.E, reg.H, MessageType::REGISTER);
         break;
     }
     case 0x5D: {
         reg.E = reg.L;
+        reg.PC++;
         message("MOV E, L", reg.E, reg.L, MessageType::REGISTER);
         break;
     }
     case 0x5E: {
-        uint8_t value = memory.read(reg.H * 16 + reg.L);
+        uint8_t value = memory.read(reg.HL.get());
         reg.E = value;
+        reg.PC++;
         message("MOV E, M", reg.E, value, MessageType::REGISTER);
         break;
     }
     case 0x67: {
         reg.H = reg.A;
+        reg.PC++;
         message("MOV H, A", reg.H, reg.A, MessageType::REGISTER);
         break;
     }
     case 0x60: {
         reg.H = reg.B;
+        reg.PC++;
         message("MOV H, B", reg.H, reg.B, MessageType::REGISTER);
         break;
     }
     case 0x61: {
         reg.H = reg.C;
+        reg.PC++;
         message("MOV H, C", reg.H, reg.C, MessageType::REGISTER);
         break;
     }
     case 0x62: {
         reg.H = reg.D;
+        reg.PC++;
         message("MOV H, D", reg.H, reg.D, MessageType::REGISTER);
         break;
     }
     case 0x63: {
         reg.H = reg.E;
+        reg.PC++;
         message("MOV H, E", reg.H, reg.E, MessageType::REGISTER);
         break;
     }
     case 0x64: {
         reg.H = reg.H;
+        reg.PC++;
         message("MOV H, H", reg.H, reg.H, MessageType::REGISTER);
         break;
     }
     case 0x65: {
         reg.H = reg.L;
+        reg.PC++;
         message("MOV H, L", reg.H, reg.L, MessageType::REGISTER);
         break;
     }
     case 0x66: {
-        uint8_t value = memory.read(reg.H * 16 + reg.L);
+        uint8_t value = memory.read(reg.HL.get());
         reg.H = value;
+        reg.PC++;
         message("MOV H, M", reg.H, value, MessageType::REGISTER);
         break;
     }
     case 0x6F: {
         reg.L = reg.A;
+        reg.PC++;
         message("MOV L, A", reg.L, reg.A, MessageType::REGISTER);
         break;
     }
     case 0x68: {
         reg.L = reg.B;
+        reg.PC++;
         message("MOV L, B", reg.L, reg.B, MessageType::REGISTER);
         break;
     }
     case 0x69: {
         reg.L = reg.C;
+        reg.PC++;
         message("MOV L, C", reg.L, reg.C, MessageType::REGISTER);
         break;
     }
     case 0x6A: {
         reg.L = reg.D;
+        reg.PC++;
         message("MOV L, D", reg.L, reg.D, MessageType::REGISTER);
         break;
     }
     case 0x6B: {
         reg.L = reg.E;
+        reg.PC++;
         message("MOV L, E", reg.L, reg.E, MessageType::REGISTER);
         break;
     }
     case 0x6C: {
         reg.L = reg.H;
+        reg.PC++;
         message("MOV L, H", reg.L, reg.H, MessageType::REGISTER);
         break;
     }
     case 0x6D: {
         reg.L = reg.L;
+        reg.PC++;
         message("MOV L, L", reg.L, reg.L, MessageType::REGISTER);
         break;
     }
     case 0x6E: {
-        uint8_t value = memory.read(reg.H * 16 + reg.L);
+        uint8_t value = memory.read(reg.HL.get());
         reg.L = value;
+        reg.PC++;
         message("MOV L, M", reg.L, value, MessageType::REGISTER);
         break;
     }
     case 0x77: { 
-        memory.write(reg.H * 16 + reg.L, reg.A);
+        memory.write(reg.HL.get(), reg.A);
+        reg.PC++;
         message("MOV M, A", reg.A, reg.A, MessageType::MEMORY);
         break;
     }
     case 0x70: { 
-        memory.write(reg.H * 16 + reg.L, reg.B);
+        memory.write(reg.HL.get(), reg.B);
+        reg.PC++;
         message("MOV M, B", reg.B, reg.B, MessageType::MEMORY);
         break;
     }
     case 0x71: { 
-        memory.write(reg.H * 16 + reg.L, reg.C);
+        memory.write(reg.HL.get(), reg.C);
+        reg.PC++;
         message("MOV M, C", reg.C, reg.C, MessageType::MEMORY);
         break;
     }
     case 0x72: {  
-        memory.write(reg.H * 16 + reg.L, reg.D);
+        memory.write(reg.HL.get(), reg.D);
+        reg.PC++;
         message("MOV M, D", reg.D, reg.D, MessageType::MEMORY);
         break;
     }
     case 0x73: { 
-        memory.write(reg.H * 16 + reg.L, reg.E);
+        memory.write(reg.HL.get(), reg.E);
+        reg.PC++;
         message("MOV M, E", reg.E, reg.E, MessageType::MEMORY);
         break;
     }
     case 0x74: { 
-        memory.write(reg.H * 16 + reg.L, reg.H);
+        memory.write(reg.HL.get(), reg.H);
+        reg.PC++;
         message("MOV M, H", reg.H, reg.H, MessageType::MEMORY);
         break;
     }
     case 0x75: { 
-        memory.write(reg.H * 16 + reg.L, reg.L);
+        memory.write(reg.HL.get(), reg.L);
+        reg.PC++;
         message("MOV M, L", reg.L, reg.L, MessageType::MEMORY);
         break;
     }
