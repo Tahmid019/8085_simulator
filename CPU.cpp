@@ -460,42 +460,49 @@ int CPU::execute(uint8_t opcode) {
 
     case 0x3D: { // DCR A
         reg.A--;
+		updateFlags<uint8_t>(reg, reg.A, 0xFE);
         reg.PC++;
         message("DCR A executed.", reg.A,0, MessageType::REGISTER);
         break;
     }
     case 0x05: { // DCR B
         reg.B--;
+        updateFlags<uint8_t>(reg, reg.B, 0xFE);
         reg.PC++;
         message("DCR B executed.", reg.B,0, MessageType::REGISTER);
         break;
     }
     case 0x0D: { // DCR C
         reg.C--;
+        updateFlags<uint8_t>(reg, reg.C, 0xFE);
         reg.PC++;
         message("DCR C executed.", reg.C,0, MessageType::REGISTER);
         break;
     }
     case 0x15: { // DCR D
         reg.D--;
+        updateFlags<uint8_t>(reg, reg.C, 0xFE);
         reg.PC++;
         message("DCR D executed.", reg.D,0, MessageType::REGISTER);
         break;
     }
     case 0x1D: { // DCR E
         reg.E--;
+		updateFlags<uint8_t>(reg, reg.E, 0xFE);
         reg.PC++;
         message("DCR E executed.", reg.E,0, MessageType::REGISTER);
         break;
     }
     case 0x25: { // DCR H
         reg.H--;
+		updateFlags<uint8_t>(reg, reg.H, 0xFE);
         reg.PC++;
         message("DCR H executed.", reg.H,0, MessageType::REGISTER);
         break;
     }
     case 0x2D: { // DCR L
         reg.L--;
+		updateFlags<uint8_t>(reg, reg.L, 0xFE);
         reg.PC++;
         message("DCR L executed.", reg.L,0, MessageType::REGISTER);
         break;
@@ -504,6 +511,7 @@ int CPU::execute(uint8_t opcode) {
         uint16_t address = reg.HL.get();
         uint8_t value = memory.read(address) - 1;
         memory.write(address, value);
+		updateFlags<uint8_t>(reg, value, 0xFE);
         reg.PC++;
         debug("DCR M executed.", address, value, MessageType::MEMORY);
         message("DCR M executed.", value,0, MessageType::REGISTER);
@@ -514,24 +522,28 @@ int CPU::execute(uint8_t opcode) {
 
     case 0x0B: { // DCX B
         reg.BC.set(reg.BC.get() - 1);
+		updateFlags<uint16_t>(reg, reg.BC.get(), 0xFE);
         reg.PC++;
         message("DCX B executed.", reg.B, reg.C, MessageType::REGISTER);
         break;
     }
     case 0x1B: { // DCX D
         reg.DE.set(reg.DE.get() - 1);
+		updateFlags<uint16_t>(reg, reg.DE.get(), 0xFE);
         reg.PC++;
         message("DCX D executed.", reg.D, reg.E, MessageType::REGISTER);
         break;
     }
     case 0x22B: { // DCX H
         reg.HL.set(reg.HL.get() - 1);
+		updateFlags<uint16_t>(reg, reg.HL.get(), 0xFE);
         reg.PC++;
         message("DCX H executed.", reg.H, reg.L, MessageType::REGISTER);
         break;
     }
     case 0x3B: { // DCX SP
         reg.SP--;
+		updateFlags<uint16_t>(reg, reg.SP.get(), 0xFE);
         reg.PC++;
         message("DCX SP executed.", static_cast<uint8_t>(reg.SP & 0xFF),0, MessageType::REGISTER);
         break;
@@ -1395,33 +1407,40 @@ int CPU::execute(uint8_t opcode) {
     // === Rotate & Return ===
 
     case 0x17: { // RAL
-        uint8_t carry = reg.Flags & 0x01;
+        uint8_t d7 = reg.A & 0x80;
         reg.Flags = (reg.Flags & 0xFE) | ((reg.A & 0x80) != 0);
-        reg.A = (reg.A << 1) | carry;
+        reg.A = (reg.A << 1) | ((d7 >> 7) & 0x01);
         reg.PC++;
+        message("RAL executed. [A]: ", reg.A,0, MessageType::REGISTER);
         break;
     }
     case 0x1F: { // RAR
-        uint8_t carry = reg.Flags & 0x01;
+        uint8_t d0 = reg.A & 0x01;
         reg.Flags = (reg.Flags & 0xFE) | (reg.A & 0x01);
-        reg.A = (reg.A >> 1) | (carry << 7);
+        reg.A = (reg.A >> 1) | ((d0 << 7) & 0x80);
         reg.PC++;
+        message("RAR executed. [A]: ", reg.A, 0, MessageType::REGISTER);
         break;
     }
     case 0x07: { // RLC
+        uint8_t carry = reg.Flags & 0x01;
         reg.Flags = (reg.Flags & 0xFE) | ((reg.A & 0x80) != 0);
-        reg.A = (reg.A << 1) | (reg.A >> 7);
+        reg.A = (reg.A << 1) | (carry & 0x01);
         reg.PC++;
+        message("RLC executed. [A]: ", reg.A, 0, MessageType::REGISTER);
         break;
     }
     case 0x0F: { // RRC
+        uint8_t carry = reg.Flags & 0x01;
         reg.Flags = (reg.Flags & 0xFE) | (reg.A & 0x01);
-        reg.A = (reg.A >> 1) | (reg.A << 7);
+        reg.A = (reg.A >> 1) | ((carry << 7) & 0x80);
         reg.PC++;
+        message("RRC executed. [A]: ", reg.A, 0, MessageType::REGISTER);
         break;
     }
     case 0xC9: { // RET
         reg.PC = reg.SP.pop(memory) | (reg.SP.pop(memory) << 8);
+        message("RET executed. [PC]: ", reg.PC, 0, MessageType::MEMORY);
         break;
     }
     case 0xD8: { // RC
@@ -1431,6 +1450,7 @@ int CPU::execute(uint8_t opcode) {
         else {
             reg.PC++;
         }
+        message("RC executed. [PC]: ", reg.PC, 0, MessageType::MEMORY);
         break;
     }
     case 0xC0: { // RNZ
@@ -1440,6 +1460,7 @@ int CPU::execute(uint8_t opcode) {
         else {
             reg.PC++;
         }
+        message("RNZ executed. [PC]: ", reg.PC, 0, MessageType::MEMORY);
         break;
     }
     case 0xD0: { // RNC
@@ -1449,6 +1470,7 @@ int CPU::execute(uint8_t opcode) {
         else {
             reg.PC++;
         }
+        message("RNC executed. [PC]: ", reg.PC, 0, MessageType::MEMORY);
         break;
     }
     case 0xF0: { // RP - if Positive
@@ -1458,6 +1480,7 @@ int CPU::execute(uint8_t opcode) {
         else {
             reg.PC++;
         }
+        message("RP executed. [PC]: ", reg.PC, 0, MessageType::MEMORY);
         break;
     }
     case 0xF8: { // RM - if Minus
@@ -1467,6 +1490,7 @@ int CPU::execute(uint8_t opcode) {
         else {
             reg.PC++;
         }
+        message("RM executed. [PC]: ", reg.PC, 0, MessageType::MEMORY);
         break;
     }
     case 0xE8: { // RPE
@@ -1476,6 +1500,7 @@ int CPU::execute(uint8_t opcode) {
         else {
             reg.PC++;
         }
+        message("RPE executed. [PC]: ", reg.PC, 0, MessageType::MEMORY);
         break;
     }
     case 0xE0: { // RPO
@@ -1485,11 +1510,13 @@ int CPU::execute(uint8_t opcode) {
         else {
             reg.PC++;
         }
+        message("RPO executed. [PC]: ", reg.PC, 0, MessageType::MEMORY);
         break;
     }
     case 0x20: { // RIM
         reg.A = interruptControl.readMask();
         reg.PC++;
+        message("RIM executed. [A]: ", reg.A, 0, MessageType::REGISTER);
         break;
     }
 

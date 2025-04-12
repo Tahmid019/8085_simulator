@@ -44,8 +44,8 @@ public:
 
 int main() {
 
-    uint16_t start_addr = 0x1ff2;
-    string filename = "sub16.txt";
+    uint16_t start_addr = 0x1ff5;
+    string filename = "mul.txt";
 
     sim_8085 instance;
     instance.load_program(filename, start_addr, false);

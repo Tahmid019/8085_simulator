@@ -51,6 +51,9 @@
     <ClCompile Include="IO.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="Registers.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory.h">
@@ -96,7 +99,12 @@
     <Text Include="sub8.txt">
       <Filter>Tests</Filter>
     </Text>
-    <Text Include="sub16.txt" />
+    <Text Include="sub16.txt">
+      <Filter>Tests</Filter>
+    </Text>
+    <Text Include="mul.txt">
+      <Filter>Tests</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="data.csv">

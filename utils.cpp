@@ -65,30 +65,9 @@ void debug(std::string msg = "[--] ", uint16_t in_addr = 0, uint8_t in_data = 0,
     }
 }
 
-bool parity(uint8_t val) {
-    int count_1s = 0;
-    int count_0s = 0;
-
-    ((val & 0x10000000) == 0x10000000) ? count_1s++ : count_0s++;
-    ((val & 0x01000000) == 0x01000000) ? count_1s++ : count_0s++;
-    ((val & 0x00100000) == 0x00100000) ? count_1s++ : count_0s++;
-    ((val & 0x00010000) == 0x00010000) ? count_1s++ : count_0s++;
-    ((val & 0x00001000) == 0x00001000) ? count_1s++ : count_0s++;
-    ((val & 0x00000100) == 0x00000100) ? count_1s++ : count_0s++;
-    ((val & 0x00000010) == 0x00000010) ? count_1s++ : count_0s++;
-    ((val & 0x00000001) == 0x00000001) ? count_1s++ : count_0s++;
-
-    if (count_1s % 2 == 0) return true;
-    return false;
-}
-
-bool auxillaryCarry(uint8_t regValue_1, uint8_t regValue_2) {
-    return ((regValue_1 & 0x00001000) && (regValue_2 & 0x00001000));
-}
-
 bool carry(uint8_t value) {
     return ((static_cast<int>(value) / 255) != 0);
-}
+}// Wrong Imp
 
 size_t t2t_message(string custm_message = "", uint16_t a = 0XFFFF, uint16_t b = 0XFFFF, Type2Tpe type = Type2Tpe::t8_2_8) {
 	string message = "";

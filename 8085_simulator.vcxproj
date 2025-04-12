@@ -135,6 +135,7 @@
     <ClCompile Include="IOHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="Registers.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +153,7 @@
   <ItemGroup>
     <Text Include="add16.txt" />
     <Text Include="Guid.txt" />
+    <Text Include="mul.txt" />
     <Text Include="program.txt" />
     <Text Include="q1.txt" />
     <Text Include="sub16.txt" />
