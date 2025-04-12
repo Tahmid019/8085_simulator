@@ -144,7 +144,7 @@ uint16_t ALU::dad(Registers& reg, RegisterPair& regx) {
 	if (result > 0xFFFF) { // carry
 		reg.Flags |= 0x01;
 	}
-	reg.HL.set(result);
+	reg.HL.set(result & 0XFFFF);
 	return reg.HL.get();
 }
 
@@ -166,9 +166,20 @@ uint8_t ALU::ora(Registers& reg, uint8_t value) {
 }
 
 uint8_t ALU::sub(Registers& reg, uint8_t value) {
-	uint16_t result = reg.A - value;
+	if (reg.A < value) {
+		reg.A = value - reg.A;
+		reg.A = (~reg.A) & 0xFF;
+		reg.A++;
+		reg.Flags |= 0x01; // C
+	}
+	else {
+		reg.A -= value;
+		reg.Flags &= 0xFE; // C
+	}
+	reg.A &= 0xFF;
+	uint16_t result = reg.A & 0xFF;
 
-	reg.Flags = (reg.Flags & 0xFE) | ((result & 0x100) != 0); // C
+	//reg.Flags = (reg.Flags & 0xFE) | ((result & 0x100) != 0); // C
 	reg.Flags = (reg.Flags & 0xDF) | (((result & 0xFF) == 0) << 5); // Z
 	reg.Flags = (reg.Flags & 0x7F) | ((result & 0x80)); // Sgn
 	reg.Flags = (reg.Flags & 0xF7) | (parity(result & 0xFF) << 3); // P
@@ -178,9 +189,11 @@ uint8_t ALU::sub(Registers& reg, uint8_t value) {
 
 uint8_t ALU::sbi(Registers& reg, uint8_t value) {
 	uint8_t borrow = reg.Flags & 0x01;
-	uint16_t result = ALU::sub(reg, value) - borrow;
+	reg.A = (ALU::sub(reg, value) & 0xFF);
+	
+	(borrow) ? reg.A-- : reg.A;
 
-	return result & 0xFF;
+	return reg.A & 0xFF;
 }
 
 uint8_t ALU::xra(Registers& reg, uint8_t value) {

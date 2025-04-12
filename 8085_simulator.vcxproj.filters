@@ -90,6 +90,13 @@
     </Text>
     <Text Include="Guid.txt" />
     <Text Include="q1.txt" />
+    <Text Include="add16.txt">
+      <Filter>Tests</Filter>
+    </Text>
+    <Text Include="sub8.txt">
+      <Filter>Tests</Filter>
+    </Text>
+    <Text Include="sub16.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data.csv">

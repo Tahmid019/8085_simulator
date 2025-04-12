@@ -89,3 +89,43 @@ bool auxillaryCarry(uint8_t regValue_1, uint8_t regValue_2) {
 bool carry(uint8_t value) {
     return ((static_cast<int>(value) / 255) != 0);
 }
+
+size_t t2t_message(string custm_message = "", uint16_t a = 0XFFFF, uint16_t b = 0XFFFF, Type2Tpe type = Type2Tpe::t8_2_8) {
+	string message = "";
+    switch (type) {
+	    case Type2Tpe::t8_2_8: {
+		    message = "Display { 8bit-8bit } >> ";
+		    a = (static_cast<uint8_t>(a));
+		    b = (static_cast<uint8_t>(b));
+		    break;
+	    }
+		case Type2Tpe::t8_2_16: {
+			message = "Display { 8bit-16bit } >> ";
+			a = (static_cast<uint8_t>(a));
+			b = (static_cast<uint16_t>(b));
+			break;
+		}
+        case Type2Tpe::t16_2_8: {
+            message = "Display { 16bit-8bit } >> ";
+            a = (static_cast<uint16_t>(a));
+            b = (static_cast<uint8_t>(b));
+            break;
+        }
+		case Type2Tpe::t16_2_16: {
+			message = "Display { 16bit-16bit } >> ";
+			a = (static_cast<uint16_t>(a));
+			b = (static_cast<uint16_t>(b));
+			break;
+		}
+        default: {
+            message = "Display { UNKNOWN } >> ";
+            a = (static_cast<uint16_t>(a));
+            b = (static_cast<uint16_t>(b));
+            break;
+        }
+    };
+    cout << custm_message << endl;
+	cout << message << "a: { " << std::hex << a << " } b: { " << std::hex << b << " }" << endl;
+
+	return custm_message.length() + message.length() + 1;
+}
