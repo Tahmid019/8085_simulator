@@ -105,6 +105,9 @@
     <Text Include="mul.txt">
       <Filter>Tests</Filter>
     </Text>
+    <Text Include="div8.txt">
+      <Filter>Tests</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="data.csv">

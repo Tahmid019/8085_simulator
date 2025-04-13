@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="add16.txt" />
+    <Text Include="div8.txt" />
     <Text Include="Guid.txt" />
     <Text Include="mul.txt" />
     <Text Include="program.txt" />
