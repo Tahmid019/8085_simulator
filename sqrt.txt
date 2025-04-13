@@ -1,0 +1,33 @@
+LXI H
+0
+37
+MVI M
+36
+
+MVI C
+1
+MVI B
+1
+LDA
+0
+37
+SUB B
+JZ
+17
+32
+INR C
+INR B
+INR B
+JMP
+7
+32
+MOV A, C
+STA
+0
+38
+
+LXI H
+0
+38
+
+HLT

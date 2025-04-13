@@ -44,8 +44,8 @@ public:
 
 int main() {
 
-    uint16_t start_addr = 0x1ff8;
-    string filename = "div8.txt";
+    uint16_t start_addr = 0x1ffb;
+    string filename = "sqrt.txt";
 
     sim_8085 instance;
     instance.load_program(filename, start_addr, false);

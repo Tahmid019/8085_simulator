@@ -157,6 +157,7 @@
     <Text Include="mul.txt" />
     <Text Include="program.txt" />
     <Text Include="q1.txt" />
+    <Text Include="sqrt.txt" />
     <Text Include="sub16.txt" />
     <Text Include="sub8.txt" />
   </ItemGroup>
