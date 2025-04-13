@@ -111,7 +111,10 @@
     <Text Include="sqrt.txt">
       <Filter>Tests</Filter>
     </Text>
-    <Text Include="movBlock.txt" />
+    <Text Include="movBlock.txt">
+      <Filter>Tests</Filter>
+    </Text>
+    <Text Include="check01.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data.csv">
