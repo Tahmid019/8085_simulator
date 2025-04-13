@@ -108,7 +108,10 @@
     <Text Include="div8.txt">
       <Filter>Tests</Filter>
     </Text>
-    <Text Include="sqrt.txt" />
+    <Text Include="sqrt.txt">
+      <Filter>Tests</Filter>
+    </Text>
+    <Text Include="movBlock.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data.csv">

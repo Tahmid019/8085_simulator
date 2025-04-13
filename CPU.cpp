@@ -481,7 +481,7 @@ int CPU::execute(uint8_t opcode) {
     }
     case 0x15: { // DCR D
         reg.D--;
-        updateFlags<uint8_t>(reg, reg.C, 0xFE);
+        updateFlags<uint8_t>(reg, reg.D, 0xFE);
         reg.PC++;
         message("DCR D executed.", reg.D,0, MessageType::REGISTER);
         break;
