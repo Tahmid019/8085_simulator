@@ -44,8 +44,8 @@ public:
 
 int main() {
 
-    uint16_t start_addr = 0x1ffb;
-    string filename = "check01.txt";
+    uint16_t start_addr = 0x1fDB;
+    string filename = "bubbleSort.txt";
 
     sim_8085 instance;
     instance.load_program(filename, start_addr, false);

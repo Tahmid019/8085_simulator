@@ -114,7 +114,12 @@
     <Text Include="movBlock.txt">
       <Filter>Tests</Filter>
     </Text>
-    <Text Include="check01.txt" />
+    <Text Include="check01.txt">
+      <Filter>Tests</Filter>
+    </Text>
+    <Text Include="bubbleSort.txt">
+      <Filter>Tests</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="data.csv">

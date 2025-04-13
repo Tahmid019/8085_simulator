@@ -534,7 +534,7 @@ int CPU::execute(uint8_t opcode) {
         message("DCX D executed.", reg.D, reg.E, MessageType::REGISTER);
         break;
     }
-    case 0x22B: { // DCX H
+    case 0x2B: { // DCX H
         reg.HL.set(reg.HL.get() - 1);
 		updateFlags<uint16_t>(reg, reg.HL.get(), 0xFE);
         reg.PC++;

@@ -78,7 +78,7 @@ std::map<std::string, Instruction> instructionSet = {
 
     {"DCX B", Instruction("DCX B", 0x0B, 1)},
     {"DCX D", Instruction("DCX D", 0x1B, 1)},
-    {"DCX H", Instruction("DCX H", 0x22B, 1)},
+    {"DCX H", Instruction("DCX H", 0x2B, 1)},
     {"DCX SP", Instruction("DCX SP", 0x3B, 1)},
 
     {"DI", Instruction("DI", 0xF3, 1)},
