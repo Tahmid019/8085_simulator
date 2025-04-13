@@ -40,17 +40,6 @@ public:
         spValue = value;
     }
 
-    uint8_t pop(Memory& memory) {
-        uint8_t value = memory.read(spValue); 
-        spValue++;                            
-        return value;                         
-    }
-
-	uint8_t push(Memory& memory, uint8_t value) {
-		spValue--;
-		memory.write(spValue, value);
-		return value;
-	}
 
     StackPointer& operator=(uint16_t value) {
         spValue = value;
@@ -82,6 +71,18 @@ public:
     operator uint16_t() const {
         return spValue;
     }
+    
+    uint8_t pop(Memory& memory) {
+        uint8_t value = memory.read(spValue); 
+        spValue++;                            
+        return value;                         
+    }
+
+	uint8_t push(Memory& memory, uint8_t value) {
+		spValue--;
+		memory.write(spValue, value);
+		return value;
+	}
 };
 
 
@@ -98,7 +99,6 @@ public:
 
     StackPointer SP; 
 
-    Registers() = default;
 };
 
 template<typename T>

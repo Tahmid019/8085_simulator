@@ -120,6 +120,7 @@
     <Text Include="bubbleSort.txt">
       <Filter>Tests</Filter>
     </Text>
+    <Text Include="bcd2bin.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data.csv">

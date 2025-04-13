@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="add16.txt" />
+    <Text Include="bcd2bin.txt" />
     <Text Include="bubbleSort.txt" />
     <Text Include="check01.txt" />
     <Text Include="div8.txt" />

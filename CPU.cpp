@@ -200,8 +200,9 @@ int CPU::execute(uint8_t opcode) {
     case 0xE6: {
         uint8_t value = memory.read(++reg.PC);
         reg.PC++;
+        message("original [A]: ", reg.A, 0, MessageType::REGISTER);
         reg.A = ALU::ana(reg, value);
-        message("ANI executed.  => [VAL] - [A] : ", value, reg.A, MessageType::REGISTER);
+        message("ANI executed.  => [A] - val : ", reg.A, value, MessageType::REGISTER);
         break;
     }
 
@@ -210,10 +211,11 @@ int CPU::execute(uint8_t opcode) {
     case 0xCD: {
         uint16_t address = memory.read(++reg.PC) | (memory.read(++reg.PC) << 8); // little Endian
         reg.PC++;
-        memory.write(reg.SP--, reg.PC & 0xFF); // lower  
-        memory.write(reg.SP--, (reg.PC >> 8) & 0xFF); // higher 
+        memory.write(--reg.SP, (reg.PC >> 8) & 0xFF); // higher 
+        memory.write(--reg.SP, reg.PC & 0xFF); // lower  
         reg.PC = address;
-        debug("CALL executed. --> ", address, 0, MessageType::MEMORY);
+        t2t_message("[MEMORY] CALL executed.\n(low) [SP] - [[SP]]", reg.SP.get(), memory.read(reg.SP.get()), Type2Tpe::t16_2_8);
+        t2t_message("(high) [SP] - [[SP]]", reg.SP.get()+1, memory.read(reg.SP.get()+1), Type2Tpe::t16_2_8);
         break;
     }
     case 0xDC: { // CALL if carry 1
@@ -819,8 +821,8 @@ int CPU::execute(uint8_t opcode) {
     }
     case 0x31: { // LXI SP
         reg.PC++;
-        reg.SP = memory.read(reg.PC++) | (memory.read(reg.PC++) << 8);
-        message("LXI SP executed. Loaded value into Stack Pointer.", static_cast<uint8_t>(reg.SP & 0xFF), static_cast<uint8_t>(reg.SP >> 8), MessageType::REGISTER);
+        reg.SP.set(memory.read(reg.PC++) | (memory.read(reg.PC++) << 8));
+        t2t_message("LXI SP executed. [SP] - [[SP]]: ", (reg.SP.get()), memory.read(reg.SP.get()), Type2Tpe::t16_2_8);
         break;
     }
 
@@ -1404,6 +1406,42 @@ int CPU::execute(uint8_t opcode) {
         break;
     }
 
+    // === PUSH ===
+
+    case 0xC5: // PUSH B
+        reg.PC++;
+        memory.write(--reg.SP, reg.B); // high
+        memory.write(--reg.SP, reg.C); // low
+        message("PUSH B executed.", 0, 0, MessageType::INFO);
+        t2t_message("(high [B]) -> [SP] - [[SP]]: ", (reg.SP.get()+1), memory.read(reg.SP.get()+1), Type2Tpe::t16_2_8);
+        t2t_message("(low [C]) -> [SP] - [[SP]]: ", (reg.SP.get()), memory.read(reg.SP.get()), Type2Tpe::t16_2_8);
+        break;
+    case 0xD5: // PUSH D
+        reg.PC++;
+        memory.write(--reg.SP, reg.D);
+        memory.write(--reg.SP, reg.E); 
+        message("PUSH D executed.", 0, 0, MessageType::INFO);
+        t2t_message("(high [D]) -> [SP] - [[SP]]: ", (reg.SP.get() + 1), memory.read(reg.SP.get() + 1), Type2Tpe::t16_2_8);
+        t2t_message("(low [E]) -> [SP] - [[SP]]: ", (reg.SP.get()), memory.read(reg.SP.get()), Type2Tpe::t16_2_8);
+        break;
+    case 0xE5: // PUSH H
+        reg.PC++;
+        memory.write(--reg.SP, reg.H); 
+        memory.write(--reg.SP, reg.L); 
+        message("PUSH H executed.", 0, 0, MessageType::INFO);
+        t2t_message("(high [HJ]) -> [SP] - [[SP]]: ", (reg.SP.get() + 1), memory.read(reg.SP.get() + 1), Type2Tpe::t16_2_8);
+        t2t_message("(low [L]) -> [SP] - [[SP]]: ", (reg.SP.get()), memory.read(reg.SP.get()), Type2Tpe::t16_2_8);
+        break;
+    case 0xF5: // PUSH PSW
+        reg.PC++;
+        memory.write(--reg.SP, reg.A); 
+        memory.write(--reg.SP, reg.Flags);
+        message("PUSH PSW executed.", 0, 0, MessageType::INFO);
+        t2t_message("(high [A]) -> [SP] - [[SP]]: ", (reg.SP.get() + 1), memory.read(reg.SP.get() + 1), Type2Tpe::t16_2_8);
+        t2t_message("(low [Flags]) -> [SP] - [[SP]]: ", (reg.SP.get()), memory.read(reg.SP.get()), Type2Tpe::t16_2_8);
+        break;
+
+
     // === Rotate & Return ===
 
     case 0x17: { // RAL
@@ -1439,8 +1477,8 @@ int CPU::execute(uint8_t opcode) {
         break;
     }
     case 0xC9: { // RET
-        reg.PC = reg.SP.pop(memory) | (reg.SP.pop(memory) << 8);
-        message("RET executed. [PC]: ", reg.PC, 0, MessageType::MEMORY);
+        reg.PC = (reg.SP.pop(memory) | (reg.SP.pop(memory) << 8));
+        t2t_message("RET executed. [PC]: ", reg.PC, 0, Type2Tpe::t16_2_16);
         break;
     }
     case 0xD8: { // RC
@@ -1815,48 +1853,66 @@ int CPU::execute(uint8_t opcode) {
     // === XRA ===
 
     case 0xAF: { // XRA A
+        uint8_t prev = reg.A;
         reg.A = ALU::xra(reg, reg.A);
         reg.PC++;
+        t2t_message("XRA A executed. [A] <- [A]", reg.A, prev, Type2Tpe::t8_2_8);
         break;
     }
     case 0xA8: { // XRA B
+        uint8_t prev = reg.A;
         reg.A = ALU::xra(reg, reg.B);
         reg.PC++;
+        t2t_message("XRA B executed. [A] <- [A]", reg.A, prev, Type2Tpe::t8_2_8);
         break;
     }
     case 0xA9: { // XRA C
+        uint8_t prev = reg.A;
         reg.A = ALU::xra(reg, reg.C);
         reg.PC++;
+        t2t_message("XRA C executed. [A] <- [A]", reg.A, prev, Type2Tpe::t8_2_8);
         break;
     }
     case 0xAA: { // XRA D
+        uint8_t prev = reg.A;
         reg.A = ALU::xra(reg, reg.D);
         reg.PC++;
+        t2t_message("XRA D executed. [A] <- [A]", reg.A, prev, Type2Tpe::t8_2_8);
         break;
     }
     case 0xAB: { // XRA E
+        uint8_t prev = reg.A;
         reg.A = ALU::xra(reg, reg.E);
         reg.PC++;
+        t2t_message("XRA E executed. [A] <- [A]", reg.A, prev, Type2Tpe::t8_2_8);
         break;
     }
     case 0xAC: { // XRA H
+        uint8_t prev = reg.A;
         reg.A = ALU::xra(reg, reg.H);
         reg.PC++;
+        t2t_message("XRA H executed. [A] <- [A]", reg.A, prev, Type2Tpe::t8_2_8);
         break;
     }
     case 0xAD: { // XRA L
+        uint8_t prev = reg.A;
         reg.A = ALU::xra(reg, reg.L);
         reg.PC++;
+        t2t_message("XRA L executed. [A] <- [A]", reg.A, prev, Type2Tpe::t8_2_8);
         break;
     }
     case 0xAE: { // XRA M 
+        uint8_t prev = reg.A;
         reg.A = ALU::xra(reg, memory.read(reg.HL.get()));
         reg.PC++;
+        t2t_message("XRA H executed. [A] <- [A]", reg.A, prev, Type2Tpe::t8_2_8);
         break;
     }
     case 0xEE: { // XRI 
+        uint8_t prev = reg.A;
         reg.PC++;
         reg.A = ALU::xra(reg, memory.read(reg.PC++));
+        t2t_message("XRI executed. [A] <- [A]", reg.A, prev, Type2Tpe::t8_2_8);
         break;
     }
 
