@@ -11,3 +11,6 @@ public:
 	uint8_t read(uint16_t address);
 	void clear();
 };
+
+
+

@@ -15,3 +15,4 @@ public:
 
 extern std::map<std::string, Instruction> instructionSet;
 extern std::map<std::string, std::function<void()>> instructionHandlers;
+
