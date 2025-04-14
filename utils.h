@@ -20,6 +20,8 @@ enum class Type2Tpe {
 
 void message(std::string msg, uint8_t in_load, uint8_t out_load, MessageType type);
 
+void removeTrailingSpaces(string& str);
+
 void debug(std::string msg, uint16_t in_addr, uint8_t in_data, MessageType type);
 
 bool carry(uint8_t value);

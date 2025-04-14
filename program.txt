@@ -1,0 +1,7 @@
+MVI A
+10
+    ADI 
+10 
+     OUT 
+   255
+HLT
