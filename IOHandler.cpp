@@ -16,7 +16,7 @@ void IOHandler::loadProgram(CPU& cpu, string filename, uint16_t& init_addr) {
     int ws = 0;
 
     while (getline(file, strInst)) {
-        removeTrailingSpace(strInst);
+        removeTrailingSpaces(strInst);
         if (ws>0) {
             cpu.memory.write(addr++, stoi(strInst)); // STRING TO HEXT IMPLEMENTATION
             debug("Loaded at: ", addr - 1, 0, MessageType::MEMORY);
