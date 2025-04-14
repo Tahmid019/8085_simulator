@@ -1,0 +1,18 @@
+MVI C
+4
+DAD B
+DCR C
+MOV A, C
+JZ
+11
+0
+JMP
+2
+0
+MOV A, H
+OUT 
+255
+MOV A, L
+OUT 
+255
+HLT

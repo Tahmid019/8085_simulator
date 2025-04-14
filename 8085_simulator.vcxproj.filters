@@ -123,6 +123,8 @@
     <Text Include="bcd2bin.txt" />
     <Text Include="fibonaci.txt" />
     <Text Include="arithmeticProgression.txt" />
+    <Text Include="nElement.txt" />
+    <Text Include="prefixSum.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data.csv">

@@ -161,6 +161,8 @@
     <Text Include="Guid.txt" />
     <Text Include="movBlock.txt" />
     <Text Include="mul.txt" />
+    <Text Include="nElement.txt" />
+    <Text Include="prefixSum.txt" />
     <Text Include="program.txt" />
     <Text Include="q1.txt" />
     <Text Include="sqrt.txt" />
