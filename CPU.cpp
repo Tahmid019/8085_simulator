@@ -838,6 +838,7 @@ int CPU::execute(uint8_t opcode) {
     case 0x06: {
         uint8_t value = memory.read(++reg.PC);
         reg.B = value;
+        reg.BC.set(reg.B << 8 | reg.C);
         reg.PC++;
         message("MVI B", reg.B, 0x00, MessageType::REGISTER);
         break;
@@ -845,6 +846,7 @@ int CPU::execute(uint8_t opcode) {
     case 0x0E: {
         uint8_t value = memory.read(++reg.PC);
         reg.C = value;
+        //reg.BC.set(reg.B << 8 | reg.C);
         reg.PC++;
         message("MVI C", reg.C, 0x00, MessageType::REGISTER);
         break;
@@ -852,6 +854,7 @@ int CPU::execute(uint8_t opcode) {
     case 0x16: {
         uint8_t value = memory.read(++reg.PC);
         reg.D = value;
+        //reg.DE.set(reg.D << 8 | reg)
         reg.PC++;
         message("MVI D", reg.D, 0x00, MessageType::REGISTER);
         break;
@@ -1949,7 +1952,8 @@ int CPU::execute(uint8_t opcode) {
         uint8_t value = memory.read(reg.PC++);
         //uint8_t portAddress = memory.read(reg.PC++);
         //io.write(portAddress, reg.A);
-        message("OUT : ", value, reg.A, MessageType::REGISTER);
+        //message("OUT : ", value, reg.A, MessageType::REGISTER);
+        t2t_message("OUT executed. [Port] <- [A]: ", value, reg.A, Type2Tpe::t8_2_8);
         break;
     }
 

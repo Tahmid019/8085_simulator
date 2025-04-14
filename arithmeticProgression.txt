@@ -1,18 +1,21 @@
 MVI C
-4
-DAD B
+3
+MVI A
+1
+MVI B
+2
 DCR C
+MOV H, A
 MOV A, C
 JZ
-11
-0
-JMP
-2
+17
 0
 MOV A, H
-OUT 
-255
-MOV A, L
+ADD B
+JMP
+6
+0
+MOV A, H
 OUT 
 255
 HLT

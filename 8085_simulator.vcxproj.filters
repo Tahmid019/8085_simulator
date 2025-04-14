@@ -121,6 +121,8 @@
       <Filter>Tests</Filter>
     </Text>
     <Text Include="bcd2bin.txt" />
+    <Text Include="fibonaci.txt" />
+    <Text Include="arithmeticProgression.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data.csv">
