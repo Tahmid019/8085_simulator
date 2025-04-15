@@ -526,28 +526,32 @@ int CPU::execute(uint8_t opcode) {
         reg.BC.set(reg.BC.get() - 1);
 		updateFlags<uint16_t>(reg, reg.BC.get(), 0xFE);
         reg.PC++;
-        message("DCX B executed.", reg.B, reg.C, MessageType::REGISTER);
+        /*message("DCX B executed.", reg.B, reg.C, MessageType::REGISTER);*/
+        debug("DCX B: ", reg.BC.get(), memory.read(reg.BC.get()), MessageType::MEMORY);
         break;
     }
     case 0x1B: { // DCX D
         reg.DE.set(reg.DE.get() - 1);
 		updateFlags<uint16_t>(reg, reg.DE.get(), 0xFE);
         reg.PC++;
-        message("DCX D executed.", reg.D, reg.E, MessageType::REGISTER);
+        //message("DCX D executed.", reg.D, reg.E, MessageType::REGISTER);
+        debug("DCX D: ", reg.DE.get(), memory.read(reg.DE.get()), MessageType::MEMORY);
         break;
     }
     case 0x2B: { // DCX H
         reg.HL.set(reg.HL.get() - 1);
 		updateFlags<uint16_t>(reg, reg.HL.get(), 0xFE);
         reg.PC++;
-        message("DCX H executed.", reg.H, reg.L, MessageType::REGISTER);
+        //message("DCX H executed.", reg.H, reg.L, MessageType::REGISTER);
+        debug("DCX H: ", reg.HL.get(), memory.read(reg.HL.get()), MessageType::MEMORY);
         break;
     }
     case 0x3B: { // DCX SP
         reg.SP--;
 		updateFlags<uint16_t>(reg, reg.SP.get(), 0xFE);
         reg.PC++;
-        message("DCX SP executed.", static_cast<uint8_t>(reg.SP & 0xFF),0, MessageType::REGISTER);
+        //message("DCX SP executed.", static_cast<uint8_t>(reg.SP & 0xFF),0, MessageType::REGISTER);
+		debug("DCX SP: ", static_cast<uint16_t>(reg.SP.get()), memory.read(reg.SP.get()), MessageType::MEMORY);
         break;
     }
 
@@ -796,7 +800,7 @@ int CPU::execute(uint8_t opcode) {
         reg.PC++;
         reg.C = memory.read(reg.PC++);
         reg.B = memory.read(reg.PC++);
-        reg.BC.set(reg.B << 8 | reg.C);
+        //reg.BC.set(reg.B << 8 | reg.C);
         //message("LXI B executed. Loaded values into B and C registers.", reg.B, reg.C, MessageType::REGISTER);
         debug("LXI B: ", reg.BC.get(), memory.read(reg.BC.get()), MessageType::MEMORY);
         break;
@@ -805,7 +809,7 @@ int CPU::execute(uint8_t opcode) {
         reg.PC++;
         reg.E = memory.read(reg.PC++);
         reg.D = memory.read(reg.PC++);
-        reg.DE.set(reg.D << 8 | reg.E);
+        //reg.DE.set(reg.D << 8 | reg.E);
         //message("LXI D executed. Loaded values into D and E registers.", reg.D, reg.E, MessageType::REGISTER);
         debug("LXI D: ", reg.DE.get(), memory.read(reg.DE.get()), MessageType::MEMORY);
         break;
@@ -814,7 +818,7 @@ int CPU::execute(uint8_t opcode) {
         reg.PC++;
         reg.L = memory.read(reg.PC++);
         reg.H = memory.read(reg.PC++);
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         //message("LXI H executed. Loaded values into H and L registers.", reg.H, reg.L, MessageType::REGISTER);
         debug("LXI H: ", reg.HL.get(), memory.read(reg.HL.get()), MessageType::MEMORY);
         break;
@@ -838,6 +842,7 @@ int CPU::execute(uint8_t opcode) {
     case 0x06: {
         uint8_t value = memory.read(++reg.PC);
         reg.B = value;
+        //reg.BC.set(reg.B << 8 | reg.C);
         reg.PC++;
         message("MVI B", reg.B, 0x00, MessageType::REGISTER);
         break;
@@ -845,6 +850,7 @@ int CPU::execute(uint8_t opcode) {
     case 0x0E: {
         uint8_t value = memory.read(++reg.PC);
         reg.C = value;
+        //reg.BC.set(reg.B << 8 | reg.C);
         reg.PC++;
         message("MVI C", reg.C, 0x00, MessageType::REGISTER);
         break;
@@ -852,6 +858,7 @@ int CPU::execute(uint8_t opcode) {
     case 0x16: {
         uint8_t value = memory.read(++reg.PC);
         reg.D = value;
+        //reg.DE.set(reg.D << 8 | reg)
         reg.PC++;
         message("MVI D", reg.D, 0x00, MessageType::REGISTER);
         break;
@@ -866,7 +873,7 @@ int CPU::execute(uint8_t opcode) {
     case 0x26: {
         uint8_t value = memory.read(++reg.PC);
         reg.H = value;
-		reg.HL.set(reg.H << 8 | reg.L);
+		//reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MVI H", reg.H, 0x00, MessageType::REGISTER);
         break;
@@ -874,7 +881,7 @@ int CPU::execute(uint8_t opcode) {
     case 0x2E: {
         uint8_t value = memory.read(++reg.PC);
         reg.L = value;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MVI L", reg.L, 0x00, MessageType::REGISTER);
         break;
@@ -882,7 +889,7 @@ int CPU::execute(uint8_t opcode) {
     case 0x36: {
         uint8_t value = memory.read(++reg.PC);
         uint16_t M_addr = reg.HL.get();
-        cout << M_addr << endl;
+        //cout << M_addr << endl;
         memory.write(M_addr, value);
         reg.PC++;
         //message("MVI M", memory.read(M_addr), 0x00, MessageType::REGISTER);
@@ -1140,49 +1147,49 @@ int CPU::execute(uint8_t opcode) {
     }
     case 0x67: {
         reg.H = reg.A;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV H, A", reg.H, reg.A, MessageType::REGISTER);
         break;
     }
     case 0x60: {
         reg.H = reg.B;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV H, B", reg.H, reg.B, MessageType::REGISTER);
         break;
     }
     case 0x61: {
         reg.H = reg.C;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV H, C", reg.H, reg.C, MessageType::REGISTER);
         break;
     }
     case 0x62: {
         reg.H = reg.D;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV H, D", reg.H, reg.D, MessageType::REGISTER);
         break;
     }
     case 0x63: {
         reg.H = reg.E;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV H, E", reg.H, reg.E, MessageType::REGISTER);
         break;
     }
     case 0x64: {
         reg.H = reg.H;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV H, H", reg.H, reg.H, MessageType::REGISTER);
         break;
     }
     case 0x65: {
         reg.H = reg.L;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV H, L", reg.H, reg.L, MessageType::REGISTER);
         break;
@@ -1190,56 +1197,56 @@ int CPU::execute(uint8_t opcode) {
     case 0x66: {
         uint8_t value = memory.read(reg.HL.get());
         reg.H = value;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV H, M", reg.H, value, MessageType::REGISTER);
         break;
     }
     case 0x6F: {
         reg.L = reg.A;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV L, A", reg.L, reg.A, MessageType::REGISTER);
         break;
     }
     case 0x68: {
         reg.L = reg.B;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV L, B", reg.L, reg.B, MessageType::REGISTER);
         break;
     }
     case 0x69: {
         reg.L = reg.C;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV L, C", reg.L, reg.C, MessageType::REGISTER);
         break;
     }
     case 0x6A: {
         reg.L = reg.D;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV L, D", reg.L, reg.D, MessageType::REGISTER);
         break;
     }
     case 0x6B: {
         reg.L = reg.E;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV L, E", reg.L, reg.E, MessageType::REGISTER);
         break;
     }
     case 0x6C: {
         reg.L = reg.H;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV L, H", reg.L, reg.H, MessageType::REGISTER);
         break;
     }
     case 0x6D: {
         reg.L = reg.L;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV L, L", reg.L, reg.L, MessageType::REGISTER);
         break;
@@ -1247,7 +1254,7 @@ int CPU::execute(uint8_t opcode) {
     case 0x6E: {
         uint8_t value = memory.read(reg.HL.get());
         reg.L = value;
-        reg.HL.set(reg.H << 8 | reg.L);
+        //reg.HL.set(reg.H << 8 | reg.L);
         reg.PC++;
         message("MOV L, M", reg.L, value, MessageType::REGISTER);
         break;
@@ -1949,7 +1956,8 @@ int CPU::execute(uint8_t opcode) {
         uint8_t value = memory.read(reg.PC++);
         //uint8_t portAddress = memory.read(reg.PC++);
         //io.write(portAddress, reg.A);
-        message("OUT : ", value, reg.A, MessageType::REGISTER);
+        //message("OUT : ", value, reg.A, MessageType::REGISTER);
+        t2t_message("OUT executed. [Port] <- [A]: ", value, reg.A, Type2Tpe::t8_2_8);
         break;
     }
 

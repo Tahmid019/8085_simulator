@@ -62,7 +62,9 @@ uint8_t ALU::adc(Registers& reg, uint8_t value) {
 
 
 uint8_t ALU::ana(Registers& reg, uint8_t value) {
+	cout << reg.A << endl;
 	reg.A &= value;
+	cout << reg.A << endl;
 
 	// S, Z, P, AC, CY
 	reg.Flags &= ~(0x80 | 0x20 | 0x08 | 0x02 | 0x01);

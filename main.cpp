@@ -44,7 +44,7 @@ public:
 
 int main() {
 
-    uint16_t start_addr = 0x1ffb;
+    uint16_t start_addr = 0x0000;
     string filename = "program.txt";
 
     sim_8085 instance;
