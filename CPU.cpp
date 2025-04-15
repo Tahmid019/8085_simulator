@@ -838,7 +838,7 @@ int CPU::execute(uint8_t opcode) {
     case 0x06: {
         uint8_t value = memory.read(++reg.PC);
         reg.B = value;
-        reg.BC.set(reg.B << 8 | reg.C);
+        //reg.BC.set(reg.B << 8 | reg.C);
         reg.PC++;
         message("MVI B", reg.B, 0x00, MessageType::REGISTER);
         break;
