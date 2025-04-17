@@ -156,18 +156,25 @@
     <Text Include="bcd2bin.txt" />
     <Text Include="bubbleSort.txt" />
     <Text Include="check01.txt" />
+    <Text Include="cube.txt" />
     <Text Include="div8.txt" />
     <Text Include="fibonaci.txt" />
     <Text Include="Guid.txt" />
     <Text Include="movBlock.txt" />
     <Text Include="mul.txt" />
     <Text Include="nElement.txt" />
+    <Text Include="prefixAND.txt" />
+    <Text Include="prefixOR.txt" />
     <Text Include="prefixSum.txt" />
+    <Text Include="prefixXOR.txt" />
     <Text Include="program.txt" />
     <Text Include="q1.txt" />
     <Text Include="sqrt.txt" />
     <Text Include="sub16.txt" />
     <Text Include="sub8.txt" />
+    <Text Include="suffixOR.txt" />
+    <Text Include="suffixSum.txt" />
+    <Text Include="suffixXOR.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="add.txt" />
