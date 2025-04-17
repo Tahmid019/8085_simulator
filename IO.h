@@ -16,3 +16,5 @@ public:
 
 	bool isPortConnected() const;
 };
+
+
