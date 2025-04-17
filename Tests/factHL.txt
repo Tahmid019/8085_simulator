@@ -1,0 +1,45 @@
+MVI C        
+6           
+MVI H        
+0            
+MVI L        
+1            
+MOV A, C      
+ANA A         
+JZ            
+30            
+0             
+DCR C         
+JZ           
+34            
+0             
+MOV D, H      
+MOV E, L      
+MVI H         
+0             
+MVI L         
+0             
+MOV B, C      
+DAD D         
+DCR B         
+JNZ           
+22            
+0             
+DCR C         
+MOV A, C      
+DCR A         
+ANA A         
+JNZ           
+15            
+0             
+MOV A, H      
+OUT           
+255           
+MOV A, L      
+OUT           
+255           
+HLT           
+INR C         
+JMP           
+34            
+0             

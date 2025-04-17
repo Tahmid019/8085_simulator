@@ -109,8 +109,8 @@ size_t t2t_message(string custm_message = "", uint16_t a = 0XFFFF, uint16_t b = 
 	return custm_message.length() + message.length() + 1;
 }
 void removeTrailingSpaces(string& str) {
-    while (str.size() > 0 && str.back() == ' ')str.pop_back();
+    while (str.size() > 0 && (str.back() == ' '||str.back()=='\t'))str.pop_back();
     reverse(str.begin(), str.end());
-    while (str.size() > 0 && str.back() == ' ')str.pop_back();
+    while (str.size() > 0 && (str.back() == ' '||str.back()=='\t'))str.pop_back();
     reverse(str.begin(), str.end());
 }

@@ -1,6 +1,88 @@
+NOP
+NOP
+NOP
 MVI A
-21
-OUT 
-255
-
-HLT
+27
+MOV E, A
+MVI B  
+0	   
+MOV C, E
+MOV A, B
+CMP C  
+JC	   
+58	   
+0	   
+MOV A, B
+ADD C  
+RAR	   
+MOV D, A
+MVI H  
+0	   
+MOV L, D
+MOV A, D    
+DCR A  
+JZ	   
+33	   
+0	   
+MOV B, A
+MVI H  
+0	   
+MOV L, D
+MVI C  
+0	   
+MOV A, L
+ADD D  
+MOV L, A
+JC	   
+24	   
+0	   
+INR H  
+DCR B  
+JNZ	   
+19	   
+0	   
+PUSH H 
+POP D  
+MVI H  
+0	   
+MVI L  
+0	   
+MOV A, D
+ANA A  
+JZ	   
+46	   
+0	   
+MOV B, D
+DAD D  
+DCR B  
+JNZ	   
+40	   
+0	   
+MOV A, H
+ANA A  
+JNZ	   
+61	   
+0	   
+MOV A, L
+CMP E  
+JZ	   
+61	   
+0	   
+JC	   
+61	   
+0	   
+MOV A, D
+INR A  
+MOV B, A
+JMP	   
+6	   
+0	   
+MOV C, D
+DCR C  
+JMP	   
+6	   
+0	   
+MOV A, C
+OUT	   
+255	   
+HLT	   
