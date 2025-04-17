@@ -120,6 +120,11 @@
     <Text Include="bubbleSort.txt">
       <Filter>Tests</Filter>
     </Text>
+<<<<<<< HEAD
+    <Text Include="bcd2bin.txt">
+      <Filter>Tests</Filter>
+    </Text>
+=======
     <Text Include="bcd2bin.txt" />
     <Text Include="fibonaci.txt" />
     <Text Include="arithmeticProgression.txt" />
@@ -132,6 +137,7 @@
     <Text Include="suffixSum.txt" />
     <Text Include="suffixXOR.txt" />
     <Text Include="suffixOR.txt" />
+>>>>>>> dev_balla
   </ItemGroup>
   <ItemGroup>
     <None Include="data.csv">

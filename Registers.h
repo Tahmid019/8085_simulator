@@ -12,7 +12,7 @@
 class Register;
 
 struct RegisterPair {
-	uint8_t* low, *high;
+	uint8_t *high, *low;
 	
 	uint16_t get() {
 		return (*high << 8) | *low;
