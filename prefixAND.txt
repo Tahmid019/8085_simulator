@@ -29,7 +29,7 @@ MOV A, C
 JNZ 
 21
 0
-LXI H
+LXI H 
 0
 16
 INX H

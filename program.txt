@@ -1,32 +1,6 @@
-LXI B
-1
-1
-MOV A, B
+MVI H
+2
+MOV A, H
 OUT
 255
-MOV A, C
-OUT
-255
-
-INX B
-MOV A, B
-OUT
-255
-MOV A, C
-OUT
-255
-
-MVI C
-10
-INX B
-INX B
-INX B
-
-MVI B
-16
-DCX B
-DCX B
-DCX B
-
-
 HLT
