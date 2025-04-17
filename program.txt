@@ -1,6 +1,26 @@
-MVI H
-2
-MOV A, H
-OUT
+MVI C
+15
+MVI B
+1
+MOV A, B
+MOV E, A
+XRA A
+MOV D, C
+ADD E
+DCR D
+JNZ
+8
+0
+MOV B, A
+DCR C
+MOV A, C
+CPI
+1
+JNZ
+4
+0
+MOV A, B
+OUT 
 255
+
 HLT
