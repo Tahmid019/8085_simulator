@@ -2,9 +2,10 @@
 #include "../Headers/Memory.h"
 
 Memory::Memory() {
-    for (uint16_t i = 0; i < UINT16_MAX; i++) {
+    mem.resize(65535, 0);
+   /* for (uint16_t i = 0; i < UINT16_MAX; i++) {
         mem[i] = static_cast<uint16_t>(-1);
-    }
+    }*/
 }
 
 void Memory::write(uint16_t address, uint8_t data) {
