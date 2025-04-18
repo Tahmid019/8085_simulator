@@ -23,6 +23,18 @@ public:
         cpu.reg.PC = 0x0000;
         cpu.reg.SP = 0xffff;
         cpu.reg.Flags = 0x00;
+
+        cout << "Enter memory location in hex and value and press 2 to stop:\n";
+        while (true) {
+            string a,b;cin >> a;
+            if (a == "2")break;
+            cin >> b;
+            int address = stoi(a, 0, 16);
+            int val = stoi(b);
+            cpu.memory.write(address,val);
+        }
+
+
     }
     void load_program(string filename,uint16_t init_addr, bool debug = false) {
         message("Loading Program in Main Memory ...", 0, 0, MessageType::INFO);
