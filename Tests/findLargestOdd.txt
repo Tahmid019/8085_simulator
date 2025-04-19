@@ -1,0 +1,30 @@
+MVI H
+16
+MVI L
+0
+MVI B
+0
+MVI C
+10
+MOV A, M
+MOV D, A
+ANI
+1
+JZ
+23
+0
+MOV A, D
+CMP B
+JC
+23
+0
+MOV B, A
+INX H
+DCR C
+JNZ
+8
+0
+MOV A, B
+OUT
+255
+HLT

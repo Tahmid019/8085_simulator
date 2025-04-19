@@ -17,7 +17,7 @@ uint8_t Memory::read(uint16_t address) {
     return mem[address];
 }
 void Memory::clear() {
-	mem.clear();
-    mem.resize(65536, 0);
+	mem.vector::clear();
+    mem.vector::resize(65536, 0);
 	std::cout << "Memory Cleared" << std::endl;
 }
