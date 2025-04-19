@@ -1,9 +1,3 @@
-LXI H
-0
-37
-MVI M
-36
-
 MVI C
 1
 MVI B
@@ -14,20 +8,18 @@ LDA
 SUB B
 JZ
 17
-32
+0
 INR C
 INR B
 INR B
 JMP
 7
-32
+0
 MOV A, C
 STA
 0
 38
-
 LXI H
 0
 38
-
 HLT
