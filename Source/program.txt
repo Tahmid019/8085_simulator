@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 MVI H
 16
 MVI L
@@ -22,4 +23,33 @@ MVI A
 1
 OUT
 255
+=======
+MVI D
+6
+LXI H
+0
+37
+LXI B
+0
+38
+MOV A, M
+STAX B
+INX H
+INX B
+DCR D
+JNZ
+8
+0
+
+
+LXI H
+0
+38
+INX H
+INX H
+INX H
+INX H
+INX H
+
+>>>>>>> fe2f4fe (upd: input_data)
 HLT

@@ -23,19 +23,11 @@ public:
         cpu.reg.PC = 0x0000;
         cpu.reg.SP = 0xffff;
         cpu.reg.Flags = 0x00;
-
-        cout << "Enter memory location in hex and value and press 2 to stop:\n";
-        while (true) {
-            string a,b;cin >> a;
-            if (a == "2")break;
-            cin >> b;
-            int address = stoi(a, 0, 16);
-            int val = stoi(b);
-            cpu.memory.write(address,val);
-        }
-
-
     }
+	void input_data() {
+		message("Insert data in Memory ...", 0, 0, MessageType::INFO);
+		io_handler.initializeData2Memory(cpu);
+	}
     void load_program(string filename,uint16_t init_addr, bool debug = false) {
         message("Loading Program in Main Memory ...", 0, 0, MessageType::INFO);
         io_handler.loadProgram(cpu, filename, init_addr);
@@ -61,6 +53,7 @@ int main() {
     filename = R"(..\..\..\Source\)" + filename;
 
     sim_8085 instance;
+	instance.input_data();
     instance.load_program(filename, start_addr, false);
     instance.execute_program(start_addr); 
 

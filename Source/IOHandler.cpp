@@ -3,6 +3,18 @@
 #include "../Headers/Instructions.h"
 #include "../Headers/utils.h"
 
+void IOHandler::initializeData2Memory(CPU& cpu) {
+    cout << "[ Insert data in Memory ] / [ Press 2 to Run Anyway ] :\n";
+    while (true) {
+        string a, b;cin >> a;
+        if (a == "2")break;
+        cin >> b;
+        int address = stoi(a, 0, 16);
+        int val = stoi(b);
+        cpu.memory.write(address, val);
+    }
+}
+
 void IOHandler::loadProgram(CPU& cpu, string filename, uint16_t& init_addr) {
     std::ifstream file(filename);
 
