@@ -1,55 +1,45 @@
-<<<<<<< HEAD
-MVI H
-16
-MVI L
-0
-MOV A, M
-CPI
-0
-JZ
-18
-MOV B, A
-DCR B
-MOV A, B
-ANA M
-JZ
-22
-MVI A
-0
-OUT
-255
-HLT
-MVI A
-1
-OUT
-255
-=======
-MVI D
-6
-LXI H
-0
-37
-LXI B
-0
-38
-MOV A, M
-STAX B
-INX H
-INX B
-DCR D
-JNZ
-8
-0
-
-
-LXI H
-0
-38
-INX H
-INX H
-INX H
-INX H
-INX H
-
->>>>>>> fe2f4fe (upd: input_data)
-HLT
+MVI C        
+6           
+MVI H        
+0            
+MVI L        
+1            
+MOV A, C      
+ANA A         
+JZ            
+30            
+0             
+DCR C         
+JZ           
+34            
+0             
+MOV D, H      
+MOV E, L      
+MVI H         
+0             
+MVI L         
+0             
+MOV B, C      
+DAD D         
+DCR B         
+JNZ           
+22            
+0             
+DCR C         
+MOV A, C      
+DCR A         
+ANA A         
+JNZ           
+15            
+0             
+MOV A, H      
+OUT           
+255           
+MOV A, L      
+OUT           
+255           
+HLT           
+INR C         
+JMP           
+34            
+0             

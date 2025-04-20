@@ -15,5 +15,6 @@
 #include <type_traits>
 #include <stdexcept>
 #include<vector>
+#include<array>
 
 using namespace std;

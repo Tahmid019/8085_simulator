@@ -2,7 +2,8 @@
 #include "../Headers/Memory.h"
 
 Memory::Memory() {
-    mem.resize(65536, 0);
+    //mem.resize(65536, 0);
+    mem.fill(0);
    /* for (uint16_t i = 0; i < UINT16_MAX; i++) {
         mem[i] = static_cast<uint16_t>(-1);
     }*/
@@ -17,7 +18,8 @@ uint8_t Memory::read(uint16_t address) {
     return mem[address];
 }
 void Memory::clear() {
-	mem.vector::clear();
-    mem.vector::resize(65536, 0);
+    mem.fill(0);
+	//mem.vector::clear();
+    //mem.vector::resize(65536, 0);
 	std::cout << "Memory Cleared" << std::endl;
 }
