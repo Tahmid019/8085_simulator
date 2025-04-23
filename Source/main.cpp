@@ -2,7 +2,7 @@
 #include "../Headers/utils.h"
 #include "../Headers/CPU.h"
 #include "../Headers/IOHandler.h"
-
+#include "../Headers/Parser.h"
 
 class sim_8085 {
 private:

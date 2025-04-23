@@ -20,6 +20,7 @@ vector<uint8_t> Parser::tokenize(CPU& cpu, const string& line, uint16_t& addr) {
 	if (parts.empty()) return bytes;
 
 	string mne = parts[0];
+	cout << parts.size() << endl;
 	transform(mne.begin(), mne.end(), mne.begin(), ::toupper);
 	
 	if (instructionSet.find(mne) == instructionSet.end()) {

@@ -1,65 +1,65 @@
 #include "../Headers/Head_1.h"
 #include "../Headers/utils.h"
 
-void message(std::string msg="[--] ", uint8_t in_load = 0, uint8_t out_load = 0, MessageType type = MessageType::INFO) {
-    std::string prefix;
+void message(string msg="[--] ", uint8_t in_load = 0, uint8_t out_load = 0, MessageType type = MessageType::INFO) {
+    string prefix;
     switch (type) {
         case MessageType::INFO: {
             prefix = "[INFO] ";
-            std::cout << prefix << msg << std::endl;
+            cout << prefix << msg << endl;
             break;
         }
         case MessageType::WARNING: {
             prefix = "[WARNING] ";
-            std::cout << prefix << msg << std::endl;
+            cout << prefix << msg << endl;
             break;
         }
         case MessageType::ERROR: {
             prefix = "[ERROR] ";
-            std::cout << prefix << msg << std::endl;
+            cout << prefix << msg << endl;
         }
         case MessageType::MEMORY: {
             prefix = "[MEMORY - Load] ";
-            std::cerr << prefix << msg << " Memory-value: [ " << std::hex << static_cast<int>(in_load) << " ]";
+            cerr << prefix << msg << " Memory-value: [ " << hex << static_cast<int>(in_load) << " ]";
             break;
         }
         case MessageType::REGISTER: {
             prefix = "[REGISTER - Load] ";
-            std::cerr << prefix << msg << " Register-value: [ " << std::hex << static_cast<int>(in_load) << " ]";
+            cerr << prefix << msg << " Register-value: [ " << hex << static_cast<int>(in_load) << " ]";
             break;
         }
     }   
 
-    if (out_load != 0x00) std::cout << " <-- [ " << std::hex << static_cast<int>(out_load) << " ]";
-    std::cout << std::endl;
+    if (out_load != 0x00) cout << " <-- [ " << hex << static_cast<int>(out_load) << " ]";
+    cout << endl;
 }
 
-void debug(std::string msg = "[--] ", uint16_t in_addr = 0, uint8_t in_data = 0, MessageType type = MessageType::INFO) {
-    std::string prefix;
+void debug(string msg = "[--] ", uint16_t in_addr = 0, uint8_t in_data = 0, MessageType type = MessageType::INFO) {
+    string prefix;
     switch (type) {
         case MessageType::INFO: {
             prefix = "[INFO] ";
-            std::cout << prefix << msg << std::endl;
+            cout << prefix << msg << endl;
             break;
         }
         case MessageType::MEMORY: {
             prefix = "[MEMORY] ";
-            std::cout << prefix << msg;
-            if (in_addr != 0) std::cout << " Address: { " << std::hex << static_cast<uint16_t>(in_addr) << " } ";
-            if (in_data != 0) std::cout << " Data : [ " << std::hex << static_cast<int>(in_data) << " ] ";
-            std::cout << std::endl;
+            cout << prefix << msg;
+            if (in_addr != 0) cout << " Address: { " << hex << static_cast<uint16_t>(in_addr) << " } ";
+            if (in_data != 0) cout << " Data : [ " << hex << static_cast<int>(in_data) << " ] ";
+            cout << endl;
             break;
         }
         case MessageType::REGISTER: {
             prefix = "[REGISTER] ";
-            std::cout << prefix << msg;
-            if (in_addr != 0) std::cout << " Address: { " << std::hex << static_cast<uint16_t>(in_addr) << " } ";
-            if (in_data != 0) std::cout << " Data : [ " << std::hex << static_cast<int>(in_data) << " ] ";
-            std::cout << std::endl;
+            cout << prefix << msg;
+            if (in_addr != 0) cout << " Address: { " << hex << static_cast<uint16_t>(in_addr) << " } ";
+            if (in_data != 0) cout << " Data : [ " << hex << static_cast<int>(in_data) << " ] ";
+            cout << endl;
             break;
         }
         default: {
-            std::cout << "[UNKNOWN CASE]" << std::endl;
+            cout << "[UNKNOWN CASE]" << endl;
             break;
         }
     }
@@ -104,7 +104,7 @@ size_t t2t_message(string custm_message = "", uint16_t a = 0XFFFF, uint16_t b = 
         }
     };
     cout << custm_message << endl;
-	cout << message << "a: { " << std::hex << a << " } b: { " << std::hex << b << " }" << endl;
+	cout << message << "a: { " << hex << a << " } b: { " << hex << b << " }" << endl;
 
 	return custm_message.length() + message.length() + 1;
 }
@@ -113,4 +113,14 @@ void removeTrailingSpaces(string& str) {
     reverse(str.begin(), str.end());
     while (str.size() > 0 && (str.back() == ' '||str.back()=='\t'))str.pop_back();
     reverse(str.begin(), str.end());
+}
+
+uint8_t hto8b(const string& hexStr) {
+    unsigned int byte;
+    stringstream ss;
+
+    ss << hex << hexStr; 
+    ss >> byte;
+
+    return static_cast<uint8_t>(byte);  
 }

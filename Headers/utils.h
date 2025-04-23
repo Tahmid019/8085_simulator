@@ -28,6 +28,9 @@ bool carry(uint8_t value);
 
 size_t t2t_message(string message, uint16_t a, uint16_t b, Type2Tpe type);
 
+uint8_t hto8b(const string& hexStr);
+
+
 template<typename T>
 bool parity(T val) {
     static_assert(std::is_unsigned<T>::value, "Only unsigned types are allowed");
