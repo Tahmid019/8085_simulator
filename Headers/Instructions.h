@@ -9,7 +9,7 @@ public:
 
 	Instruction() = default;
 	Instruction(string name, function<vector<uint8_t>(const vector<string>&)> decoder, uint8_t size)
-		: name(move(name)), decoder(move(decoder)), wordSize(size) {}
+		: mnemonic(move(name)), decoder(move(decoder)), wordSize(size) {}
 };
 
 extern map<string, Instruction> instructionSet;

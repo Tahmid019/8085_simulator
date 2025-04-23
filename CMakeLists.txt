@@ -11,20 +11,18 @@ endif()
 
 project ("8085_MP_sim")
 
-# Add source to this project's executable.
-add_executable(8085_MP_sim
-    Source/main.cpp
-    Source/ALU.cpp
-    Source/CPU.cpp
-    Source/Instructions.cpp
-    Source/InterruptControl.cpp
-    Source/IO.cpp
-    Source/IOHandler.cpp
-    Source/Memory.cpp
-    Source/Registers.cpp
-    Source/utils.cpp
- "Headers/Parser.h" "Source/Parser.cpp" "Headers/CLI.h"  "Headers/Decoder.h" "Source/Decoder.cpp" "Source/Instruction/ACI.cpp" "Source/Instruction/ACI.cpp" "Headers/InstructionHeaders/Inst_Head.h")
+# Include directories
+include_directories(
+    ${CMAKE_SOURCE_DIR}/InstructionHeaders
+)
 
+# Collect all .cpp files
+file(GLOB_RECURSE SOURCE_FILES
+    "${CMAKE_SOURCE_DIR}/Source/*.cpp"
+)
+
+# Create the executable
+add_executable(8085_MP_sim ${SOURCE_FILES} "Headers/Head_2.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET 8085_MP_sim PROPERTY CXX_STANDARD 20)

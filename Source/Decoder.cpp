@@ -2,14 +2,15 @@
 #include "../Headers/Decoder.h"
 #include "../Headers/Instructions.h"
 
-uint8_t Decoder::decode(string& mnemonic, vector<string>& operands) {
+vector<uint8_t> Decoder::decode(string& mnemonic, vector<string>& operands) {
     string upper = mnemonic;
     transform(upper.begin(), upper.end(), upper.begin(), toupper);
 
-	auto it = instructionSet.find(upper);
-	if (it != instructionSet.end()) {
-		return it->(operands);
-	}else
+	if (instructionSet.find(upper) == instructionSet.end()) {
 		throw runtime_error("Unknown instruction: " + mnemonic);
-	return 0x00;
+		return {};
+	}
+
+	Instruction it = instructionSet[upper];
+	return it.decoder(operands);
 }

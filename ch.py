@@ -8,7 +8,7 @@ for filename in os.listdir(header_folder):
         filepath = os.path.join(header_folder, filename)
         
         boilerplate = f"""#pragma once
-#include "Head_1.h"
+#include "../Head_1.h"
 
 vector<uint8_t> decode{instruction}(const std::vector<std::string>& operands);
 """

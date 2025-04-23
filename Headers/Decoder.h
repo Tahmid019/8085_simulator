@@ -2,5 +2,5 @@
 
 class Decoder {
 public:
-	static uint8_t decode(string& mnemonic, vector<string>& operands);
+	static vector<uint8_t> decode(string& mnemonic, vector<string>& operands);
 };

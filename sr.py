@@ -8,7 +8,7 @@ for filename in os.listdir(cpp_folder):
         filepath = os.path.join(cpp_folder, filename)
         
         content = f"""#pragma once
-#include "Headers/Head_1.h"
+#include "../Headers/Head_2.h"
 
 vector<uint8_t> decode{inst_name}(const vector<string>& operands) {{
     return {{}}; 

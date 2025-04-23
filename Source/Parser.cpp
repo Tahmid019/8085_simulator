@@ -4,7 +4,7 @@
 #include "../Headers/Memory.h"
 
 
-void Parser::tokenize(CPU& cpu, const string& line, uint16_t& addr) {
+vector<uint8_t> Parser::tokenize(CPU& cpu, const string& line, uint16_t& addr) {
 	istringstream iss(line);
 	string token;
 
@@ -16,7 +16,7 @@ void Parser::tokenize(CPU& cpu, const string& line, uint16_t& addr) {
 			parts.push_back(token);
 	}
 
-	if (parts.empty()) return;
+	if (parts.empty()) return {};
 
 	string mne = parts[0];
 	parts.erase(parts.begin());
@@ -24,23 +24,23 @@ void Parser::tokenize(CPU& cpu, const string& line, uint16_t& addr) {
 	transform(mne.begin(), mne.end(), mne.begin(), ::toupper);
 	
 	if (instructionSet.find(mne) == instructionSet.end()) {
-		throw runtime_error("Unknown instruction: " + mnemonic);
-		return bytes;
+		throw runtime_error("Unknown instruction: " + mne);
+		return {};
 	}
 	Instruction inst = instructionSet[mne];
 	vector<uint8_t> bytes = inst.decoder(parts);
 	int ws = inst.wordSize;
 
-	cpu.memory.write(addr++, byte[0]);
-	t2t_message("Loaded at: ", addr - 1, bytes[0], MessageType::MEMORY);
+	cpu.memory.write(addr++, bytes[0]);
+	t2t_message("Loaded at: ", addr - 1, bytes[0], Type2Tpe::t16_2_8);
 
 	if (ws != bytes.size())
-		throw runtime_error("Invalid instruction size: " + mnemonic + " | Expected: " + to_string(ws) + " | Found: " + to_string(bytes.size());
+		throw runtime_error("Invalid instruction size: " + mne + " | Expected: " + to_string(ws) + " | Found: " + to_string(bytes.size()));
 
 	for (int i = 1; i < bytes.size(); ++i) {
 		cpu.memory.write(addr++, bytes[i]);
-		t2t_message("Loaded at: ", addr - 1, bytes[i], MessageType::MEMORY);
+		t2t_message("Loaded at: ", addr - 1, bytes[i], Type2Tpe::t16_2_8);
 	}
 
-	return;
+	return {};
 }

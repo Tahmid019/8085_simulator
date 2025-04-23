@@ -1,4 +1,5 @@
-#pragma once
+// instruction headers
+
 #include "ACI.h"
 #include "ADC.h"
 #include "ADD.h"
@@ -81,4 +82,3 @@
 #include "XRA.h"
 #include "XRI.h"
 #include "XTHL.h"
-

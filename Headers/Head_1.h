@@ -20,6 +20,5 @@
 #include <algorithm>
 #include <conio.h>
 
-#include "InstructionHeaders/Inst_Head.h"
 
 using namespace std;
