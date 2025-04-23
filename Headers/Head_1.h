@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 #include <sstream>
+#include <stdexcept>
 #include <vector>
 #include <utility>
 #include <cmath>
@@ -18,5 +19,7 @@
 #include <vector>
 #include <algorithm>
 #include <conio.h>
+
+#include "InstructionHeaders/Inst_Head.h"
 
 using namespace std;

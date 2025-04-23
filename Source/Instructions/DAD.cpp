@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/DAD.h"
-
+vector<uint8_t> decodeDAD(const vector<string>& operands) {
+    return {}; 
+}

@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/ANA.h"
-
+vector<uint8_t> decodeANA(const vector<string>& operands) {
+    return {}; 
+}

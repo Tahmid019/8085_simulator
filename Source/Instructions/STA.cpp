@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/STA.h"
-
+vector<uint8_t> decodeSTA(const vector<string>& operands) {
+    return {}; 
+}

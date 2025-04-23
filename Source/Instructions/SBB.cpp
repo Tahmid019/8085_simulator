@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/SBB.h"
-
+vector<uint8_t> decodeSBB(const vector<string>& operands) {
+    return {}; 
+}

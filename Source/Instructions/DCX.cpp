@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/DCX.h"
-
+vector<uint8_t> decodeDCX(const vector<string>& operands) {
+    return {}; 
+}

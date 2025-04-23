@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/LDA.h"
-
+vector<uint8_t> decodeLDA(const vector<string>& operands) {
+    return {}; 
+}

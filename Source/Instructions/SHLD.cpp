@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/SHLD.h"
-
+vector<uint8_t> decodeSHLD(const vector<string>& operands) {
+    return {}; 
+}

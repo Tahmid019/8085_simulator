@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/POP.h"
-
+vector<uint8_t> decodePOP(const vector<string>& operands) {
+    return {}; 
+}

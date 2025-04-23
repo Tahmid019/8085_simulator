@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/CPE.h"
-
+vector<uint8_t> decodeCPE(const vector<string>& operands) {
+    return {}; 
+}

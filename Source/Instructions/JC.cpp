@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/JC.h"
-
+vector<uint8_t> decodeJC(const vector<string>& operands) {
+    return {}; 
+}

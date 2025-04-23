@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/PUSH.h"
-
+vector<uint8_t> decodePUSH(const vector<string>& operands) {
+    return {}; 
+}

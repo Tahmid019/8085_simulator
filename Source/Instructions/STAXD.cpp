@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/STAXD.h"
-
+vector<uint8_t> decodeSTAXD(const vector<string>& operands) {
+    return {}; 
+}

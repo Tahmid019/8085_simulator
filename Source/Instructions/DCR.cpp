@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/DCR.h"
-
+vector<uint8_t> decodeDCR(const vector<string>& operands) {
+    return {}; 
+}

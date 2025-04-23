@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/RPE.h"
-
+vector<uint8_t> decodeRPE(const vector<string>& operands) {
+    return {}; 
+}

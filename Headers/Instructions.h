@@ -3,16 +3,14 @@
 
 class Instruction {
 public:
-	std::string mnemonic;
-	uint8_t opcode;
+	string mnemonic;
+	function<vector<uint8_t>(const vector<string>&)> decoder;
 	int wordSize;
 
-	Instruction() : mnemonic(""), opcode(0), wordSize(0) {}
-
-	Instruction(std::string mn, uint8_t oc, int ws) : mnemonic(mn), opcode(oc), wordSize(ws) {}
-	//static void Execute(std::string mnemonic);
+	Instruction() = default;
+	Instruction(string name, function<vector<uint8_t>(const vector<string>&)> decoder, uint8_t size)
+		: name(move(name)), decoder(move(decoder)), wordSize(size) {}
 };
 
-extern std::map<std::string, Instruction> instructionSet;
-extern std::map<std::string, std::function<void()>> instructionHandlers;
+extern map<string, Instruction> instructionSet;
 

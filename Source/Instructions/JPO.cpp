@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/JPO.h"
-
+vector<uint8_t> decodeJPO(const vector<string>& operands) {
+    return {}; 
+}

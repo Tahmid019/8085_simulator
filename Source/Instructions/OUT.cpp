@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/OUT.h"
-
+vector<uint8_t> decodeOUT(const vector<string>& operands) {
+    return {}; 
+}

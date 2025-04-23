@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/CMP.h"
-
+vector<uint8_t> decodeCMP(const vector<string>& operands) {
+    return {}; 
+}

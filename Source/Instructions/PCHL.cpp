@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/PCHL.h"
-
+vector<uint8_t> decodePCHL(const vector<string>& operands) {
+    return {}; 
+}

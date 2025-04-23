@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/ADD.h"
-
+vector<uint8_t> decodeADD(const vector<string>& operands) {
+    return {}; 
+}

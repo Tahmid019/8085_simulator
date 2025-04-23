@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/SUB.h"
-
+vector<uint8_t> decodeSUB(const vector<string>& operands) {
+    return {}; 
+}

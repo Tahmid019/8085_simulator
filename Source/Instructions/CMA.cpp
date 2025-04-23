@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/CMA.h"
-
+vector<uint8_t> decodeCMA(const vector<string>& operands) {
+    return {}; 
+}

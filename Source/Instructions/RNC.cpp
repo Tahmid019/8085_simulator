@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/RNC.h"
-
+vector<uint8_t> decodeRNC(const vector<string>& operands) {
+    return {}; 
+}

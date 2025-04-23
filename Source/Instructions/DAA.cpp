@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/DAA.h"
-
+vector<uint8_t> decodeDAA(const vector<string>& operands) {
+    return {}; 
+}

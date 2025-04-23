@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/SUI.h"
-
+vector<uint8_t> decodeSUI(const vector<string>& operands) {
+    return {}; 
+}

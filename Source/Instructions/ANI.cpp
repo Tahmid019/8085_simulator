@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/ANI.h"
-
+vector<uint8_t> decodeANI(const vector<string>& operands) {
+    return {}; 
+}

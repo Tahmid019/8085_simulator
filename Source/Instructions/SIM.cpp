@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/SIM.h"
-
+vector<uint8_t> decodeSIM(const vector<string>& operands) {
+    return {}; 
+}

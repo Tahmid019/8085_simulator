@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/XRI.h"
-
+vector<uint8_t> decodeXRI(const vector<string>& operands) {
+    return {}; 
+}

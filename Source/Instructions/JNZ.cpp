@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/JNZ.h"
-
+vector<uint8_t> decodeJNZ(const vector<string>& operands) {
+    return {}; 
+}

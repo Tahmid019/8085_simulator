@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/ORI.h"
-
+vector<uint8_t> decodeORI(const vector<string>& operands) {
+    return {}; 
+}

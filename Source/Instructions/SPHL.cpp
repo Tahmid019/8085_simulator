@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/SPHL.h"
-
+vector<uint8_t> decodeSPHL(const vector<string>& operands) {
+    return {}; 
+}

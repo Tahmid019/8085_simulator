@@ -1,4 +1,6 @@
 #pragma once
+#include "Headers/Head_1.h"
 
-#include "../../Headers/Instructionheaders/RLC.h"
-
+vector<uint8_t> decodeRLC(const vector<string>& operands) {
+    return {}; 
+}
