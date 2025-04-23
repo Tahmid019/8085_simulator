@@ -23,7 +23,7 @@ add_executable(8085_MP_sim
     Source/Memory.cpp
     Source/Registers.cpp
     Source/utils.cpp
-)
+ "Headers/Parser.h" "Source/Parser.cpp")
 
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)

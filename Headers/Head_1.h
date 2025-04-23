@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <map>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <utility>
 #include <cmath>
@@ -14,6 +15,7 @@
 #include <functional>
 #include <type_traits>
 #include <stdexcept>
-#include<vector>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
