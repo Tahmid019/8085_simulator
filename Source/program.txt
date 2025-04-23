@@ -1,1 +1,3 @@
 MOV A, B
+MVI A, 10
+HLT

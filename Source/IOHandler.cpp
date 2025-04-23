@@ -33,50 +33,6 @@ void IOHandler::loadProgram(CPU& cpu, string filename, uint16_t& init_addr) {
         removeTrailingSpaces(strInst);
         
 		Parser::tokenize(cpu, strInst, addr);
-
-        //if (ws>0) {
-        //    cpu.memory.write(addr++, stoi(strInst)); // STRING TO HEXT IMPLEMENTATION
-        //    debug("Loaded at: ", addr - 1, 0, MessageType::MEMORY);
-        //    ws--;
-        //    continue;
-        //}
-        //if (strInst == "") continue;
-        //if (instructionSet.find(strInst) == instructionSet.end()) {
-        //    std::cerr << "Error: {" << strInst << "} | Invalid Instruction ..." << std::endl;
-        //    exit(1);
-        //}
-
-        //Instruction Inst = instructionSet[strInst];
-        //uint8_t oc = Inst.opcode;
-        //ws = Inst.wordSize;
-
-        //switch (ws) {
-        //    case 1: {
-        //        cpu.memory.write(addr++, oc);
-        //        ws--;
-        //        debug("Loaded at: ", addr-1, oc, MessageType::MEMORY);
-        //        break;
-        //    }
-        //
-        //    case 2: {
-        //        cpu.memory.write(addr++, oc);
-        //        ws--;
-        //        debug("Loaded at: ", addr - 1, 0, MessageType::MEMORY);
-        //        break;
-        //    }
-        //    
-        //    case 3: {
-        //        cpu.memory.write(addr++, oc);
-        //        ws--;
-        //        debug("Loaded at: ", addr - 1, 0, MessageType::MEMORY);
-        //        break;
-        //    }
-
-        //    default: {
-        //        debug("Invalid IO case", 0, 0, MessageType::INFO);
-        //        exit(1);
-        //    }
-        //}
     }
 
     file.close();
