@@ -2,5 +2,5 @@
 #include "../Headers/Head_2.h"
 
 vector<uint8_t> decodeRIM(const vector<string>& operands) {
-    return {}; 
+return { 0x20 };
 }
