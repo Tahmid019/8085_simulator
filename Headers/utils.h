@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Head_1.h"
 
 enum class MessageType {
@@ -28,8 +28,16 @@ bool carry(uint8_t value);
 
 size_t t2t_message(string message, uint16_t a, uint16_t b, Type2Tpe type);
 
-uint8_t hto8b(const string& hexStr);
+template<typename T>
+T htob(const string& hexStr) {
+    unsigned int byte;
+    stringstream ss;
 
+    ss << hex << hexStr;
+    ss >> byte;
+
+    return static_cast<T>(byte);
+}
 
 template<typename T>
 bool parity(T val) {
@@ -52,52 +60,83 @@ bool auxillaryCarry(T a, T b) {
     return (((a & 0x0F) + (b & 0x0F)) & 0x10) != 0;
 }
 
+namespace detail {
 
-template<typename T>
-T ston(const string& data) {
-    T value;
-    if (data.back() == 'H') {
-        data.pop_back();  
+    inline string clean_hex(const string& s) {
+        string str = s;
 
-        if constexpr (sizeof(T) == 1) {
-            value = static_cast<T>(hto8b(data));
-        }
-        else if constexpr (sizeof(T) == 2) {
-            string high_str = "";
-            reverse(data.begin(), data.end());
-            while (data.size() > 2) {
-                high_str.push_back(data.back());
-                data.pop_back();
-            }
-            reverse(data.begin(), data.end());
-            reverse(high_str.begin(), high_str.end());
-            T low = static_cast<T>(hto8b(data));
-            T high = static_cast<T>(hto8b(high_str));
-            value = static_cast<T>((high << 8) & 0xFF00 | (low) & 0x00FF);
-        }
-        else {
-            static_assert(sizeof(T) <= 2, "ston supports only 8 or 16 bit types");
+        // rm 0, 0x pref
+        if (str.size() >= 2 && str[0] == '0' && (str[1] == 'x' || str[1] == 'X')) {
+            str = str.substr(2);
         }
 
+        // rem H, h suf
+        if (!str.empty() && (str.back() == 'H' || str.back() == 'h')) {
+            str.pop_back();
+        }
+
+        if (str.empty() || str.find_first_not_of("0123456789abcdefABCDEF") != string::npos) {
+            throw invalid_argument("Invalid hex string: " + s);
+        }
+
+        return str;
     }
-    else {
-        if constexpr (sizeof(T) == 1) {
-            value = static_cast<T>(stoul(data, nullptr, 10));
-        }
-        else if constexpr (sizeof(T) == 2){
-            string high_str = "";
-            reverse(data.begin(), data.end());
-            while (data.size() > 2) {
-                high_str.push_back(data.back());
-                data.pop_back();
-            }
-            reverse(data.begin(), data.end());
-            reverse(high_str.begin(), high_str.end());
-            T low = static_cast<T>(stoul(data, nullptr, 10));
-            T high = static_cast<T>(stoul(high_str, nullptr, 10));
-            value = static_cast<T>((high << 8) & 0xFF00 | (low) & 0x00FF);
-        }
+
+    // hex str -> ui
+    inline unsigned parse_hex(const string& s) {
+        return stoul(clean_hex(s), nullptr, 16);
     }
-    return value;
+
+    // dec str -> ui
+    inline unsigned parse_dec(const string& s) {
+		if (s.empty() || s.find_first_not_of("0123456789") != string::npos) {
+			throw invalid_argument("Invalid decimal string: " + s);
+		}
+        return stoul(s, nullptr, 10);
+    }
+
+    // split 
+    inline pair<string, string> split_bytes(const string& data) {
+        if (data.size() <= 2) {
+            return { "0", data };
+        }
+        string high = data.substr(0, data.size() - 2);
+        string low = data.substr(data.size() - 2);
+        return { high, low };
+    }
+
 }
 
+
+template<typename T>
+T ston(const string& input) {
+    static_assert(sizeof(T) == 1 || sizeof(T) == 2,
+        "ston supports only 8-bit or 16-bit types");
+
+    if (input.empty())
+        throw invalid_argument("Empty input");
+
+    bool is_hex = (input.back() == 'H' || input.back() == 'h');
+    string data = input;
+    if (is_hex) {
+        data.pop_back();
+    }
+
+    if constexpr (sizeof(T) == 1) {
+        unsigned raw = is_hex
+            ? detail::parse_hex(data)
+            : detail::parse_dec(data);
+        return static_cast<T>(raw & 0xFF);
+    }
+    else {  
+        auto [high_str, low_str] = detail::split_bytes(data);
+        unsigned low = is_hex
+            ? detail::parse_hex(low_str)
+            : detail::parse_dec(low_str);
+        unsigned high = is_hex
+            ? detail::parse_hex(high_str)
+            : detail::parse_dec(high_str);
+
+        return static_cast<T>(((high << 8) & 0xFF00) | (low & 0x00FF));
+    }
+}

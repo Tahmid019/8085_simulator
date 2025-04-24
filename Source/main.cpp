@@ -47,15 +47,32 @@ public:
 };
 
 int main() {
+    try {
+        uint16_t start_addr = 0x0000;
+	    string filename = "program.txt";
+        filename = R"(..\..\..\Source\)" + filename;
 
-    uint16_t start_addr = 0x0000;
-	string filename = "program.txt";
-    filename = R"(..\..\..\Source\)" + filename;
-
-    sim_8085 instance;
-	instance.input_data();
-    instance.load_program(filename, start_addr, false);
-    instance.execute_program(start_addr); 
+        sim_8085 instance;
+	    instance.input_data();
+        instance.load_program(filename, start_addr, false);
+        instance.execute_program(start_addr); 
+    }
+    catch (const invalid_argument& e) {
+        cerr << "Argument error: " << e.what() << endl;
+        return 1;
+    }
+    catch (const out_of_range& e) {
+        cerr << "Out-of-range error: " << e.what() << endl;
+        return 2;
+    }
+    catch (const exception& e) {
+        cerr << "Unhandled exception: " << e.what() << endl;
+        return 3;
+    }
+    catch (...) {
+        cerr << "Unknown fatal error\n";
+        return 4;
+    }
 
     return 0;
 }

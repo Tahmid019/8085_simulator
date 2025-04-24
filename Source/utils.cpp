@@ -115,14 +115,4 @@ void removeTrailingSpaces(string& str) {
     reverse(str.begin(), str.end());
 }
 
-uint8_t hto8b(const string& hexStr) {
-    unsigned int byte;
-    stringstream ss;
-
-    ss << hex << hexStr; 
-    ss >> byte;
-
-    return static_cast<uint8_t>(byte);  
-}
-
 

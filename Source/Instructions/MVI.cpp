@@ -21,7 +21,7 @@ vector<uint8_t> decodeMVI(const vector<string>& operands) {
 
     uint8_t opcode = mviOpcodes[reg];
 
-    uint8_t byte = 0x00 | ston<uint8_t>(operands[0]);
+    uint8_t byte = 0x00 | ston<uint8_t>(data);
 
     return { opcode, byte };
 }
