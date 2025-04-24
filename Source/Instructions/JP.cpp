@@ -1,10 +1,11 @@
 #pragma once
 #include "../Headers/Head_2.h"
+#include "../Headers/utils.h"
 
 vector<uint8_t> decodeJP(const vector<string>& operands) {
     if (operands.size() != 1) {
         throw invalid_argument("JP instruction requires exactly one operand.");
     }
-    int addr = stoi(operands[0], nullptr, 0);
+    uint16_t addr = 0x0000 | ston<uint16_t>(operands[0]);
     return { 0xF2, static_cast<uint8_t>(addr & 0xFF), static_cast<uint8_t>((addr >> 8) & 0xFF) };
 }

@@ -5,5 +5,5 @@ vector<uint8_t> decodeSIM(const vector<string>& operands) {
     if (!operands.empty()) {
         throw invalid_argument("SIM instruction takes no operands.");
     }
-return { 0x30 };
+    return { 0x30 };
 }

@@ -1,14 +1,15 @@
 #pragma once
 #include "../Headers/Head_2.h"
+#include "../Headers/utils.h"
 
 vector<uint8_t> decodeOUT(const vector<string>& operands) {
     if (operands.size() != 1) {
         throw invalid_argument("OUT instruction requires exactly one operand.");
     }
 
-    int port;
+    uint8_t port;
     try {
-        port = stoi(operands[0], nullptr, 0);
+        port = 0x00 | ston<uint8_t>(operands[0]);;
     }
     catch (...) {
         throw invalid_argument("Invalid port number for OUT instruction: " + operands[0]);

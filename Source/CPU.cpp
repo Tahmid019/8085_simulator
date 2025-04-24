@@ -1641,6 +1641,7 @@ int CPU::execute(uint8_t opcode) {
         reg.PC++;
         message("Reg B:", reg.B, 0, MessageType::REGISTER);
         message("SBB B executed. [A] <- [A] - [B] - CY", reg.A, prev, MessageType::REGISTER);
+        [[fallthrough]];
         break;
     }
 

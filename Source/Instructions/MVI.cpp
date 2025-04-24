@@ -1,6 +1,6 @@
 #pragma once
-#include "../Headers/head_1.h"
 #include "../Headers/Head_2.h"
+#include "../Headers/utils.h"
 
 vector<uint8_t> decodeMVI(const vector<string>& operands) {
     static map<string, uint8_t> mviOpcodes = {
@@ -21,14 +21,7 @@ vector<uint8_t> decodeMVI(const vector<string>& operands) {
 
     uint8_t opcode = mviOpcodes[reg];
 
-    uint8_t byte;
-    if (data.back() == 'H') {
-        data.pop_back();
-        byte = static_cast<uint8_t>(stoi(data, nullptr, 16));
-    }
-    else {
-        byte = static_cast<uint8_t>(stoi(data, nullptr, 16));
-    }
+    uint8_t byte = 0x00 | ston<uint8_t>(operands[0]);
 
     return { opcode, byte };
 }
