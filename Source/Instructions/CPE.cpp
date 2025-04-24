@@ -2,5 +2,6 @@
 #include "../Headers/Head_2.h"
 
 vector<uint8_t> decodeCPE(const vector<string>& operands) {
-    return {}; 
+    return { 0xEC };
 }
+
