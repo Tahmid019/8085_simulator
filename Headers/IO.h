@@ -1,20 +1,13 @@
 #pragma once
-#include "Head_1.h"
+#include "IODevice.h"
 
-class IO {
-private:
-	string portName;
-	bool isConnected;
+class IO : public IODevice {
 public:
-	IO();
-	~IO();
+    IO(const string& name = "New Port");
+    ~IO();
 
-	bool connect();
-	void disconnect();
-	uint8_t read(uint8_t portAddress);
-	void write(uint8_t portAddress, uint8_t value);
-
-	bool isPortConnected() const;
+    bool connect() override;
+    void disconnect() override;
+    uint8_t read(uint8_t portAddress) override;
+    void write(uint8_t portAddress, uint8_t value) override;
 };
-
-

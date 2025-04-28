@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\tahmi\Documents\STUDY\4th\cs212-oops\8085_MP_sim\build\CMakeFiles\e3ecd73a8d48550f668d36136bc58945\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{8884494A-1E7D-370C-96B1-D3D65ADFD67B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

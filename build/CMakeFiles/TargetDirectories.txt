@@ -1,0 +1,3 @@
+C:/Users/tahmi/Documents/STUDY/4th/cs212-oops/8085_MP_sim/build/CMakeFiles/8085_MP_sim.dir
+C:/Users/tahmi/Documents/STUDY/4th/cs212-oops/8085_MP_sim/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/tahmi/Documents/STUDY/4th/cs212-oops/8085_MP_sim/build/CMakeFiles/ZERO_CHECK.dir

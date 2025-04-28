@@ -22,7 +22,7 @@ file(GLOB_RECURSE SOURCE_FILES
 )
 
 # Create the executable
-add_executable(8085_MP_sim ${SOURCE_FILES} "Headers/Head_2.h")
+add_executable(8085_MP_sim ${SOURCE_FILES} "Headers/Head_2.h" "Headers/IODevice.h" "Source/IODevice.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET 8085_MP_sim PROPERTY CXX_STANDARD 20)
