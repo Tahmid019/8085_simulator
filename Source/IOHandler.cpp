@@ -4,7 +4,8 @@
 #include "../Headers/utils.h"
 #include "../Headers/Parser.h"
 
-void IOHandler::initializeData2Memory(CPU& cpu) {
+void IOHandler::initializeData2Memory(CPU& cpu, const string& mem_file) {
+    //cpu.memory.loadMemory(mem_file);
     cout << "[ Insert data in Memory ] / [ Press 2 to Run Anyway ] :\n";
     while (true) {
         string a, b;cin >> a;

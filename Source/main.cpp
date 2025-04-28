@@ -24,15 +24,15 @@ public:
         cpu.reg.SP = 0xffff;
         cpu.reg.Flags = 0x00;
     }
-	void input_data() {
+	void input_data(const string& mem_file) {
 		message("Insert data in Memory ...", 0, 0, MessageType::INFO);
-		io_handler.initializeData2Memory(cpu);
+		io_handler.initializeData2Memory(cpu, mem_file);
 	}
     void load_program(string filename,uint16_t init_addr, bool debug = false) {
         message("Loading Program in Main Memory ...", 0, 0, MessageType::INFO);
         io_handler.loadProgram(cpu, filename, init_addr);
     }
-    void execute_program(uint16_t init_addr) {
+    void execute_program(uint16_t init_addr, const string& mem_file) {
         message("Executing Program from Main Memory ...", 0, 0, MessageType::INFO);
         cpu.reg.PC = init_addr;
         while (true) {
@@ -40,6 +40,7 @@ public:
             if (check == -1) break;
             cout << endl;
         }
+        //cpu.memory.save2csv(mem_file);
     }
     ~sim_8085() {
         cerr << "sim_8085 instance deconstructed" << endl;
@@ -50,12 +51,13 @@ int main() {
     try {
         uint16_t start_addr = 0x0000;
 	    string filename = "program.txt";
+        string mem_file = "memory.csv";
         filename = R"(..\..\..\Source\)" + filename;
 
         sim_8085 instance;
-	    instance.input_data();
+	    instance.input_data(mem_file);
         instance.load_program(filename, start_addr, false);
-        instance.execute_program(start_addr); 
+        instance.execute_program(start_addr, mem_file); 
     }
     catch (const invalid_argument& e) {
         cerr << "Argument error: " << e.what() << endl;

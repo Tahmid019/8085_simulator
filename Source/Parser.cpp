@@ -10,6 +10,13 @@ vector<uint8_t> Parser::tokenize(CPU& cpu, const string& line, uint16_t& addr) {
 
 	vector<string> parts;
 	while (getline(iss, token, ' ')) {
+		if (token.empty()) break;
+		if (token.front() == ';') {
+			break;
+		}
+		if (token.front() == ',') {
+			token.erase(token.begin());
+		}
 		if(token.back() == ',')
 			token.pop_back();
 		if (!token.empty()) 
@@ -17,11 +24,18 @@ vector<uint8_t> Parser::tokenize(CPU& cpu, const string& line, uint16_t& addr) {
 	}
 
 	if (parts.empty()) return {};
-
+	string addr_ptr;
+	if (parts[0].back() == ':') {
+		addr_ptr = parts[0];
+		cout << addr << endl;
+		parts.erase(parts.begin());
+	}
 	string mne = parts[0];
 	parts.erase(parts.begin());
 
 	transform(mne.begin(), mne.end(), mne.begin(), ::toupper);
+
+
 	
 	if (instructionSet.find(mne) == instructionSet.end()) {
 		throw runtime_error("Unknown instruction: " + mne);

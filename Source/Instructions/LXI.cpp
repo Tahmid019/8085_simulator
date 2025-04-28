@@ -7,7 +7,7 @@ vector<uint8_t> decodeLXI(const vector<string>& operands) {
         throw invalid_argument("LXI instruction requires two operands.");
     }
     const string& rp = operands[0];
-    uint16_t data = 0x0000 | ston<uint16_t>(operands[0]);
+    uint16_t data = 0x0000 | ston<uint16_t>(operands[1]);
     if (rp == "B") return { 0x01, static_cast<uint8_t>(data & 0xFF), static_cast<uint8_t>((data >> 8) & 0xFF) };
     if (rp == "D") return { 0x11, static_cast<uint8_t>(data & 0xFF), static_cast<uint8_t>((data >> 8) & 0xFF) };
     if (rp == "H") return { 0x21, static_cast<uint8_t>(data & 0xFF), static_cast<uint8_t>((data >> 8) & 0xFF) };
