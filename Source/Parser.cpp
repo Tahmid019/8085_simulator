@@ -10,8 +10,10 @@ vector<uint8_t> Parser::tokenize(CPU& cpu, const string& line, uint16_t& addr) {
 
 	vector<string> parts;
 	while (getline(iss, token, ' ')) {
-		if (token.empty()) break;
-		if (token.front() == ';') {
+		
+		if (token.back() == ':') continue;
+
+		if (token.empty() || token.front() == ';') {
 			break;
 		}
 		if (token.front() == ',') {
