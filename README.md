@@ -1,6 +1,6 @@
 # 8085 Microprocessor Emulator
 
-![8085 Emulator](media/image23.jpg)
+![8085 Emulator](media/Front.png)
 
 An Object-Oriented Programming project to emulate the Intel 8085 microprocessor, providing a virtual environment for assembly programming, debugging, and learning.
 
@@ -47,6 +47,9 @@ The primary objective is to assist usersâ€”particularly students and hobbyistsâ€
 - **GUI Framework**: Qt
 - **Build Tools**: GCC, Visual Studio 2022
 - **Debugging**: CLI & VS Debugger
+
+## Documentation
+[Link text]()
 
 ## Installation
 1. **Clone the Repository**:
