@@ -11,6 +11,15 @@ endif()
 
 project ("8085_MP_sim")
 
+# Add thirdparty libraries
+add_subdirectory(thirdparty/SDL-Main)			#window opener
+add_subdirectory(thirdparty/imgui-docking)		#ui
+
+# Set SDL Build properties
+set(SDL_STATIC ON CACHE BOOL "Build SDL3 as a static library" FORCE)
+set(SDL_SHARED OFF CACHE BOOL "Don't build SDL3 as a shared library" FORCE)
+set(SDL_TEST OFF CACHE BOOL "Don't build SDL3 test programs" FORCE)
+
 # Include directories
 include_directories(
     ${CMAKE_SOURCE_DIR}/InstructionHeaders
@@ -19,13 +28,17 @@ include_directories(
 # Collect all .cpp files
 file(GLOB_RECURSE SOURCE_FILES
     "${CMAKE_SOURCE_DIR}/Source/*.cpp"
+    "${CMAKE_SOURCE_DIR}/Source/*.c"
 )
 
 # Create the executable
-add_executable(8085_MP_sim ${SOURCE_FILES} "Headers/Head_2.h" "Headers/IODevice.h" "Source/IODevice.cpp")
+add_executable(8085_MP_sim ${SOURCE_FILES} "Headers/UIManager.h" "Headers/Head_2.h" "Headers/IODevice.h" "Headers/tinyfiledialogs.h" "Source/IODevice.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET 8085_MP_sim PROPERTY CXX_STANDARD 20)
 endif()
+
+# Link Libraries
+target_link_libraries("${CMAKE_PROJECT_NAME}" PRIVATE SDL3::SDL3 imgui)
 
 # TODO: Add tests and install targets if needed.
