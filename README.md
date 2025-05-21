@@ -44,7 +44,7 @@ The primary objective is to assist usersâ€”particularly students and hobbyistsâ€
 
 ## Technologies Used
 - **Programming Language**: C++
-- **GUI Framework**: Qt
+- **GUI Framework**: SDL3 + ImGui
 - **Build Tools**: GCC, Visual Studio 2022
 - **Debugging**: CLI & VS Debugger
 
