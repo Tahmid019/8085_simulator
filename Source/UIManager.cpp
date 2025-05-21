@@ -1,6 +1,9 @@
 #include "../Headers/UIManager.h"
 
-UIManager::UIManager(SDL_Window* window, SDL_Renderer* renderer, const Registers& reg, const vector<uint8_t>& mem)
+const uint8_t u8_max = 0xff;
+const uint8_t u8_min = 0x00;
+
+UIManager::UIManager(SDL_Window* window, SDL_Renderer* renderer, const Registers& reg, vector<uint8_t>& mem)
     : m_window(window)
     , m_renderer(renderer)
     , m_file_loaded(false)
@@ -11,6 +14,7 @@ UIManager::UIManager(SDL_Window* window, SDL_Renderer* renderer, const Registers
     , programPaused(true)
     , cpuResetTriggered(false)
     , currentInstruction(0)
+    , m_selected_addr(0x0000)
 {}
 
 UIManager::~UIManager() {
@@ -134,7 +138,7 @@ void UIManager::DrawRegisterView(float height) {
 
     ImGui::Separator();
     if (programPaused)
-        ImGui::Text("CPU execution is paused!\nPress Play button to unpause!");
+        ImGui::Text("CPU execution is paused!\nPress Play button to un-pause!");
 
     ImGui::Text("Instruction: %s", currentInstruction < m_file_lines.size() ? m_file_lines[currentInstruction].c_str(): "");
     
@@ -178,9 +182,23 @@ void UIManager::DrawControls(float height) {
     if (ImGui::Button("Step")) {
         stepMode = true;
         stepCycle = 1;
-    } //simulator_step();
+    }
+    //simulator_step();
     ImGui::SameLine();
-    if (ImGui::Button("Reset")) Reset();
+    if (ImGui::Button("Reset")) 
+        Reset();
+
+
+    ImGui::Text("Memory Address: ");
+    ImGui::SameLine();
+    if (ImGui::InputInt("##Memory Location: ", &m_selected_addr, 1, 100, ImGuiInputTextFlags_CharsHexadecimal)) {
+        if (m_selected_addr < 0x0000 || m_selected_addr > m_memoryView.size()) {
+			m_selected_addr = 0x0000;
+		}
+    }
+    ImGui::Text("Memory[0x%04X]: ", m_selected_addr);
+    ImGui::SameLine();
+    ImGui::DragScalar("##Memory Input", ImGuiDataType_U8, &m_memoryView[m_selected_addr], 1.0f, &u8_min, &u8_max, "%x");
     ImGui::EndChild();
 }
 

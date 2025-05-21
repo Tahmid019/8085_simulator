@@ -89,7 +89,7 @@ public:
         return cpu.reg;
     }
 
-    const vector<uint8_t>& get_memory() {
+    vector<uint8_t>& get_memory() {
         return cpu.memory.mem;
     }
 

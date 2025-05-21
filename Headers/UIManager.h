@@ -13,7 +13,7 @@
 
 class UIManager {
 public:
-    UIManager(SDL_Window* window, SDL_Renderer* renderer, const Registers& reg, const vector<uint8_t>&);
+    UIManager(SDL_Window* window, SDL_Renderer* renderer, const Registers& reg, vector<uint8_t>& mem);
     ~UIManager();
 
     bool        Init();
@@ -39,9 +39,10 @@ private:
     SDL_Renderer*   m_renderer;
     bool            m_file_loaded;
     std::string     m_file_path;
+    int             m_selected_addr;
     
     const Registers&            m_cpuState;
-    const vector<uint8_t>&      m_memoryView;
+    std::vector<uint8_t>&       m_memoryView;
     std::vector<std::string>    m_file_lines;
 
 public:

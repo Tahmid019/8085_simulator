@@ -6,16 +6,16 @@
 
 void IOHandler::initializeData2Memory(CPU& cpu, const string& mem_file) {
     //cpu.memory.loadMemory(mem_file);
-    cout << "[ Insert data in Memory ] / [ Press 'R' to Run Anyway ] :\n";
-    while (true) {
-        string a, b;
-        cin >> a;
-        if (a == "R" || a == "r") break;
-        cin >> b;
-        int address = stoi(a, 0, 16);
-        int val = stoi(b);
-        cpu.memory.write(address, val);
-    }
+    //cout << "[ Insert data in Memory ] / [ Press 'R' to Run Anyway ] :\n";
+    //while (true) {
+    //    string a, b;
+    //    cin >> a;
+    //    if (a == "R" || a == "r") break;
+    //    cin >> b;
+    //    int address = stoi(a, 0, 16);
+    //    int val = stoi(b);
+    //    cpu.memory.write(address, val);
+    //}
 }
 
 void IOHandler::loadProgram(CPU& cpu, string filename, uint16_t& init_addr) {
