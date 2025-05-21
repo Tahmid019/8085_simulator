@@ -1,19 +1,40 @@
-# Security Policy
+# Supported Versions
+This project is currently in beta and the first stable release is scheduled for June 1st.
 
-## Supported Versions
+| Version | Supported                               |
+| ------- | --------------------------------------- |
+| 0.1.x   | :x: (Beta Only)                         |
+| 1.0.x   | :white\_check\_mark: (Planned June 1st) |
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.1.x   | :white_check_mark: |
-| 1.0.x   | :x:                |
+# Reporting a Vulnerability
+This project is in active development and security is a key concern.
 
-## Reporting a Vulnerability
+To report a vulnerability:
 
-Use this section to tell people how to report a vulnerability.
+Email: [tahmidchoudhury019@gmail.com] 
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+Subject: Vulnerability Report – [Short Description]
+
+Expected Response Time: Within 7 business days
+
+Disclosure Policy: Responsible disclosure only
+
+What to Include
+When submitting a report, please include:
+
+A clear and detailed description of the vulnerability
+
+Steps to reproduce the issue
+
+Any relevant logs or screenshots (if applicable)
+
+Suggested mitigations (if known)
+
+## After Submission
+You will receive an acknowledgment within 72 hours.
+
+Valid reports will be triaged, and fixes will be prioritized based on severity.
+
+Once resolved, credit will be given in the release notes (if desired).
+
