@@ -1,21 +1,13 @@
-MVI C
-3
-MVI A
-1
-MVI B
-2
-DCR C
-MOV H, A
-MOV A, C
-JZ
-17
-0
-MOV A, H
-ADD B
-JMP
-6
-0
-MOV A, H
-OUT 
-255
-HLT
+MVI C 03H  
+MVI A 01H  
+MVI B 02H  
+DCR C  
+MOV H A  
+MOV A C  
+JZ 0017H  
+MOV A H  
+ADD B  
+JMP 0006H  
+MOV A H  
+OUT FFH  
+HLT  
