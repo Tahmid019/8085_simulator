@@ -1,45 +1,28 @@
-MVI C        
-6           
-MVI H        
-0            
-MVI L        
-1            
-MOV A, C      
-ANA A         
-JZ            
-30            
-0             
-DCR C         
-JZ           
-34            
-0             
-MOV D, H      
-MOV E, L      
-MVI H         
-0             
-MVI L         
-0             
-MOV B, C      
-DAD D         
-DCR B         
-JNZ           
-22            
-0             
-DCR C         
-MOV A, C      
-DCR A         
-ANA A         
-JNZ           
-15            
-0             
-MOV A, H      
-OUT           
-255           
-MOV A, L      
-OUT           
-255           
-HLT           
-INR C         
-JMP           
-34            
-0             
+MVI C 06H
+MVI H 00H
+MVI L 01H
+MOV A C
+ANA A
+JZ 0030H
+DCR C
+JZ 0034H
+MOV D H
+MOV E L
+MVI H 00H
+MVI L 00H
+MOV B C
+DAD D
+DCR B
+JNZ 0022H
+DCR C
+MOV A C
+DCR A
+ANA A
+JNZ 0015H
+MOV A H
+OUT FFH
+MOV A L
+OUT FFH
+HLT
+INR C
+JMP 0034H

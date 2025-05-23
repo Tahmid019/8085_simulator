@@ -1,38 +1,19 @@
-; Assuming:
-; - Array starts at memory location C050H
-; - First byte (C050H) = number of elements (n)
-; - Then n numbers follow
-
-;ORG C000H        ; Start program at C000H
-
-LXI H, C050H     ; HL points to start of array
-MOV C, M         ; C = number of elements (n)
-DCR C            ; C = n-1 (number of passes)
-
-MAIN_LOOP:       ; Outer loop starts here
-MOV D, C         ; D = inner loop counter (n-1, n-2, ..., 1)
-LXI H, C051H     ; HL points to the first element
-
-INNER_LOOP:      ; Inner loop starts here
-MOV A, M         ; A = current element
-INX H            ; Point to next element
-CMP M            ; Compare A with M (next element)
-JC SKIP_SWAP     ; If A < M, no swap needed
-
-; Swap A and M
-MOV B, M         ; B = next element
-MOV M, A         ; Put current element in next location
-DCX H            ; Move back to current location
-MOV M, B         ; Put next element in current location
-INX H            ; Move HL back to next element
-
-SKIP_SWAP:
-DCR D            ; Decrement inner loop counter
-JNZ INNER_LOOP   ; Repeat inner loop if D != 0
-
-DCR C            ; Decrement outer loop counter
-JNZ MAIN_LOOP    ; Repeat outer loop if C != 0
-
-HLT              ; Stop program
-
-END
+LXI H C050H
+MOV C M
+DCR C
+MOV D C
+LXI H C051H
+MOV A M
+INX H
+CMP M
+JC C012H
+MOV B M
+MOV M A
+DCX H
+MOV M B
+INX H
+DCR D
+JNZ C009H
+DCR C
+JNZ C005H
+HLT
