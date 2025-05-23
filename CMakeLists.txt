@@ -1,44 +1,66 @@
-﻿# CMakeList.txt : CMake project for 8085_MP_sim, include source and define
-# project specific logic here.
-#
-cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required(VERSION 3.8)
+project(8085_MP_sim LANGUAGES C CXX)
 
-# Enable Hot Reload for MSVC compilers if supported.
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
+# 1) Force static builds of everything
+set(BUILD_SHARED_LIBS OFF)                       # globally disable all SHARED targets
+option(SDL_STATIC      "Build SDL3 as static"    ON)
+option(SDL_SHARED      "Build SDL3 as shared"    OFF)
+option(SDL_TEST        "Build SDL3 tests"        OFF)
+
+# 2) For MSVC: link the runtime library statically (/MT instead of /MD)
+if (MSVC)
+  # CMake ≥3.15
+  set(CMAKE_MSVC_RUNTIME_LIBRARY 
+      "MultiThreaded$<$<CONFIG:Debug>:Debug>")    
 endif()
 
-project ("8085_MP_sim")
+# For MinGW: also pull in libgcc/libstdc++ statically
+if (MINGW)
+  set(CMAKE_EXE_LINKER_FLAGS 
+      "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+endif()
 
-# Add thirdparty libraries
-add_subdirectory(thirdparty/SDL-Main)			#window opener
-add_subdirectory(thirdparty/imgui-docking)		#ui
+# 3) Turn on C++20
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Set SDL Build properties
-set(SDL_STATIC ON CACHE BOOL "Build SDL3 as a static library" FORCE)
-set(SDL_SHARED OFF CACHE BOOL "Don't build SDL3 as a shared library" FORCE)
-set(SDL_TEST OFF CACHE BOOL "Don't build SDL3 test programs" FORCE)
+# Add third-party SDL and ImGui
+add_subdirectory(thirdparty/SDL-main)       # <-- your SDL3 source tree
+add_subdirectory(thirdparty/imgui-docking)
 
-# Include directories
+# Your include paths
 include_directories(
     ${CMAKE_SOURCE_DIR}/InstructionHeaders
 )
 
-# Collect all .cpp files
-file(GLOB_RECURSE SOURCE_FILES
+# Gather sources
+file(GLOB_RECURSE APP_SOURCES
     "${CMAKE_SOURCE_DIR}/Source/*.cpp"
     "${CMAKE_SOURCE_DIR}/Source/*.c"
 )
 
-# Create the executable
-add_executable(8085_MP_sim ${SOURCE_FILES} "Headers/UIManager.h" "Headers/Head_2.h" "Headers/IODevice.h" "Headers/tinyfiledialogs.h" "Source/IODevice.cpp")
+# Define executable
+add_executable(8085_MP_sim
+    ${APP_SOURCES}
+    Headers/UIManager.h
+    Headers/Head_2.h
+    Headers/IODevice.h
+    Headers/tinyfiledialogs.h
+    Source/IODevice.cpp
+)
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET 8085_MP_sim PROPERTY CXX_STANDARD 20)
+# 4) Link libs: SDL3::SDL3main pulls in SDL3 as static (because SDL_STATIC is ON)
+#    and supplies WinMain→main glue on Windows.
+target_link_libraries(8085_MP_sim PRIVATE
+    SDL3::SDL3
+    imgui
+)
+
+# (Optionally) strip symbols on Release
+if (CMAKE_BUILD_TYPE MATCHES Release)
+  if (UNIX)
+    add_custom_command(TARGET 8085_MP_sim
+      POST_BUILD COMMAND strip $<TARGET_FILE:8085_MP_sim>
+    )
+  endif()
 endif()
-
-# Link Libraries
-target_link_libraries("${CMAKE_PROJECT_NAME}" PRIVATE SDL3::SDL3 imgui)
-
-# TODO: Add tests and install targets if needed.
