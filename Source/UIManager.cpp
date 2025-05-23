@@ -15,6 +15,7 @@ UIManager::UIManager(SDL_Window* window, SDL_Renderer* renderer, const Registers
     , cpuResetTriggered(false)
     , currentInstruction(0)
     , m_selected_addr(0x0000)
+    , executeAllMode(false)
 {}
 
 UIManager::~UIManager() {
@@ -178,8 +179,13 @@ void UIManager::DrawControls(float height) {
         if (ImGui::Button("Pause"))
             programPaused = true;
     }
+    if (ImGui::Button("Execute All")) {
+        executeAllMode = true;
+        stepMode = false;
+    }
     //simulator_play();
     if (ImGui::Button("Step")) {
+        executeAllMode = false;
         stepMode = true;
         stepCycle = 1;
     }

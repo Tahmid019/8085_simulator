@@ -12,4 +12,6 @@ public:
 	InterruptControl interruptControl;
 	IO io;
 	int execute(uint8_t opcode);
+
+	bool isHalt = false;
 };

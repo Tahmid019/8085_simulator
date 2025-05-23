@@ -78,7 +78,10 @@ public:
 
     void step_program() {
         int check = cpu.execute(cpu.memory.read(cpu.reg.PC));
-        if (check == -1) return;
+    }
+
+    bool isCPUHalted() {
+        return cpu.isHalt;
     }
 
     void save_cpu2csv() {
@@ -172,6 +175,15 @@ int main() {
                 instance.step_program();
                 uiManager.stepCycle -= 1;
                 uiManager.currentInstruction += 1;
+            }
+            else if (!uiManager.programPaused && uiManager.executeAllMode) {
+                if (!instance.isCPUHalted()) {
+                    instance.step_program();
+                    uiManager.currentInstruction += 1;
+                }
+                else {
+                    uiManager.executeAllMode = false;
+                }
             }
         }
         

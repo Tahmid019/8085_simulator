@@ -48,6 +48,7 @@ private:
 public:
     bool            programPaused;
     bool            stepMode;
+    bool            executeAllMode;
     bool            cpuResetTriggered;
     int             stepCycle;
     int             currentInstruction;

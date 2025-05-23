@@ -1965,6 +1965,7 @@ int CPU::execute(uint8_t opcode) {
     case 0x76:
         debug("HLT", opcode, 0, MessageType::INFO);
         reg.PC++;
+        isHalt = true;
         return -1;
 
     default:
