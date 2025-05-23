@@ -239,4 +239,5 @@ void UIManager::Reset() {
     m_file_lines.clear();
     currentInstruction = 0;
     cpuResetTriggered = true;
+    programPaused = true;
 }

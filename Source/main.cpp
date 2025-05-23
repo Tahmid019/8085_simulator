@@ -65,6 +65,7 @@ public:
         cpu.reg.PC = 0x0000;
         cpu.reg.SP = 0xffff;
         cpu.reg.Flags = 0x00;
+        cpu.isHalt = false;
     }
 
     void execute_program() {
