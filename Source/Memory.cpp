@@ -44,7 +44,7 @@ uint8_t Memory::read(uint16_t address) {
 void Memory::clear() {
 	mem.vector::clear();
     mem.vector::resize(65536, 0);
-	cout << "Memory Cleared" << endl;
+	//cout << "Memory Cleared" << endl;
 }
 
 void Memory::save2csv(const string& filename) {
