@@ -73,6 +73,18 @@ void UIManager::Draw() {
     DrawRegisterView(halfH);
     ImGui::Columns(1);
 
+    if (ImGui::Button(m_showCodeEditor ? "Close Code Editor" : "Open Code Editor")) {
+        m_showCodeEditor = !m_showCodeEditor; 
+
+        // When opening the editor
+        if (m_showCodeEditor) {
+            m_assemblerError = false; 
+        }
+    }
+
+    ImGui::SameLine();
+    ImGui::Text("Or load a file using the button below");
+
     ImGui::Separator();
 
     // Bottom row: Controls and Memory views
@@ -83,6 +95,9 @@ void UIManager::Draw() {
     ImGui::Columns(1);
 
     ImGui::End();
+
+    DrawCodeEditor();
+    DrawAssembledCode();
 }
 
 const char* UIManager::GetFilePath() {
@@ -240,4 +255,100 @@ void UIManager::Reset() {
     currentInstruction = 0;
     cpuResetTriggered = true;
     programPaused = true;
+}
+
+void UIManager::DrawCodeEditor() {
+    if (!m_showCodeEditor) return;
+
+    ImGui::Begin("8085 Code Editor", &m_showCodeEditor, ImGuiWindowFlags_AlwaysAutoResize);
+
+    ImGui::Text("Enter 8085 assembly code below (one instruction per line):");
+    ImGui::Text("Example: MVI A, 1FH");
+
+    ImGui::InputTextMultiline("##sourcecode", m_codeInputBuffer, sizeof(m_codeInputBuffer),
+        ImVec2(400, 200));
+
+    if (ImGui::Button("Assemble")) {
+        AssembleCode();
+        if (!m_assemblerError) {
+            m_showAssembledCode = true;
+        }
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Close")) {
+        m_showCodeEditor = false;
+    }
+
+    if (m_assemblerError) {
+        ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "Assembler Error: %s",
+            m_assemblerErrorMsg.c_str());
+    }
+
+    ImGui::End();
+}
+
+void UIManager::DrawAssembledCode() {
+    if (!m_showAssembledCode) return;
+
+    ImGui::Begin("Assembled Code", &m_showAssembledCode, ImGuiWindowFlags_AlwaysAutoResize);
+
+    ImGui::Text("Successfully assembled %d instructions:", m_assembledLines.size());
+    ImGui::Separator();
+
+    for (const auto& line : m_assembledLines) {
+        ImGui::Text("%s", line.c_str());
+    }
+
+    ImGui::Separator();
+    if (ImGui::Button("Load into Memory")) {
+        m_showAssembledCode = false;
+        m_file_loaded = true;
+        m_file_lines = m_assembledLines;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel")) {
+        m_showAssembledCode = false;
+    }
+
+    ImGui::End();
+}
+
+void UIManager::AssembleCode() {
+    m_assembledLines.clear();
+    m_assemblerError = false;
+
+    std::istringstream iss(m_codeInputBuffer);
+    std::string line;
+
+    while (std::getline(iss, line)) {
+        // Trim whitespace
+        line.erase(0, line.find_first_not_of(" \t\r\n"));
+        line.erase(line.find_last_not_of(" \t\r\n") + 1);
+
+        if (line.empty()) continue;
+
+        std::transform(line.begin(), line.end(), line.begin(), ::toupper);
+
+        if (line.find(";") == 0) continue; 
+
+		if (line.find("DB ") == 0 || line.find("DW ") == 0 || line.find("ORG ") == 0) {
+            // start adder
+            m_assembledLines.push_back(line);
+			continue;
+		}
+        m_assembledLines.push_back(line);
+    }
+
+    if (m_assembledLines.empty()) {
+        m_assemblerError = true;
+        m_assemblerErrorMsg = "No valid instructions found";
+    }
+}
+
+bool UIManager::isCodeAssembled() {
+    return (!m_assembledLines.empty() && m_assemblerError == false);
+}
+
+vector<string> UIManager::getAssembledCode() {
+    return m_assembledLines;
 }

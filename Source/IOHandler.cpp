@@ -18,7 +18,7 @@ void IOHandler::initializeData2Memory(CPU& cpu, const string& mem_file) {
     //}
 }
 
-void IOHandler::loadProgram(CPU& cpu, string filename, uint16_t& init_addr) {
+void IOHandler::loadProgramFile(CPU& cpu, string filename, uint16_t& init_addr) {
     std::ifstream file(filename);
 
     if (!file) {
@@ -38,6 +38,24 @@ void IOHandler::loadProgram(CPU& cpu, string filename, uint16_t& init_addr) {
     }
 
     file.close();
+}
+
+void IOHandler::loadProgram(CPU& cpu, vector<string>& assembled_code, uint16_t& init_addr) {
+    if (assembled_code.empty()) {
+        std::cerr << "Error: No Code Found ... " << std::endl;
+        exit(1);
+        return;
+    }
+
+    uint16_t addr = init_addr;
+    string strInst;
+    int ws = 0;
+
+    for(auto strInst : assembled_code) {
+        removeTrailingSpaces(strInst);
+
+        Parser::tokenize(cpu, strInst, addr);
+    }
 }
 
 

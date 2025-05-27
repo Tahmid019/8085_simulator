@@ -40,9 +40,14 @@ public:
 		message("Insert data in Memory ...", 0, 0, MessageType::INFO);
 		io_handler.initializeData2Memory(cpu, mem_file);
 	}
-    void load_program(string filename,uint16_t init_addr, bool debug = false) {
+    void load_program_file(string filename,uint16_t init_addr, bool debug = false) {
         message("Loading Program in Main Memory ...", 0, 0, MessageType::INFO);
-        io_handler.loadProgram(cpu, filename, init_addr);
+        io_handler.loadProgramFile(cpu, filename, init_addr);
+    }
+
+    void load_program(vector<string> assem_code, uint16_t init_addr, bool debug = false) {
+        message("Loading Program in Main Memory ...", 0, 0, MessageType::INFO);
+        io_handler.loadProgram(cpu, assem_code, init_addr);
     }
 
     void setup_cpu(uint16_t init_addr, const string& mem_file) {
@@ -66,6 +71,7 @@ public:
         cpu.reg.SP = 0xffff;
         cpu.reg.Flags = 0x00;
         cpu.isHalt = false;
+        
     }
 
     void execute_program() {
@@ -158,7 +164,14 @@ int main() {
         
         // Handle File load event
         if (uiManager.IsFileLoaded() && !programLoaded) {
-            instance.load_program(uiManager.GetFilePath(), start_addr);
+            instance.load_program_file(uiManager.GetFilePath(), start_addr);
+            programLoaded = true;
+            instance.setup_cpu(start_addr, mem_file);
+        }
+
+        //Handle Code Upload event
+        if (uiManager.isCodeAssembled() && !programLoaded) {
+            instance.load_program(uiManager.getAssembledCode(), start_addr);
             programLoaded = true;
             instance.setup_cpu(start_addr, mem_file);
         }
