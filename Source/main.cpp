@@ -176,6 +176,12 @@ int main() {
             instance.setup_cpu(start_addr, mem_file);
         }
 
+        //Reload
+        if (uiManager.cpuReloadTriggered) {
+            uiManager.cpuReloadTriggered = !uiManager.cpuReloadTriggered;
+            instance.setup_cpu(start_addr, mem_file);
+        }
+
         // Handle Reset Event
         if (uiManager.cpuResetTriggered) {
             programLoaded = false;
@@ -190,7 +196,7 @@ int main() {
                 uiManager.stepCycle -= 1;
                 uiManager.currentInstruction += 1;
             }
-            else if (!uiManager.programPaused && uiManager.executeAllMode) {
+            else if (!uiManager.programPaused) {
                 if (!instance.isCPUHalted()) {
                     instance.step_program();
                     uiManager.currentInstruction += 1;

@@ -12,6 +12,7 @@ private:
     void DrawControls(float height);
     void DrawMemoryView(float height);
     void Reset();
+    void Reload();
 
     SDL_Window*     m_window;
     SDL_Renderer*   m_renderer;
@@ -50,10 +51,11 @@ public:
     bool        isCodeAssembled();
     vector<string> getAssembledCode();
 
-    bool            programPaused;
-    bool            stepMode;
-    bool            executeAllMode;
-    bool            cpuResetTriggered;
-    int             stepCycle;
-    int             currentInstruction;
+    bool         programPaused;
+    bool         stepMode;
+    bool         executeAllMode;
+    bool         cpuResetTriggered;
+    bool         cpuReloadTriggered;
+    int          stepCycle;
+    int          currentInstruction;
 };

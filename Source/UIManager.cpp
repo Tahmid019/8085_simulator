@@ -194,21 +194,57 @@ void UIManager::DrawControls(float height) {
         if (ImGui::Button("Pause"))
             programPaused = true;
     }
-    if (ImGui::Button("Execute All")) {
+    ImGui::SameLine();
+    ImGui::TextDisabled("(?)  ");
+    if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip("Play | Pause");
+    }
+
+
+
+    if ((executeAllMode) ? ImGui::Button("Executed") : ImGui::Button("Execute All")) {
         executeAllMode = true;
         stepMode = false;
     }
-    //simulator_play();
+    ImGui::SameLine();
+    ImGui::TextDisabled("(?)  ");
+    if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip("Enables the Execution mode -> Lets you Play and Pause.");
+    }
+
+
+
     if (ImGui::Button("Step")) {
         executeAllMode = false;
         stepMode = true;
         stepCycle = 1;
     }
-    //simulator_step();
+    ImGui::SameLine();
+    ImGui::TextDisabled("(?)  ");
+    if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip("Increment Line pointer one at-a-time. {not the Program Counter}");
+    }
+
+
     ImGui::SameLine();
     if (ImGui::Button("Reset")) 
         Reset();
+    ImGui::SameLine();
+    ImGui::TextDisabled("(?)  ");
+    if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip("Reset the simulator to initial state. Clears your code and register Values");
+    }
 
+
+    ImGui::SameLine();
+    if (ImGui::Button("Reload")) {
+        Reload();
+    }
+    ImGui::SameLine();
+    ImGui::TextDisabled("(?)  ");
+    if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip("Keeps Your Code. Re-Initialize the pointers to origin. Re-initializes the Program Counter.");
+    }
 
     ImGui::Text("Memory Address: ");
     ImGui::SameLine();
@@ -255,6 +291,14 @@ void UIManager::Reset() {
     currentInstruction = 0;
     cpuResetTriggered = true;
     programPaused = true;
+}
+
+void UIManager::Reload() {
+    currentInstruction = 0;
+    cpuReloadTriggered = true;
+    programPaused = true;
+    stepMode = false;
+	stepCycle = 0;
 }
 
 void UIManager::DrawCodeEditor() {
