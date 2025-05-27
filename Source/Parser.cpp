@@ -4,45 +4,48 @@
 #include "../Headers/Memory.h"
 
 
+
+unordered_map<std::string, uint16_t> Parser::symbolTable;
+
 vector<uint8_t> Parser::tokenize(CPU& cpu, const string& line, uint16_t& addr) {
 	istringstream iss(line);
 	string token;
-
 	vector<string> parts;
+	
 	while (getline(iss, token, ' ')) {
 		
-		if (token.back() == ':') continue;
-
-		if (token.empty() || token.front() == ';') {
-			break;
-		}
-		if (token.front() == ',') {
-			token.erase(token.begin());
-		}
-		if(token.back() == ',')
-			token.pop_back();
-		if (!token.empty()) 
-			parts.push_back(token);
+		if (token.empty() || token.front() == ';') break;
+		
+		token.erase(remove(token.begin(), token.end(), ','), token.end());
+		if (!token.empty()) parts.push_back(token);
 	}
 
 	if (parts.empty()) return {};
+
 	string addr_ptr;
 	if (parts[0].back() == ':') {
-		addr_ptr = parts[0];
-		cout << addr << endl;
+		addr_ptr = parts[0].substr(0, parts[0].size()-1);
+		symbolTable[addr_ptr] = addr;
 		parts.erase(parts.begin());
+		if (parts.empty()) return{};
 	}
+
 	string mne = parts[0];
 	parts.erase(parts.begin());
-
 	transform(mne.begin(), mne.end(), mne.begin(), ::toupper);
 
 
 	
 	if (instructionSet.find(mne) == instructionSet.end()) {
 		throw runtime_error("Unknown instruction: " + mne);
-		return {};
 	}
+
+	for (auto& part : parts) {
+		if (symbolTable.count(part)) {
+			part = to_string(symbolTable[part]);
+		}
+	}
+
 	Instruction inst = instructionSet[mne];
 	vector<uint8_t> bytes = inst.decoder(parts);
 	int ws = inst.wordSize;

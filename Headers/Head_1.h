@@ -4,6 +4,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <map>
+#include <unordered_map>
+#include <memory>
 #include <string>
 #include <sstream>
 #include <stdexcept>
