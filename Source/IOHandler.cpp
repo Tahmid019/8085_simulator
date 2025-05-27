@@ -56,6 +56,7 @@ void IOHandler::loadProgram(CPU& cpu, vector<string>& assembled_code, uint16_t& 
 
         Parser::tokenize(cpu, strInst, addr);
     }
+
 }
 
 
