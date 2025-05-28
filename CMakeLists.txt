@@ -47,7 +47,7 @@ add_executable(8085_MP_sim
     Headers/IODevice.h
     Headers/tinyfiledialogs.h
     Source/IODevice.cpp
-)
+ "Headers/Parsing/token.h" "Headers/Parsing/Lexer.h" "Source/Parsing_Imp/lexer.cpp")
 
 # 4) Link libs: SDL3::SDL3main pulls in SDL3 as static (because SDL_STATIC is ON)
 #    and supplies WinMain→main glue on Windows.
