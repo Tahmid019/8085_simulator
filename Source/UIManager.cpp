@@ -134,8 +134,19 @@ void UIManager::DrawFileView(float height) {
     else {
         float listH = height - ImGui::GetFrameHeightWithSpacing();
         ImGui::BeginChild("FileContentChild", ImVec2(0, listH), false);
+
+		int currentAddress = static_cast<int>(m_cpuState.PC);
+        
         for (int i = 0; i < (int)m_file_lines.size(); ++i) {
-            ImGui::Text(i == currentInstruction ? "-> %s" : "   %s", m_file_lines[i].c_str());
+            if (i == currentAddress) {
+                ImGui::SetScrollHereY(0.5f); 
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 0.0f, 1.0f)); 
+                ImGui::Text("-> %s", m_file_lines[i].c_str());
+                ImGui::PopStyleColor();
+            }
+            else {
+                ImGui::Text("   %s", m_file_lines[i].c_str());
+            }
         }
         ImGui::EndChild();
     }

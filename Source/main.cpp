@@ -181,6 +181,7 @@ int main() {
             programLoaded = false;
             uiManager.cpuReloadTriggered = false;
             instance.reset_cpu();
+            uiManager.executeAllMode = false;
         }
 
         // Handle Reset Event
@@ -188,6 +189,7 @@ int main() {
             programLoaded = false;
 			uiManager.cpuResetTriggered = false;
             instance.reset_cpu();
+            uiManager.executeAllMode = false;
 		}
 
         // Step cpu instruction
@@ -195,12 +197,17 @@ int main() {
             if (uiManager.CpuCanStep()) {
                 instance.step_program();
                 uiManager.stepCycle -= 1;
-                uiManager.currentInstruction += 1;
-            }
+                uiManager.currentInstruction = static_cast<int>(instance.get_cpu_state().PC);
+			}
+			else if (uiManager.executeAllMode && uiManager.stepCycle > 0) {
+				instance.step_program();
+				uiManager.stepCycle -= 1;
+				uiManager.currentInstruction = static_cast<int>(instance.get_cpu_state().PC);
+			}
             else if (!uiManager.programPaused) {
                 if (!instance.isCPUHalted()) {
                     instance.step_program();
-                    uiManager.currentInstruction += 1;
+                    uiManager.currentInstruction = static_cast<int>(instance.get_cpu_state().PC);
                 }
                 else {
                     uiManager.executeAllMode = false;
