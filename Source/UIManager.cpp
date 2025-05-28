@@ -13,6 +13,7 @@ UIManager::UIManager(SDL_Window* window, SDL_Renderer* renderer, const Registers
     , stepCycle(0)
     , programPaused(true)
     , cpuResetTriggered(false)
+    , cpuReloadTriggered(false)
     , currentInstruction(0)
     , m_selected_addr(0x0000)
     , executeAllMode(false)
@@ -118,7 +119,7 @@ bool UIManager::CpuCanStep() {
 void UIManager::DrawFileView(float height) {
     ImGui::BeginChild("FileView", ImVec2(0, height), true);
     ImGui::Text("File View");
-    if (!m_file_loaded) {
+    if (!m_file_loaded && cpuResetTriggered) {
         if (ImGui::Button("Load File")) {
             const char* filters[] = { "*.hex", "*.bin", "*" };
             const char* file = tinyfd_openFileDialog(
@@ -294,11 +295,10 @@ void UIManager::Reset() {
 }
 
 void UIManager::Reload() {
+    m_file_loaded = false;
     currentInstruction = 0;
     cpuReloadTriggered = true;
     programPaused = true;
-    stepMode = false;
-	stepCycle = 0;
 }
 
 void UIManager::DrawCodeEditor() {

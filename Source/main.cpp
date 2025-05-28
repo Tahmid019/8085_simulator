@@ -178,8 +178,9 @@ int main() {
 
         //Reload
         if (uiManager.cpuReloadTriggered) {
-            uiManager.cpuReloadTriggered = !uiManager.cpuReloadTriggered;
-            instance.setup_cpu(start_addr, mem_file);
+            programLoaded = false;
+            uiManager.cpuReloadTriggered = false;
+            instance.reset_cpu();
         }
 
         // Handle Reset Event
