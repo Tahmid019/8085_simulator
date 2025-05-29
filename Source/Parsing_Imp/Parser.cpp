@@ -24,7 +24,7 @@ vector<unique_ptr<ASTNode>> Parser::parse() {
 }
 
 unique_ptr<ASTNode> Parser::parseInstruction() {
-	auto instruction = make_unique<Instruction>();
+	auto instruction = make_unique<InstructionAST>();
 	instruction->name = advance().value;
 
 	while (!isAtEnd() && !check(TokenType::END_OF_LINE)) {

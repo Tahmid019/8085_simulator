@@ -15,7 +15,12 @@ namespace {
 		{"R10", TokenType::REGISTER}, {"R11", TokenType::REGISTER},
 		{"R12", TokenType::REGISTER}, {"R13", TokenType::REGISTER},
 		{"R14", TokenType::REGISTER}, {"R15", TokenType::REGISTER},
-
+		{"A", TokenType::REGISTER}, {"B", TokenType::REGISTER},
+		{"C", TokenType::REGISTER}, {"D", TokenType::REGISTER},
+		{"E", TokenType::REGISTER}, {"H", TokenType::REGISTER},
+		{"L", TokenType::REGISTER}, {"M", TokenType::REGISTER},
+		{"F", TokenType::REGISTER}, {"PC", TokenType::REGISTER},
+		{"SP", TokenType::REGISTER}, {"PSW", TokenType::REGISTER},
 	};
 }
 

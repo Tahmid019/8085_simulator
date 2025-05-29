@@ -115,4 +115,15 @@ void removeTrailingSpaces(string& str) {
     reverse(str.begin(), str.end());
 }
 
+void trim(string& s) {
+    size_t start = s.find_first_not_of(" \t\r\n");
+    if (start == string::npos) {
+        s.clear();
+        return;
+    }
+    size_t end = s.find_last_not_of(" \t\r\n");
+    s = s.substr(start, end - start + 1);
+}
+
+
 

@@ -2,7 +2,7 @@
 #include "../Headers/IOHandler.h"
 #include "../Headers/Instructions.h"
 #include "../Headers/utils.h"
-#include "../Headers/Parser.h"
+#include "../Headers/Compiler.h"
 
 void IOHandler::initializeData2Memory(CPU& cpu, const string& mem_file) {
     //cpu.memory.loadMemory(mem_file);
@@ -19,44 +19,59 @@ void IOHandler::initializeData2Memory(CPU& cpu, const string& mem_file) {
 }
 
 void IOHandler::loadProgramFile(CPU& cpu, string filename, uint16_t& init_addr) {
-    std::ifstream file(filename);
+    ifstream file(filename);
 
     if (!file) {
         std::cerr << "Error: Cant Open the File ... " << filename << std::endl;
         exit(1);
         return;
     }
-
-    uint16_t addr = init_addr;
-    std::string strInst;
-    int ws = 0;
-
+    
+	vector<string> assembled_code;
+    string strInst;
     while (getline(file, strInst)) {
-        removeTrailingSpaces(strInst);
-        
-		Parser::tokenize(cpu, strInst, addr);
+		assembled_code.push_back(strInst);
     }
+
+	loadProgram(cpu, assembled_code, init_addr);
 
     file.close();
 }
 
 void IOHandler::loadProgram(CPU& cpu, vector<string>& assembled_code, uint16_t& init_addr) {
     if (assembled_code.empty()) {
-        std::cerr << "Error: No Code Found ... " << std::endl;
+        cerr << "Error: No Code Found ... " << endl;
         exit(1);
-        return;
     }
+
+    Compiler::symbolTable.clear();
+
+    Compiler::buildSymbolTable(assembled_code, init_addr);
 
     uint16_t addr = init_addr;
-    string strInst;
-    int ws = 0;
+    for (auto& line : assembled_code) {
+        try {
+            size_t commentPos = line.find(';');
+            if (commentPos != string::npos) {
+                line = line.substr(0, commentPos);
+            }
 
-    for(auto strInst : assembled_code) {
-        removeTrailingSpaces(strInst);
+            trim(line);
 
-        Parser::tokenize(cpu, strInst, addr);
+            if (line.empty()) continue;
+
+            if (line.back() == ':' && line.find(' ') == string::npos) continue;
+
+            Compiler::compile(cpu, line, addr);
+        }
+        catch (const exception& e) {
+            cerr << "Error in line: " << line << endl;
+            cerr << e.what() << endl;
+            exit(1);
+        }
     }
 
+    init_addr = addr;
 }
 
 

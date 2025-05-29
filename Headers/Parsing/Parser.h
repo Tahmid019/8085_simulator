@@ -11,7 +11,7 @@ struct Identifier : ASTNode {
 	string name;
 };
 
-struct Instruction : ASTNode{
+struct InstructionAST : ASTNode{
 	string name;
 	vector<unique_ptr<ASTNode>> operands;
 };
@@ -39,8 +39,8 @@ struct MemoryAddress : ASTNode {
 
 class Parser {
 public:
-	explicit Parser(const TokenList& tokens)
-		: m_tokens(tokens), m_current(0) {}
+	explicit Parser(const TokenList& tokens);
+		/* : m_tokens(tokens), m_current(0) {}*/
 
 	vector<unique_ptr<ASTNode>> parse();
 private:

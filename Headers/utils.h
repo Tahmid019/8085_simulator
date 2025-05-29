@@ -22,6 +22,8 @@ void message(string msg, uint8_t in_load, uint8_t out_load, MessageType type);
 
 void removeTrailingSpaces(string& str);
 
+void trim(string& str);
+
 void debug(string msg, uint16_t in_addr, uint8_t in_data, MessageType type);
 
 bool carry(uint8_t value);

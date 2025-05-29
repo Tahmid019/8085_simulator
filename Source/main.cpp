@@ -2,7 +2,6 @@
 #include "../Headers/utils.h"
 #include "../Headers/CPU.h"
 #include "../Headers/IOHandler.h"
-#include "../Headers/Parser.h"
 
 #include <SDL3/SDL.h>
 #include "../Headers/UIManager.h"
