@@ -1,10 +1,14 @@
 #pragma once
 
 #include "../Head_1.h"
-#include "toekn.h"
+#include "token.h"
 
 struct ASTNode {
 	virtual ~ASTNode() = default;
+};
+
+struct Identifier : ASTNode {
+	string name;
 };
 
 struct Instruction : ASTNode{
@@ -32,6 +36,7 @@ struct MemoryAddress : ASTNode {
 	int scale = 1;
 };
 
+
 class Parser {
 public:
 	explicit Parser(const TokenList& tokens)
@@ -46,8 +51,8 @@ private:
 	unique_ptr<ASTNode> parseMemoryAddress();
 
 	//void consume(TokenType type);
-	const Token advance();
-	const Token peek() const;
+	const Token& advance();
+	const Token& peek() const;
 	bool match(TokenType type);
 	bool check(TokenType type) const;
 	bool isAtEnd() const;
