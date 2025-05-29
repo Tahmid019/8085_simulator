@@ -42,24 +42,22 @@ T htob(const string& hexStr) {
 }
 
 template<typename T>
-bool parity(T val) {
-    static_assert(is_unsigned<T>::value, "Only unsigned types are allowed");
-
-    int count_1s = 0;
-    for (int i = 0; i < sizeof(T) * 8; ++i) {
-        if ((val >> i) & 1)
-            ++count_1s;
-    }
-
-    return (count_1s % 2 == 0); // true == even 
+constexpr bool parity(T val) {
+    static_assert(std::is_unsigned_v<T>, "Only unsigned types are allowed");
+#if __cpp_lib_bitops >= 201907L
+    return (popcount(val) & 1) == 0;
+#else
+    return (__builtin_popcountll(static_cast<unsigned long long>(val)) & 1) == 0;
+#endif
 }
 
 template<typename T>
-bool auxillaryCarry(T a, T b) {
-    static_assert(is_unsigned<T>::value, "Only unsigned types are allowed");
+constexpr bool auxiliaryCarry(T a, T b) {
+    static_assert(std::is_unsigned_v<T>, "Only unsigned types are allowed");
 
-    // bit 3 to 4, nibble carry
-    return (((a & 0x0F) + (b & 0x0F)) & 0x10) != 0;
+    constexpr T nibbleMask = static_cast<T>(0x0F);
+    // > 0x0F, -> bit-4
+    return ((a & nibbleMask) + (b & nibbleMask)) > nibbleMask;
 }
 
 namespace detail {

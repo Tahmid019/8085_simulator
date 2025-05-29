@@ -103,15 +103,25 @@ public:
 
 template<typename T>
 void updateFlags(Registers& reg, T value, uint8_t check = 0xFF) {
+    constexpr uint8_t F_S = 0x80;  
+    constexpr uint8_t F_Z = 0x20;  
+    constexpr uint8_t F_P = 0x08; 
 
-    if ((check & 0x20) && (value == 0)) reg.Flags |= 0x20; // Z
-    else reg.Flags &= ~0x20;
+    if (check & F_Z) {
+        if (value == 0) reg.Flags |= F_Z;
+        else reg.Flags &= ~F_Z;
+    }
 
-    if ((check & 0x80) && (value >> (sizeof(T) * 8 - 1))) reg.Flags |= 0x80; // Sgn
-    else reg.Flags &= ~0x80;
+    if (check & F_S) {
+        constexpr auto topBit = T(1) << (sizeof(T) * 8 - 1);
+        if (value & topBit) reg.Flags |= F_S;
+        else reg.Flags &= ~F_S;
+    }
 
-    if ((check & 0x08) && parity<T>(static_cast<T>(value))) reg.Flags |= 0x08; // P
-    else reg.Flags &= ~0x08;
-
+    if (check & F_P) {
+        if (parity<T>(value)) reg.Flags |= F_P;
+        else reg.Flags &= ~F_P;
+    }
 }
+
 

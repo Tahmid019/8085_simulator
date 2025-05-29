@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <backends/imgui_impl_sdl3.h>
 #include <backends/imgui_impl_sdlrenderer3.h>
+#include <bit>
 #include <bitset>
 #include <cctype>
 #include <charconv>
