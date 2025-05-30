@@ -49,21 +49,30 @@ vector<unique_ptr<ASTNode>> Parser::parse() {
 	return statements;
 }
 
-unique_ptr<ASTNode> Parser::parseInstruction() {
-	auto instruction = make_unique<InstructionAST>();
+std::unique_ptr<ASTNode> Parser::parseInstruction() {
+	auto instruction = std::make_unique<InstructionAST>();
+
+	// Handle label 
+	if (check(TokenType::IDENTIFIER)) {
+		const Token& token = peek();
+		if (m_current + 1 < m_tokens.size() &&
+			m_tokens[m_current + 1].type == TokenType::COLON) {
+			advance(); // identifier
+			advance(); // colon
+		}
+	}
+
+	if (!check(TokenType::IDENTIFIER)) {
+		throw std::runtime_error("Expected instruction name");
+	}
 	instruction->name = advance().value;
 
 	while (!isAtEnd() && !check(TokenType::END_OF_LINE)) {
 		if (check(TokenType::COMMA)) {
-			advance();
+			advance(); // skip comma
 			continue;
 		}
-
 		instruction->operands.push_back(parseOperand());
-	}
-
-	if (check(TokenType::END_OF_LINE)) {
-		advance();
 	}
 
 	return instruction;

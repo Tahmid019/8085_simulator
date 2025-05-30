@@ -9,31 +9,51 @@
 unordered_map<string, uint16_t> Compiler::symbolTable;
 
 void Compiler::buildSymbolTable(vector<string>& assembled_code, uint16_t& init_addr) {
-	uint16_t addr = init_addr;
+    uint16_t addr = init_addr;
 
-	for (auto& line : assembled_code) {
-		trim(line);
+    for (auto& line : assembled_code) {
+        size_t comment_pos = line.find(';');
+        if (comment_pos != string::npos) {
+            line = line.substr(0, comment_pos);
+        }
 
-		if (line.empty() || line[0] == ';') continue;
+        trim(line);
 
-		if (line.back() == ':') {
-			string label = line.substr(0, line.size() - 1);
-			Compiler::symbolTable[label] = addr;
-			continue;
-		}
+        if (line.empty()) continue;
 
-		Lexer lexer(line);
-		TokenList tokens = lexer.tokenize();
+        size_t colon_pos = line.find(':');
+        if (colon_pos != string::npos) {
+            string label = line.substr(0, colon_pos);
+            label.erase(label.find_last_not_of(" \t") + 1);
+            Compiler::symbolTable[label] = addr;
 
-		if (!tokens.empty() && tokens[0].type == TokenType::IDENTIFIER) {
-			string mne = tokens[0].value;
-			transform(mne.begin(), mne.end(), mne.begin(), ::toupper);
+            line = line.substr(colon_pos + 1);
+            line.erase(0, line.find_first_not_of(" \t\r\n"));
+            if (line.empty()) continue;
+        }
 
-			if (instructionSet.find(mne) != instructionSet.end()) {
-				addr += instructionSet[mne].wordSize;
-			}
-		}
-	}
+        Lexer lexer(line);
+        TokenList tokens = lexer.tokenize();
+
+        if (!tokens.empty()) {
+            if (tokens[0].type == TokenType::IDENTIFIER) {
+                string mne = tokens[0].value;
+                transform(mne.begin(), mne.end(), mne.begin(), ::toupper);
+
+                if (instructionSet.find(mne) != instructionSet.end()) {
+                    addr += instructionSet[mne].wordSize;
+                }
+                else {
+                    // ORG, END ...
+                    if (mne == "ORG") {
+                        if (tokens.size() >= 2 && tokens[1].type == TokenType::NUMBER) {
+                            addr = stoul(tokens[1].value, nullptr, 16);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 vector<uint8_t> Compiler::compile(CPU& cpu, const string& line, uint16_t& addr) {

@@ -53,6 +53,7 @@ Token Lexer::nextToken() {
 		}
 
 		if (hasDigits && lookahed < m_source.size() && (m_source[lookahed] == 'h' || m_source[lookahed] == 'H')) {
+			//cout << c << endl;
 			return number();
 		}
 	}
@@ -173,6 +174,7 @@ Token Lexer::identifierOrKeyword() {
 
 	return { type , string(text), line, column };
 }
+
 Token Lexer::number() {
 	size_t start = m_current;
 	size_t line = m_line;
@@ -183,18 +185,30 @@ Token Lexer::number() {
 		advance();
 	}
 
-	if (peek() == '0' && m_current + 1 < m_source.size() &&
+	if (!isAtEnd() && peek() == '0' && m_current + 1 < m_source.size() &&
 		(m_source[m_current + 1] == 'x' || m_source[m_current + 1] == 'X')) {
-		advance(); 
-		advance(); 
+		advance(); // 0
+		advance(); // x
 		isHex = true;
+	}
+	else {
+		size_t lookahead = m_current;
+		while (lookahead < m_source.size() && isxdigit(m_source[lookahead])) {
+			lookahead++;
+		}
+		if (lookahead < m_source.size() &&
+			(m_source[lookahead] == 'h' || m_source[lookahead] == 'H')) {
+			isHex = true;
+		}
 	}
 
 	while (!isAtEnd()) {
 		char c = peek();
-		if (std::isdigit(c) || (isHex && std::isxdigit(c)) ||
-			(!isHex && c == '.')) {
+		if (isxdigit(c) || (!isHex && isdigit(c))) {
 			advance();
+		}
+		else if (c == '.' && !isHex) {
+			advance(); // allow decimal point for non-hex
 		}
 		else {
 			break;
