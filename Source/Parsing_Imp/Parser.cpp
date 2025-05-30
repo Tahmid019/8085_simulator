@@ -85,51 +85,7 @@ unique_ptr<ASTNode> Parser::parseOperand() {
 		case TokenType::NUMBER: {
 			auto num = make_unique<NumberLiteral>();
 			string_view numStr = advance().value;
-			if (numStr.back() == 'H' || numStr.back() == 'h') {
-				if (numStr.size() == 5) {
-					auto body = numStr.substr(0, numStr.size() - 1);
-
-					uint8_t hi = 0, lo = 0;
-
-					// parse hi
-					{
-						auto first = body.data();
-						auto last = first + 2;
-						auto res = std::from_chars(first, last, hi, 16);
-						if (res.ec != std::errc()) {
-							std::cerr << "Failed to parse hi\n";
-							exit(1);
-						}
-					}
-
-					// parse lo
-					{
-						auto first = body.data() + 2;
-						auto last = first + 2;
-						auto res = std::from_chars(first, last, lo, 16);
-						if (res.ec != std::errc()) {
-							std::cerr << "Failed to parse lo\n";
-							exit(1);
-						}
-					}
-
-					num->value = (uint16_t(hi) << 8) | lo;
-				}else if (numStr.size() == 4) {
-					num->value = (ston<uint8_t>('0' + string(numStr.substr(0, 1)) + 'H') << 8) & 0xFF00 + (ston<uint8_t>(string(numStr.substr(1, 4)))) & 0x00FF;
-				}
-				else if (numStr.size() == 3) {
-					num->value = (ston<uint8_t>(string(numStr.substr(0,3)))) & 0x00FF;
-				}
-				else if (numStr.size() == 2) {
-					num->value = (ston<uint8_t>('0' + string(numStr.substr(0, 2)))) & 0x00FF;
-				}
-				else {
-					num->value = 0;
-				}
-			}
-			else {
-				from_chars(numStr.data(), numStr.data() + numStr.size(), num->value);
-			}
+			num->value = string(numStr);
 			return num;
 		}
 
@@ -170,9 +126,10 @@ unique_ptr<ASTNode> Parser::parseMemoryAddress() {
 		if (check(TokenType::PLUS)) {
 			advance();
 			if (check(TokenType::NUMBER)) {
-				auto scale = dynamic_cast<NumberLiteral*>(parseOperand().get());
+				auto operand = parseOperand();
+				auto scale = dynamic_cast<NumberLiteral*>(operand.get());
 				if (scale) {
-					mem->scale = static_cast<int>(scale->value);
+					mem->scale = static_cast<int>(ston<uint8_t>(scale->value));
 				}
 			}
 		}

@@ -56,7 +56,7 @@ vector<uint8_t> Compiler::compile(CPU& cpu, const string& line, uint16_t& addr) 
                     operandStrings.push_back(reg->name);
                 }
                 else if (auto num = dynamic_cast<NumberLiteral*>(operand.get())) {
-                    operandStrings.push_back(to_string(num->value));
+                    operandStrings.push_back((num->value));
                 }
                 else if (auto ident = dynamic_cast<Identifier*>(operand.get())) {
                     if (symbolTable.count(ident->name)) {
@@ -70,7 +70,7 @@ vector<uint8_t> Compiler::compile(CPU& cpu, const string& line, uint16_t& addr) 
                     string memStr = "[";
                     if (mem->displacement) {
                         if (auto disp = dynamic_cast<NumberLiteral*>(mem->displacement.get())) {
-                            memStr += to_string(disp->value);
+                            memStr += (disp->value);
                         }
                     }
                     if (mem->base) {
