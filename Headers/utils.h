@@ -30,6 +30,7 @@ bool carry(uint8_t value);
 
 size_t t2t_message(string message, uint16_t a, uint16_t b, Type2Tpe type);
 
+
 template<typename T>
 T htob(const string& hexStr) {
     unsigned int byte;
@@ -121,6 +122,7 @@ T ston(const string& input) {
     if (is_hex) {
         data.pop_back();
     }
+    cout << data << endl;
 
     if constexpr (sizeof(T) == 1) {
         unsigned raw = is_hex

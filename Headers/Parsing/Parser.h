@@ -21,7 +21,7 @@ struct Register : ASTNode {
 };
 
 struct NumberLiteral : ASTNode {
-	int64_t value;
+	uint16_t value;
 };
 
 struct StringLiteral : ASTNode{

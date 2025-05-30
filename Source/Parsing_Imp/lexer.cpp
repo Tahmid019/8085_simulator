@@ -1,5 +1,6 @@
 #include "../../../Headers/Head_1.h"
 #include "../../Headers/Parsing/Lexer.h"
+#include "../../Headers/utils.h"
 
 namespace {
 	const unordered_map<string_view, TokenType> keywords = {
@@ -172,46 +173,27 @@ Token Lexer::identifierOrKeyword() {
 
 	return { type , string(text), line, column };
 }
-
 Token Lexer::number() {
 	size_t start = m_current;
 	size_t line = m_line;
 	size_t column = m_column;
-	bool isBinary = false;
-	bool isQuad = false;
-	bool isOctal = false;
 	bool isHex = false;
-	bool isNegative = false;
 
-	if (peek() == '-') { //negetive numbers
+	if (peek() == '-') {
 		advance();
-		isNegative = true;
 	}
 
-	if (peek() == '0' && m_current + 1 < m_source.size() && (m_source[m_current + 1] == 'x' || m_source[m_current + 1] == 'X')) {
-		advance(); //0
-		advance(); // x
+	if (peek() == '0' && m_current + 1 < m_source.size() &&
+		(m_source[m_current + 1] == 'x' || m_source[m_current + 1] == 'X')) {
+		advance(); 
+		advance(); 
 		isHex = true;
-	}
-	else {
-		size_t lookahed = m_current;
-		while (lookahed < m_source.size() && isxdigit(m_source[lookahed])) {
-			lookahed++;
-		}
-		if (lookahed < m_source.size()) {
-			if ((m_source[lookahed] == 'b' || m_source[lookahed] == 'B')) isBinary = true;
-			if ((m_source[lookahed] == 'q' || m_source[lookahed] == 'Q')) isQuad = true;
-			if ((m_source[lookahed] == 'o' || m_source[lookahed] == 'O')) isOctal = true;
-			if ((m_source[lookahed] == 'h' || m_source[lookahed] == 'H')) isHex = true;
-		}
 	}
 
 	while (!isAtEnd()) {
 		char c = peek();
-		if (isxdigit(c) || (!isHex && isdigit(c))) {
-			advance();
-		}
-		else if (c == '.' && !isHex) {
+		if (std::isdigit(c) || (isHex && std::isxdigit(c)) ||
+			(!isHex && c == '.')) {
 			advance();
 		}
 		else {
@@ -219,35 +201,16 @@ Token Lexer::number() {
 		}
 	}
 
-	if (!isAtEnd() && (peek() == 'b' || peek() == 'B')) {
-		isBinary = true;
-		advance();
+	if (!isAtEnd()) {
+		char c = peek();
+		if (c == 'h' || c == 'H' || c == 'b' || c == 'B' ||
+			c == 'o' || c == 'O' || c == 'q' || c == 'Q') {
+			advance();
+		}
 	}
-
-	if (!isAtEnd() && (peek() == 'q' || peek() == 'Q')) {
-		isQuad = true;
-		advance();
-	}
-
-	if (!isAtEnd() && (peek() == 'o' || peek() == 'O')) {
-		isOctal = true;
-		advance();
-	}
-
-	if (!isAtEnd() && (peek() == 'h' || peek() == 'H')) {
-		isHex = true;
-		advance();
-	}
-
 
 	string_view text = m_source.substr(start, m_current - start);
-	int64_t val = 0;
-	if (isBinary) val = static_cast<int64_t>(stoull(string(text), nullptr, 2));
-	if (isQuad) val = static_cast<int64_t>(stoull(string(text), nullptr, 4));
-	if (isOctal) val = static_cast<int64_t>(stoull(string(text), nullptr, 8));
-	if (isHex) val = static_cast<int64_t>(stoull(string(text), nullptr, 16));
-	else val = static_cast<int64_t>(stoull(string(text), nullptr, 10));
-	return { TokenType::NUMBER, to_string(val), line, column };
+	return { TokenType::NUMBER, string(text), line, column };
 }
 
 Token Lexer::stringLiteral() {
