@@ -1,0 +1,61 @@
+;———————————————————————————————————————————————
+; 8085 Assembly
+; 1) Assembles at 0000H by default
+; 2) Init 10 bytes at 2500H–2509H with values 0Ah?01h (decreasing)
+; 3) Copy them to 2510H–2519H
+; 4) Bubble-sort the 10 bytes at 2510H–2519H in ascending order
+;———————————————————————————————————————————————
+
+        ;—————— 1) Initialize 2500H–2509H with 0Ah,09h,…,01h ——————
+        LXI   H,2500H      ; HL ? 2500H
+        MVI   B,0Ah        ; B = 10 (count & also initial value)
+
+INIT_LOOP:
+        MOV   A,B          ; A = current value (0Ah down to 01h)
+        MOV   M,A          ; [HL] ? A
+        DCR   B            ; B--
+        INX   H            ; HL++
+        JNZ   INIT_LOOP    ; repeat until B = 0
+
+        ;—————— 2) Copy 2500H–2509H ? 2510H–2519H ——————
+        LXI   H,2500H      ; HL ? source start (2500H)
+        LXI   D,2510H      ; DE ? dest start   (2510H)
+        MVI   C,0Ah        ; C = 10 count
+
+COPY_LOOP:
+        MOV   A,M          ; A ? [HL]
+        STAX  D            ; [DE] ? A
+        INX   H            ; HL++
+        INX   D            ; DE++
+        DCR   C            ; C--
+        JNZ   COPY_LOOP    ; repeat 10 times
+
+        ;—————— 3) Bubble-sort 10 bytes at 2510H–2519H ——————
+        MVI   C,0Ah        ; outer pass count = 10
+
+OUTER:
+        MOV   D,C          ; D ? C
+        DCR   D            ; D = C–1 (inner compare count)
+        LXI   H,2510H      ; HL ? start of array
+
+INNER:
+        MOV   A,M          ; A = [HL]
+        INX   H            ; HL ? next
+        CMP   M            ; compare A vs [HL]
+        JC    SKIP_SWAP    ; if A < [HL], no swap
+
+        ; — swap A and [HL] —
+        MOV   B,M          ; B = [HL]
+        MOV   M,A          ; [HL] = A
+        DCX   H            ; back to lower element
+        MOV   M,B          ; [HL] = B
+        INX   H            ; restore HL to upper element
+
+SKIP_SWAP:
+        DCR   D            ; inner count--
+        JNZ   INNER        ; repeat inner loop
+
+        DCR   C            ; outer count--
+        JNZ   OUTER        ; repeat passes
+
+        HLT                ; done, halt CPU

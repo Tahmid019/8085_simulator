@@ -119,7 +119,7 @@ bool UIManager::CpuCanStep() {
 void UIManager::DrawFileView(float height) {
     ImGui::BeginChild("FileView", ImVec2(0, height), true);
     ImGui::Text("File View");
-    if (!m_file_loaded && cpuResetTriggered) {
+    if (!m_file_loaded || cpuResetTriggered) {
         if (ImGui::Button("Load File")) {
             const char* filters[] = { "*.hex", "*.bin", "*" };
             const char* file = tinyfd_openFileDialog(
