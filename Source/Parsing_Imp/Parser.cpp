@@ -30,6 +30,8 @@ uint16_t decimalStringToHex(const std::string& decimalStr) {
 }
 
 vector<unique_ptr<ASTNode>> Parser::parse() {
+	cerr << " Parsing > " << endl;
+
 	vector<unique_ptr<ASTNode>> statements;
 
 	while (!isAtEnd()) {
@@ -46,6 +48,7 @@ vector<unique_ptr<ASTNode>> Parser::parse() {
 		}
 	}
 
+	cerr << " Parsed < ";
 	return statements;
 }
 

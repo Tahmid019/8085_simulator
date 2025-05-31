@@ -10,6 +10,7 @@ unordered_map<string, uint16_t> Compiler::symbolTable;
 
 static size_t getInstructionSize(const TokenList& tokens)
 {
+
     if (tokens.empty()) {
         return 0;
     }
@@ -21,6 +22,7 @@ static size_t getInstructionSize(const TokenList& tokens)
 
 void Compiler::buildSymbolTable(vector<string>& assembled_code, uint16_t& init_addr)
 {
+    cerr << " Building Symbol Table > ";
     uint16_t addr = init_addr;  
 
     for (auto& rawLine : assembled_code) {
@@ -62,9 +64,12 @@ void Compiler::buildSymbolTable(vector<string>& assembled_code, uint16_t& init_a
         addr = static_cast<uint16_t>(addr + byteCount);
     }
 
+    cerr << " Symbol Table built < ";
 }
 
 vector<uint8_t> Compiler::compile(CPU& cpu, const string& line, uint16_t& addr) {
+    cerr << " Compiling > ";
+
     if (line.empty() || line[0] == ';') return {};
 
     Lexer lexer(line);
@@ -142,5 +147,7 @@ vector<uint8_t> Compiler::compile(CPU& cpu, const string& line, uint16_t& addr) 
             return bytes;
         }
     }
+
+    cerr << " Compiled < ";
     return {};
 }

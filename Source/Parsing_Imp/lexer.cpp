@@ -28,11 +28,15 @@ namespace {
 Lexer::Lexer(string_view source) : m_source(source) {}
 
 TokenList Lexer::tokenize() {
+	cerr << " Tokenizing > ";
+
 	TokenList tokens;
 	while (!isAtEnd()) {
 		tokens.push_back(nextToken());
 	}
 	tokens.push_back({ TokenType::END_OF_FILE,"",m_line, m_column });
+
+	cerr << " Tokenized < ";
 	return tokens;
 }
 

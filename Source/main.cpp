@@ -37,11 +37,31 @@ public:
     }
 	void input_data(const string& mem_file) {
 		message("Insert data in Memory ...", 0, 0, MessageType::INFO);
-		io_handler.initializeData2Memory(cpu, mem_file);
 	}
     void load_program_file(string filename,uint16_t init_addr, bool debug = false) {
         message("Loading Program in Main Memory ...", 0, 0, MessageType::INFO);
-        io_handler.loadProgramFile(cpu, filename, init_addr);
+        ifstream file(filename);
+
+        if (!file) {
+            std::cerr << "Error: Cant Open the File ... " << filename << std::endl;
+            throw runtime_error("Cant open the File ...");
+        }
+
+        vector<string> assembly_code;
+        string strInst;
+        while (getline(file, strInst)) {
+            assembly_code.push_back(strInst);
+        }
+        file.close();
+		
+        if (assembly_code.empty()) {
+			cerr << "Error: No Code Found in the File ... " << filename << endl;
+			throw runtime_error("No code found in the file.");
+		}
+
+        cerr << "\nAssembly code size: " << assembly_code.size() << endl;
+
+        io_handler.loadProgram(cpu, assembly_code, init_addr);
     }
 
     void load_program(vector<string> assem_code, uint16_t init_addr, bool debug = false) {
@@ -177,12 +197,16 @@ int main() {
             }
 
             // Handle File load event
-            if (uiManager.IsFileLoaded() && !programLoaded) {
+            if (uiManager.isCodeAssembled() && !programLoaded) {
                 try {
+                    cerr << " Loading file ... " << endl;
+                    
                     instance.load_program_file(uiManager.GetFilePath(), start_addr);
                     programLoaded = true;
                     instance.setup_cpu(start_addr, mem_file);
                     resetMemoryOnError = false;  
+
+                    cerr << " File Loaded " << endl;
                 }
                 catch (const exception& e) {
 					cerr << "File load error: " << e.what() << endl;
@@ -217,7 +241,6 @@ int main() {
 				cerr << "Reloading CPU..." << endl;
                 programLoaded = false;
                 uiManager.cpuReloadTriggered = false;
-                instance.reset_cpu();
                 uiManager.executeAllMode = false;
                 errPop = false;
             }

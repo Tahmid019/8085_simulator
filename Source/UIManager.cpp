@@ -155,6 +155,8 @@ void UIManager::DrawFileView(float height) {
 }
 
 void UIManager::LoadFileLines() {
+    cerr << "m_file_lines: Loading File Lines ... ";
+
     m_file_lines.clear();
     std::ifstream f(m_file_path);
     std::string line;
@@ -170,11 +172,13 @@ void UIManager::LoadFileLines() {
 
         if (line.find("DB ") == 0 || line.find("DW ") == 0 || line.find("ORG ") == 0) {
             // start adder
-            m_assembledLines.push_back(line);
+            //m_assembledLines.push_back(line);
             continue;
         }
         m_file_lines.push_back(line);
     }
+
+    cerr << "Loaded File Lines. " << m_file_lines.size() << endl;
 }
 
 void UIManager::DrawRegisterView(float height) {
@@ -323,7 +327,6 @@ void UIManager::Reset() {
 }
 
 void UIManager::Reload() {
-    m_file_loaded = false;
     currentInstruction = 0;
     cpuReloadTriggered = true;
     programPaused = true;
@@ -415,6 +418,7 @@ void UIManager::AssembleCode() {
         m_assemblerError = true;
         m_assemblerErrorMsg = "No valid instructions found";
     }
+    m_file_lines = m_assembledLines;
 }
 
 bool UIManager::isCodeAssembled() {
