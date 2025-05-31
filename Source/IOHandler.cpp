@@ -33,15 +33,15 @@ void IOHandler::loadProgramFile(CPU& cpu, string filename, uint16_t& init_addr) 
 		assembled_code.push_back(strInst);
     }
 
-	loadProgram(cpu, assembled_code, init_addr);
-
     file.close();
+
+	loadProgram(cpu, assembled_code, init_addr);
 }
 
 void IOHandler::loadProgram(CPU& cpu, vector<string>& assembled_code, uint16_t& init_addr) {
     if (assembled_code.empty()) {
         cerr << "Error: No Code Found ... " << endl;
-        exit(1);
+		throw runtime_error("No code found to load.");
     }
 
     Compiler::symbolTable.clear();
@@ -67,7 +67,7 @@ void IOHandler::loadProgram(CPU& cpu, vector<string>& assembled_code, uint16_t& 
         catch (const exception& e) {
             cerr << "Error in line: " << line << endl;
             cerr << e.what() << endl;
-            exit(1);
+			throw runtime_error("Compilation error in line: " + line);
         }
     }
 

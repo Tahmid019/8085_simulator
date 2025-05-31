@@ -35,6 +35,10 @@ private:
 	void DrawAssembledCode();
     void AssembleCode();
 
+    bool show_error_popup = false;
+    string error_message;
+
+
 public:
     UIManager(SDL_Window* window, SDL_Renderer* renderer, const Registers& reg, vector<uint8_t>& mem);
     ~UIManager();
@@ -50,6 +54,8 @@ public:
     bool        CpuCanStep();
     bool        isCodeAssembled();
     vector<string> getAssembledCode();
+    void ShowErrorPopup();
+	void SetError(const string& message);
 
     bool         programPaused;
     bool         stepMode;

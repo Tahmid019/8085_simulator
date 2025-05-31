@@ -1,4 +1,4 @@
-#include "../Headers/Head_1.h"
+﻿#include "../Headers/Head_1.h"
 #include "../Headers/Compiler.h"
 #include "../Headers/Instructions.h"
 #include "../Headers/Memory.h"
@@ -8,52 +8,60 @@
 
 unordered_map<string, uint16_t> Compiler::symbolTable;
 
-void Compiler::buildSymbolTable(vector<string>& assembled_code, uint16_t& init_addr) {
-    uint16_t addr = init_addr;
+static size_t getInstructionSize(const TokenList& tokens)
+{
+    if (tokens.empty()) {
+        return 0;
+    }
+    string mne = toUpper(tokens[0].value);
+    Instruction inst = instructionSet[mne];
+   
+    return inst.wordSize;
+}
 
-    for (auto& line : assembled_code) {
-        size_t comment_pos = line.find(';');
+void Compiler::buildSymbolTable(vector<string>& assembled_code, uint16_t& init_addr)
+{
+    uint16_t addr = init_addr;  
+
+    for (auto& rawLine : assembled_code) {
+        size_t comment_pos = rawLine.find(';');
         if (comment_pos != string::npos) {
-            line = line.substr(0, comment_pos);
+            rawLine = rawLine.substr(0, comment_pos);
+        }
+        trim(rawLine);
+        if (rawLine.empty()) {
+            continue; 
         }
 
-        trim(line);
-
-        if (line.empty()) continue;
-
+       
+        string line = rawLine;
         size_t colon_pos = line.find(':');
         if (colon_pos != string::npos) {
             string label = line.substr(0, colon_pos);
             label.erase(label.find_last_not_of(" \t") + 1);
-            Compiler::symbolTable[label] = addr;
+            string labelUp = toUpper(label);
+
+            Compiler::symbolTable[labelUp] = addr;
 
             line = line.substr(colon_pos + 1);
-            line.erase(0, line.find_first_not_of(" \t\r\n"));
-            if (line.empty()) continue;
-        }
-
-        Lexer lexer(line);
-        TokenList tokens = lexer.tokenize();
-
-        if (!tokens.empty()) {
-            if (tokens[0].type == TokenType::IDENTIFIER) {
-                string mne = tokens[0].value;
-                transform(mne.begin(), mne.end(), mne.begin(), ::toupper);
-
-                if (instructionSet.find(mne) != instructionSet.end()) {
-                    addr += instructionSet[mne].wordSize;
-                }
-                else {
-                    // ORG, END ...
-                    if (mne == "ORG") {
-                        if (tokens.size() >= 2 && tokens[1].type == TokenType::NUMBER) {
-                            addr = stoul(tokens[1].value, nullptr, 16);
-                        }
-                    }
-                }
+            trim(line);
+            if (line.empty()) {
+                continue;
             }
         }
+
+       
+        Lexer   lexer(line);
+        TokenList tokens = lexer.tokenize();
+        if (tokens.empty()) {
+            continue;
+        }
+
+        size_t byteCount = getInstructionSize(tokens);
+
+        addr = static_cast<uint16_t>(addr + byteCount);
     }
+
 }
 
 vector<uint8_t> Compiler::compile(CPU& cpu, const string& line, uint16_t& addr) {

@@ -126,3 +126,11 @@ void trim(string& s) {
 }
 
 
+string toUpper(const string& input) {
+    string result = input;
+    for (char& c : result) {
+        c = toupper(static_cast<unsigned char>(c));
+    }
+    return result;
+}
+

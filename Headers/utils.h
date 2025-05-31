@@ -28,6 +28,8 @@ void debug(string msg, uint16_t in_addr, uint8_t in_data, MessageType type);
 
 bool carry(uint8_t value);
 
+string toUpper(const string& input);
+
 size_t t2t_message(string message, uint16_t a, uint16_t b, Type2Tpe type);
 
 

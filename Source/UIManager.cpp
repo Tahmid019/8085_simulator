@@ -17,6 +17,8 @@ UIManager::UIManager(SDL_Window* window, SDL_Renderer* renderer, const Registers
     , currentInstruction(0)
     , m_selected_addr(0x0000)
     , executeAllMode(false)
+    , show_error_popup(false)
+    , error_message("No Error")
 {}
 
 UIManager::~UIManager() {
@@ -56,49 +58,48 @@ void UIManager::RenderFrame() {
 }
 
 void UIManager::Draw() {
-    // Make window fill the entire viewport, non-movable, non-resizable, and no decoration
+    //  main window
     ImGuiIO& io = ImGui::GetIO();
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(io.DisplaySize);
     ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
+
     ImGui::Begin("8085 Simulator", nullptr, flags);
+    {
+        ImVec2 avail = ImGui::GetContentRegionAvail();
+        float halfH = avail.y * 0.5f;
 
-    // Compute available content size excluding window borders (should be full window)
-    ImVec2 avail = ImGui::GetContentRegionAvail();
-    float halfH = avail.y * 0.5f;
+        // Top row
+        ImGui::Columns(2, "TopCols", true);
+        DrawFileView(halfH);
+        ImGui::NextColumn();
+        DrawRegisterView(halfH);
+        ImGui::Columns(1);
 
-    // Top row: File and Register views
-    ImGui::Columns(2, "TopCols", true);
-    DrawFileView(halfH);
-    ImGui::NextColumn();
-    DrawRegisterView(halfH);
-    ImGui::Columns(1);
-
-    if (ImGui::Button(m_showCodeEditor ? "Close Code Editor" : "Open Code Editor")) {
-        m_showCodeEditor = !m_showCodeEditor; 
-
-        // When opening the editor
-        if (m_showCodeEditor) {
-            m_assemblerError = false; 
+        if (ImGui::Button(m_showCodeEditor ? "Close Code Editor" : "Open Code Editor")) {
+            m_showCodeEditor = !m_showCodeEditor;
+            if (m_showCodeEditor) m_assemblerError = false;
         }
+
+        ImGui::SameLine();
+        ImGui::Text("Or load a file using the button below");
+        ImGui::Separator();
+
+        // Bottom row
+        ImGui::Columns(2, "BottomCols", true);
+        DrawControls(halfH);
+        ImGui::NextColumn();
+        DrawMemoryView(halfH);
+        ImGui::Columns(1);
+        
+        DrawCodeEditor();
+        DrawAssembledCode();
     }
-
-    ImGui::SameLine();
-    ImGui::Text("Or load a file using the button below");
-
-    ImGui::Separator();
-
-    // Bottom row: Controls and Memory views
-    ImGui::Columns(2, "BottomCols", true);
-    DrawControls(halfH);
-    ImGui::NextColumn();
-    DrawMemoryView(halfH);
-    ImGui::Columns(1);
-
     ImGui::End();
 
-    DrawCodeEditor();
-    DrawAssembledCode();
+    //draw other windows
+
+    ShowErrorPopup();
 }
 
 const char* UIManager::GetFilePath() {
@@ -157,7 +158,23 @@ void UIManager::LoadFileLines() {
     m_file_lines.clear();
     std::ifstream f(m_file_path);
     std::string line;
-    while (std::getline(f, line)) m_file_lines.push_back(line);
+    while (std::getline(f, line)) {
+        line.erase(0, line.find_first_not_of(" \t\r\n"));
+        line.erase(line.find_last_not_of(" \t\r\n") + 1);
+
+        if (line.empty()) continue;
+
+        std::transform(line.begin(), line.end(), line.begin(), ::toupper);
+
+        if (line.find(";") == 0) continue;
+
+        if (line.find("DB ") == 0 || line.find("DW ") == 0 || line.find("ORG ") == 0) {
+            // start adder
+            m_assembledLines.push_back(line);
+            continue;
+        }
+        m_file_lines.push_back(line);
+    }
 }
 
 void UIManager::DrawRegisterView(float height) {
@@ -406,4 +423,43 @@ bool UIManager::isCodeAssembled() {
 
 vector<string> UIManager::getAssembledCode() {
     return m_assembledLines;
+}
+
+void UIManager::ShowErrorPopup() {
+    if (!show_error_popup) return;
+
+    // Always center the popup when appearing
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+    // Open the popup if not already open
+    if (show_error_popup && !ImGui::IsPopupOpen("Error")) {
+        ImGui::OpenPopup("Error");
+    }
+
+    // Draw the popup
+    if (ImGui::BeginPopupModal("Error", &show_error_popup,
+        ImGuiWindowFlags_AlwaysAutoResize |
+        ImGuiWindowFlags_NoMove))
+    {
+        ImGui::Text("Error occurred:");
+        ImGui::TextWrapped("%s", error_message.c_str());
+        ImGui::Separator();
+
+        if (ImGui::Button("OK", ImVec2(120, 0)) || ImGui::IsKeyPressed(ImGuiKey_Enter)) {
+            show_error_popup = false;
+            cpuResetTriggered = true;
+            m_file_loaded = false;
+			m_file_lines.clear();
+			m_assembledLines.clear();
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SetItemDefaultFocus();
+        ImGui::EndPopup();
+    }
+}
+
+void UIManager::SetError(const string& message) {
+    error_message = message;
+    show_error_popup = true;
 }

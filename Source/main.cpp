@@ -70,6 +70,8 @@ public:
         cpu.reg.SP = 0xffff;
         cpu.reg.Flags = 0x00;
         cpu.isHalt = false;
+
+        
         
     }
 
@@ -148,76 +150,152 @@ int main() {
     uint16_t start_addr = 0x0000;
 
     bool running = true;
+    bool errPop = false;
+	string errMsg = "No Error";
     bool programLoaded = false;
+    bool resetMemoryOnError = false;
 
     SDL_Event event;
     while (running) {
-        
-        // Process SDL Events
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) {
-                running = false;
-            }
-            uiManager.ProcessEvent(event);
-        }
-        
-        // Handle File load event
-        if (uiManager.IsFileLoaded() && !programLoaded) {
-            instance.load_program_file(uiManager.GetFilePath(), start_addr);
-            programLoaded = true;
-            instance.setup_cpu(start_addr, mem_file);
-        }
+        try {
+            //bool test = true;
+			//uiManager.ShowError(test, errMsg);
 
-        //Handle Code Upload event
-        if (uiManager.isCodeAssembled() && !programLoaded) {
-            instance.load_program(uiManager.getAssembledCode(), start_addr);
-            programLoaded = true;
-            instance.setup_cpu(start_addr, mem_file);
-        }
+            //if (errPop) {
+            //    cerr << "Error Popup" << endl;
+            //    uiManager.ShowError(errPop, errMsg);
+            //    errPop = false;
+            //}
 
-        //Reload
-        if (uiManager.cpuReloadTriggered) {
-            programLoaded = false;
-            uiManager.cpuReloadTriggered = false;
-            instance.reset_cpu();
-            uiManager.executeAllMode = false;
-        }
 
-        // Handle Reset Event
-        if (uiManager.cpuResetTriggered) {
-            programLoaded = false;
-			uiManager.cpuResetTriggered = false;
-            instance.reset_cpu();
-            uiManager.executeAllMode = false;
-		}
-
-        // Step cpu instruction
-        if (programLoaded) {
-            if (uiManager.CpuCanStep()) {
-                instance.step_program();
-                uiManager.stepCycle -= 1;
-                uiManager.currentInstruction = static_cast<int>(instance.get_cpu_state().PC);
-			}
-			else if (uiManager.executeAllMode && uiManager.stepCycle > 0) {
-				instance.step_program();
-				uiManager.stepCycle -= 1;
-				uiManager.currentInstruction = static_cast<int>(instance.get_cpu_state().PC);
-			}
-            else if (!uiManager.programPaused) {
-                if (!instance.isCPUHalted()) {
-                    instance.step_program();
-                    uiManager.currentInstruction = static_cast<int>(instance.get_cpu_state().PC);
+            // Process SDL Events
+            while (SDL_PollEvent(&event)) {
+                if (event.type == SDL_EVENT_QUIT) {
+                    running = false;
                 }
-                else {
-                    uiManager.executeAllMode = false;
+                uiManager.ProcessEvent(event);
+            }
+
+            // Handle File load event
+            if (uiManager.IsFileLoaded() && !programLoaded) {
+                try {
+                    instance.load_program_file(uiManager.GetFilePath(), start_addr);
+                    programLoaded = true;
+                    instance.setup_cpu(start_addr, mem_file);
+                    resetMemoryOnError = false;  
+                }
+                catch (const exception& e) {
+					cerr << "File load error: " << e.what() << endl;
+                    uiManager.SetError(e.what());
+                    instance.reset_cpu();
+                    errPop = true;
+                    errMsg = e.what();
+                    programLoaded = false;
                 }
             }
+
+            //Handle Code Upload event
+            if (uiManager.isCodeAssembled() && !programLoaded) {
+                try {
+                    instance.load_program(uiManager.getAssembledCode(), start_addr);
+                    programLoaded = true;
+                    instance.setup_cpu(start_addr, mem_file);
+                    resetMemoryOnError = false; 
+                }
+                catch (const exception& e) {
+					cerr << "Code upload error: " << e.what() << endl;
+					uiManager.SetError(e.what());
+                    instance.reset_cpu();
+                    errPop = true;
+                    errMsg = e.what();
+                    programLoaded = false;
+                }
+            }
+
+            //Reload
+            if (uiManager.cpuReloadTriggered) {
+				cerr << "Reloading CPU..." << endl;
+                programLoaded = false;
+                uiManager.cpuReloadTriggered = false;
+                instance.reset_cpu();
+                uiManager.executeAllMode = false;
+                errPop = false;
+            }
+
+            // Handle Reset Event
+            if (uiManager.cpuResetTriggered) {
+				cerr << "Resetting CPU..." << endl;
+                programLoaded = false;
+                uiManager.cpuResetTriggered = false;
+                instance.reset_cpu();
+                uiManager.executeAllMode = false;
+                errPop = false;
+				resetMemoryOnError = false; 
+            }
+
+            // Step cpu instruction
+            if (programLoaded) {
+                try {
+                    if (uiManager.CpuCanStep()) {
+                        instance.step_program();
+                        uiManager.stepCycle -= 1;
+                        uiManager.currentInstruction = static_cast<int>(instance.get_cpu_state().PC);
+                    }
+                    else if (uiManager.executeAllMode && uiManager.stepCycle > 0) {
+                        instance.step_program();
+                        uiManager.stepCycle -= 1;
+                        uiManager.currentInstruction = static_cast<int>(instance.get_cpu_state().PC);
+                    }
+                    else if (!uiManager.programPaused) {
+                        if (!instance.isCPUHalted()) {
+                            instance.step_program();
+                            uiManager.currentInstruction = static_cast<int>(instance.get_cpu_state().PC);
+                        }
+                        else {
+                            uiManager.executeAllMode = false;
+                        }
+                    }
+                }
+                catch (const exception& e) {
+                    cerr << "Execution error: " << e.what() << endl;
+                    uiManager.SetError(e.what());
+                    instance.reset_cpu();
+                    errPop = true;
+                    errMsg = e.what();
+                    programLoaded = false;
+                    resetMemoryOnError = true;
+                }
+            }
+
+            // Begin new frame and draw GUI
+            uiManager.BeginFrame();
+            uiManager.Draw();
+            uiManager.RenderFrame();
         }
-        
-        // Begin new frame and draw GUI
-        uiManager.BeginFrame();
-        uiManager.Draw();
-        uiManager.RenderFrame();
+        catch (const exception& e) {
+            cerr << "UI Exception: " << e.what() << endl;
+            errPop = true;
+            errMsg = string("UI Error: ") + e.what();
+            resetMemoryOnError = true;
+        }
+
+        // Handle memory reset after error if needed
+        if (resetMemoryOnError) {
+            try {
+                instance.reset_cpu();
+                instance.input_data(mem_file);  
+                programLoaded = false;
+                uiManager.executeAllMode = false;
+                uiManager.programPaused = true;
+                uiManager.stepCycle = 0;
+                resetMemoryOnError = false;
+            }
+            catch (const exception& e) {
+                uiManager.SetError(e.what());
+                cerr << "Critical reset error: " << e.what() << endl;
+                running = false; 
+            }
+        }
     }
 
     uiManager.Shutdown();
