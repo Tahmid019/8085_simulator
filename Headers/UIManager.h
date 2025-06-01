@@ -54,6 +54,7 @@ public:
     bool        CpuCanStep();
     bool        isCodeAssembled();
     vector<string> getAssembledCode();
+    vector<string> getLoadedCode();
     void ShowErrorPopup();
 	void SetError(const string& message);
 

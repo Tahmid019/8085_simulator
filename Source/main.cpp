@@ -197,11 +197,12 @@ int main() {
             }
 
             // Handle File load event
-            if (uiManager.isCodeAssembled() && !programLoaded) {
+            if (uiManager.IsFileLoaded() && !programLoaded) {
                 try {
                     cerr << " Loading file ... " << endl;
                     
-                    instance.load_program_file(uiManager.GetFilePath(), start_addr);
+                    //instance.load_program_file(uiManager.GetFilePath(), start_addr);
+                    instance.load_program(uiManager.getLoadedCode(), start_addr);
                     programLoaded = true;
                     instance.setup_cpu(start_addr, mem_file);
                     resetMemoryOnError = false;  

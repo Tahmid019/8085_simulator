@@ -172,7 +172,7 @@ void UIManager::LoadFileLines() {
 
         if (line.find("DB ") == 0 || line.find("DW ") == 0 || line.find("ORG ") == 0) {
             // start adder
-            //m_assembledLines.push_back(line);
+            m_file_lines.push_back(line);
             continue;
         }
         m_file_lines.push_back(line);
@@ -427,6 +427,10 @@ bool UIManager::isCodeAssembled() {
 
 vector<string> UIManager::getAssembledCode() {
     return m_assembledLines;
+}
+
+vector<string> UIManager::getLoadedCode() {
+    return m_file_lines;
 }
 
 void UIManager::ShowErrorPopup() {
