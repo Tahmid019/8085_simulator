@@ -37,7 +37,7 @@ The primary objective is to assist usersâ€”particularly students and hobbyistsâ€
   - Virtual ports for `IN` and `OUT` instructions.
   - Integration with external devices (e.g., Arduino).
 - **Debugging Tools**:
-  - CLI and GUI (Qt) interfaces.
+  - CLI and ImGUI interfaces.
   - Memory visualization and register state inspection.
 - **Cross-Platform**:
   - Runs on Windows, Linux, and macOS.
