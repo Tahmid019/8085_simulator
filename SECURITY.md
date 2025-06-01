@@ -14,7 +14,7 @@ To report a vulnerability:
 
 Email: [tahmidchoudhury019@gmail.com] 
 
-Subject: Vulnerability Report – [Short Description]
+Subject: Vulnerability Report – 
 
 Expected Response Time: Within 7 business days
 
