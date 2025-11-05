@@ -1,0 +1,14 @@
+# Target labels
+ sdl3-populate
+# Source files and their labels
+C:/Users/tahmi/Documents/Work/PROJECTS/MPMC_8085/sim/build/_deps/sdl3-subbuild/CMakeFiles/sdl3-populate
+C:/Users/tahmi/Documents/Work/PROJECTS/MPMC_8085/sim/build/_deps/sdl3-subbuild/CMakeFiles/fa33267fbc17be038bd0d463721b7a41/sdl3-populate.rule
+C:/Users/tahmi/Documents/Work/PROJECTS/MPMC_8085/sim/build/_deps/sdl3-subbuild/CMakeFiles/01fe9f160d604d29aec52030fa7fc62a/sdl3-populate-complete.rule
+C:/Users/tahmi/Documents/Work/PROJECTS/MPMC_8085/sim/build/_deps/sdl3-subbuild/CMakeFiles/995e7d6c99d2f3158882c77f0b94a74a/sdl3-populate-build.rule
+C:/Users/tahmi/Documents/Work/PROJECTS/MPMC_8085/sim/build/_deps/sdl3-subbuild/CMakeFiles/995e7d6c99d2f3158882c77f0b94a74a/sdl3-populate-configure.rule
+C:/Users/tahmi/Documents/Work/PROJECTS/MPMC_8085/sim/build/_deps/sdl3-subbuild/CMakeFiles/995e7d6c99d2f3158882c77f0b94a74a/sdl3-populate-download.rule
+C:/Users/tahmi/Documents/Work/PROJECTS/MPMC_8085/sim/build/_deps/sdl3-subbuild/CMakeFiles/995e7d6c99d2f3158882c77f0b94a74a/sdl3-populate-install.rule
+C:/Users/tahmi/Documents/Work/PROJECTS/MPMC_8085/sim/build/_deps/sdl3-subbuild/CMakeFiles/995e7d6c99d2f3158882c77f0b94a74a/sdl3-populate-mkdir.rule
+C:/Users/tahmi/Documents/Work/PROJECTS/MPMC_8085/sim/build/_deps/sdl3-subbuild/CMakeFiles/995e7d6c99d2f3158882c77f0b94a74a/sdl3-populate-patch.rule
+C:/Users/tahmi/Documents/Work/PROJECTS/MPMC_8085/sim/build/_deps/sdl3-subbuild/CMakeFiles/995e7d6c99d2f3158882c77f0b94a74a/sdl3-populate-test.rule
+C:/Users/tahmi/Documents/Work/PROJECTS/MPMC_8085/sim/build/_deps/sdl3-subbuild/CMakeFiles/995e7d6c99d2f3158882c77f0b94a74a/sdl3-populate-update.rule

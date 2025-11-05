@@ -1,6 +1,6 @@
-﻿#include "../../../Headers/Head_1.h"
-#include "../../Headers/Parsing/Parser.h"
-#include "../../Headers/utils.h"
+﻿#include "Head_1.h"
+#include "Parser.h"
+#include "utils.h"
 
 Parser::Parser(const TokenList& tokens) : m_tokens(tokens) {}
 

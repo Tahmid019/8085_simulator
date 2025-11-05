@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\tahmi\Documents\Work\PROJECTS\MPMC_8085\sim\build\_deps\sdl3-subbuild\CMakeFiles\995e7d6c99d2f3158882c77f0b94a74a\sdl3-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\tahmi\Documents\Work\PROJECTS\MPMC_8085\sim\build\_deps\sdl3-subbuild\CMakeFiles\995e7d6c99d2f3158882c77f0b94a74a\sdl3-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\tahmi\Documents\Work\PROJECTS\MPMC_8085\sim\build\_deps\sdl3-subbuild\CMakeFiles\995e7d6c99d2f3158882c77f0b94a74a\sdl3-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\tahmi\Documents\Work\PROJECTS\MPMC_8085\sim\build\_deps\sdl3-subbuild\CMakeFiles\995e7d6c99d2f3158882c77f0b94a74a\sdl3-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\tahmi\Documents\Work\PROJECTS\MPMC_8085\sim\build\_deps\sdl3-subbuild\CMakeFiles\995e7d6c99d2f3158882c77f0b94a74a\sdl3-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\tahmi\Documents\Work\PROJECTS\MPMC_8085\sim\build\_deps\sdl3-subbuild\CMakeFiles\995e7d6c99d2f3158882c77f0b94a74a\sdl3-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\tahmi\Documents\Work\PROJECTS\MPMC_8085\sim\build\_deps\sdl3-subbuild\CMakeFiles\995e7d6c99d2f3158882c77f0b94a74a\sdl3-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\tahmi\Documents\Work\PROJECTS\MPMC_8085\sim\build\_deps\sdl3-subbuild\CMakeFiles\995e7d6c99d2f3158882c77f0b94a74a\sdl3-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\tahmi\Documents\Work\PROJECTS\MPMC_8085\sim\build\_deps\sdl3-subbuild\CMakeFiles\01fe9f160d604d29aec52030fa7fc62a\sdl3-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\tahmi\Documents\Work\PROJECTS\MPMC_8085\sim\build\_deps\sdl3-subbuild\CMakeFiles\fa33267fbc17be038bd0d463721b7a41\sdl3-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\tahmi\Documents\Work\PROJECTS\MPMC_8085\sim\build\_deps\sdl3-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\tahmi\Documents\Work\PROJECTS\MPMC_8085\sim\build\_deps\sdl3-subbuild\CMakeFiles\sdl3-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{7FE19297-14D6-3E15-9FA4-899FFA443BC2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -55,3 +55,8 @@ The primary objective is to assist usersâ€”particularly students and hobbyistsâ€
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/yourusername/8085-emulator.git
+2. **Build**
+	```bash
+	cmake -S . -B build -A x64
+	cmake --build build --config Release 
+

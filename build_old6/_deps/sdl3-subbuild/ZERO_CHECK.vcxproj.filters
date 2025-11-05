@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\tahmi\Documents\Work\PROJECTS\MPMC_8085\sim\build\_deps\sdl3-subbuild\CMakeFiles\fa33267fbc17be038bd0d463721b7a41\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{7FE19297-14D6-3E15-9FA4-899FFA443BC2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

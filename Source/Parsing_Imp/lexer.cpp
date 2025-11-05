@@ -1,6 +1,6 @@
-#include "../../../Headers/Head_1.h"
-#include "../../Headers/Parsing/Lexer.h"
-#include "../../Headers/utils.h"
+#include "Head_1.h"
+#include "Lexer.h"
+#include "utils.h"
 
 namespace {
 	const unordered_map<string_view, TokenType> keywords = {
